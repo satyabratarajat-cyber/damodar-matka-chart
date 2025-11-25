@@ -1,0 +1,39 @@
+[
+    {
+        "date": "2024-11-20",
+        "day": "Wednesday",
+        "open_panna": "246",
+        "open_num": 2,
+        "close_panna": "158",
+        "close_num": 4,
+        "result": "2-4"
+    },
+    {
+        "date": "2024-11-21",
+        "day": "Thursday",
+        "open_panna": "334",
+        "open_num": 0,
+        "close_panna": "127",
+        "close_num": 0,
+        "result": "0-0"
+    },
+    {
+        "date": "2024-11-22",
+        "day": "Friday",
+        "open_panna": "689",
+        "open_num": 3,
+        "close_panna": "238",
+        "close_num": 3,
+        "result": "3-3"
+    },
+    {
+        "date": "2024-11-24",
+        "day": "Sunday",
+        "open_panna": "119",
+        "open_num": 1,
+        "close_panna": "344",
+        "close_num": 1,
+        "result": "1-1"
+    }
+    // Naye records yahin par jodein. Har record ke baad comma lagana na bhoolein (last record chhodkar)।
+]

@@ -1,0 +1,78 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+header {
+    background-color: #004d99; /* Dark Blue Header */
+    color: white;
+    padding: 20px 0;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 1.5em;
+    margin: 0;
+}
+
+main {
+    padding-bottom: 50px; /* Footer ke liye space */
+}
+
+#chart-container {
+    overflow-x: auto; /* Agar screen chhoti ho to scroll aa jaaye */
+    padding: 10px;
+}
+
+/* Chart (Table) ka design */
+.matka-chart {
+    width: 90%;
+    max-width: 800px; /* Chart ki max width */
+    margin: 0 auto;
+    border-collapse: collapse; /* Borders ko milata hai */
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.matka-chart th, .matka-chart td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.matka-chart th {
+    background-color: #ffcc00; /* Yellow Header */
+    color: #333;
+    text-transform: uppercase;
+}
+
+/* Weekend Rows ko highlight karna */
+.matka-chart tr.sunday {
+    background-color: #f0c0c0; /* Light Red for Sunday */
+    font-weight: bold;
+}
+
+/* Open aur Close ke numbers ka rang */
+.open-number {
+    color: green;
+    font-weight: bold;
+}
+
+.close-number {
+    color: red;
+    font-weight: bold;
+}
+
+footer {
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
