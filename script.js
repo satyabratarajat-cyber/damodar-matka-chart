@@ -5,8 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch('data.json')
         .then(response => {
             if (!response.ok) {
-                // Agar file nahi mili to error throw karein
-                throw new Error(`HTTP error! status: ${response.status} - Data file nahi mili ya load nahi ho payi.`);
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
         })
@@ -14,36 +13,34 @@ document.addEventListener('DOMContentLoaded', function() {
             // 2. Data ko naya record upar dikhaane ke liye reverse karna
             data.reverse(); 
 
-            // 3. Table banane ka kaam shuru karna
-            let tableHTML = '<table class="matka-chart"><thead><tr><th>दिनांक (Date)</th><th>दिन (Day)</th><th>ओपन पन्ना (Open Panna)</th><th>ओपन (Open)</th><th>क्लोज पन्ना (Close Panna)</th><th>क्लोज (Close)</th><th>जोड़ी (Jodi)</th></tr></thead><tbody>';
+            // 3. Table banane ka kaam shuru karna (sirf 3 columns)
+            let tableHTML = '<table class="matka-chart"><thead><tr><th>दिनांक (Date)</th><th>दिन (Day)</th><th>परिणाम (Result)</th></tr></thead><tbody>';
 
             // 4. Har data record ke liye table ki row banana
             data.forEach(record => {
-                // Sunday ko highlight karne ke liye class
                 const rowClass = record.day.toLowerCase() === 'sunday' ? 'sunday' : '';
+
+                // Central result cell jahan Open aur Close ka data saath mein hoga
+                const resultCell = `
+                    <div class="result-cell-container">
+                        <span class="panna">${record.open_panna}</span>
+                        <span class="number open-number">${record.open_num}</span>
+                        <span class="jodi-separator">-</span>
+                        <span class="number close-number">${record.close_num}</span>
+                        <span class="panna">${record.close_panna}</span>
+                    </div>
+                `;
 
                 tableHTML += `<tr class="${rowClass}">`;
                 
-                // Date
+                // Column 1: Date
                 tableHTML += `<td>${record.date}</td>`;
                 
-                // Day
+                // Column 2: Day
                 tableHTML += `<td>${record.day}</td>`;
                 
-                // Open Panna
-                tableHTML += `<td>${record.open_panna}</td>`;
-
-                // Open Number
-                tableHTML += `<td class="open-number">${record.open_num}</td>`;
-
-                // Close Panna
-                tableHTML += `<td>${record.close_panna}</td>`;
-                
-                // Close Number
-                tableHTML += `<td class="close-number">${record.close_num}</td>`;
-
-                // Jodi (Result)
-                tableHTML += `<td>${record.result}</td>`;
+                // Column 3: Result (Open Panna + Open Num + Jodi + Close Num + Close Panna)
+                tableHTML += `<td class="result-column">${resultCell}</td>`;
                 
                 tableHTML += '</tr>';
             });
@@ -53,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
             container.innerHTML = tableHTML;
         })
         .catch(error => {
-            // Agar data load na ho to error message dikhana
             console.error('Data load karne mein gadbadi:', error);
             container.innerHTML = '<p style="color:red;">चार्ट लोड करने में कोई समस्या आई। कृपया डेटा फ़ाइल जाँचें।</p>';
         });
