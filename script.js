@@ -1,9 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('chart-container');
-    const DAYS_OF_WEEK_KEYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']; // Columns
+    const DAYS_OF_WEEK_KEYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
     
     fetch('data.json')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Data file not found or network error.');
+            }
+            return response.json();
+        })
         .then(data => {
             // Data ko date ke hisaab se sort karna (Zaroori)
             data.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -28,15 +33,19 @@ document.addEventListener('DOMContentLoaded', function() {
         // Date format DD/MM/YY
         const format = (dStr) => {
             const d = new Date(dStr);
-            // Timezone issue se bachne ke liye thoda complex formatting
             const day = d.getDate().toString().padStart(2, '0');
             const month = (d.getMonth() + 1).toString().padStart(2, '0');
             const year = String(d.getFullYear()).slice(-2);
             return `${day}/${month}/${year}`;
         };
+        
+        // Sunday (0), Monday (1), ... Saturday (6)
+        const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
         for (const record of data) {
-            const dayKey = record.day.slice(0, 3).toUpperCase(); 
+            // Date object se Day Key nikalna
+            const dateObj = new Date(record.date);
+            const dayKey = dayNames[dateObj.getDay()];
 
             if (dayKey === 'MON' && currentWeek.records.length > 0) {
                 // Agar Monday aaya aur current week mein pehle se data hai, to naya hafta shuru karo
@@ -50,8 +59,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 currentWeek = { days: {}, records: [] };
             }
             
-            currentWeek.days[dayKey] = record;
-            currentWeek.records.push(record);
+            // Agar din Monday se Saturday ke beech hai, tabhi record ko add karein
+            if (keys.includes(dayKey)) {
+                currentWeek.days[dayKey] = record;
+                currentWeek.records.push(record);
+            }
         }
 
         // Aakhri hafte ko add karna
