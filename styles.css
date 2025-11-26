@@ -1,3 +1,5 @@
+/* --- Weekly Grid Styling --- */
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -8,7 +10,7 @@ body {
 }
 
 header {
-    background-color: #004d99; /* Dark Blue Header */
+    background-color: #004d99;
     color: white;
     padding: 20px 0;
     margin-bottom: 20px;
@@ -19,88 +21,70 @@ h1 {
     margin: 0;
 }
 
-main {
-    padding-bottom: 50px; /* Footer ke liye space */
-}
-
 #chart-container {
-    overflow-x: auto; /* Agar screen chhoti ho to scroll aa jaaye */
+    overflow-x: auto; 
     padding: 10px;
 }
 
-/* Chart (Table) ka design */
-.matka-chart {
-    width: 90%;
-    max-width: 800px; /* Chart ki max width */
-    margin: 0 auto;
-    border-collapse: collapse; /* Borders ko milata hai */
+.matka-grid {
+    width: 95%;
+    max-width: 1000px;
+    margin: 20px auto;
+    border-collapse: collapse;
     background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.matka-chart th, .matka-chart td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-    font-size: 0.9em;
-}
-
-.matka-chart th {
-    background-color: #ffcc00; /* Yellow Header */
+.matka-grid th {
+    background-color: #f7e091; /* Light Yellow Header */
     color: #333;
+    padding: 10px 5px;
+    font-size: 1em;
+    border: 1px solid #c7c7c7;
     text-transform: uppercase;
 }
 
-/* Weekend Rows ko highlight karna */
-.matka-chart tr.sunday {
-    background-color: #f0c0c0; /* Light Red for Sunday */
-    font-weight: bold;
+.matka-grid td {
+    border: 1px solid #c7c7c7;
+    padding: 0;
+    text-align: center;
+    vertical-align: top;
+    height: 90px; 
+    width: 14%; 
 }
 
-/* Open aur Close ke numbers ka rang */
-.open-number {
-    color: green;
-    font-weight: bold;
-}
-
-.close-number {
-    color: red;
-    font-weight: bold;
-}
-
-footer {
-    padding: 10px;
-    background-color: #333;
-    color: white;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-
-}
-/* Naye Format ke liye CSS */
-.result-column {
-    font-weight: bold;
-    font-size: 1.1em;
-}
-.result-cell-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px; /* Elements ke beech ki doori */
-}
-
-.panna {
-    color: #004d99; /* Blue color for Panna */
+/* Date Range Column */
+.date-range {
     font-size: 0.8em;
+    font-weight: bold;
+    background-color: #eee;
+    padding: 5px;
+    line-height: 1.4;
 }
 
-.jodi-separator {
+/* Data Cell Formatting (Stacked Panna/Jodi) */
+.data-cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%; /* Cell ki puri height leni chahiye */
+    padding: 5px 0;
+}
+
+.panna-top, .panna-bottom {
+    font-size: 0.7em;
     color: #333;
-    font-size: 1.2em;
+    line-height: 1;
 }
 
-/* Open aur Close ke numbers ka rang (Jo pehle se defined hai) */
-/*
-.open-number { color: green; }
-.close-number { color: red; }
-*/
+.jodi-mid {
+    font-size: 1.6em; /* Bada Jodi Number */
+    font-weight: 900;
+    color: red; /* Jodi ka rang (Jaise screenshot mein hai) */
+    line-height: 1.1;
+    margin: 2px 0;
+}
+
+.empty-cell {
+    background-color: #fcfcfc;
+}
