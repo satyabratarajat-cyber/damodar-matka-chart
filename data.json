@@ -4,7 +4,7 @@
         "day": "Monday",
         "open_panna": "123",
         "open_num": 6,
-        "close_panna": "123",
+        "close_panna": "204",
         "close_num": 6,
         "result": "6-6"
     },
@@ -54,3 +54,4 @@
         "result": "0-0"
     }
 ]
+
