@@ -1,83 +1,84 @@
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('chart-container');
-    // Chart mein Monday se Saturday tak ke liye
-    const DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const DAYS_OF_WEEK_KEYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']; // Columns
     
     fetch('data.json')
         .then(response => response.json())
         .then(data => {
-            // Pehle data ko date ke hisaab se sort karte hain
+            // Data ko date ke hisaab se sort karna (Zaroori)
             data.sort((a, b) => new Date(a.date) - new Date(b.date));
             
-            // 1. Data ko hafto (Weeks) mein group karna
-            const weeks = groupDataIntoWeeks(data);
+            // 1. Data ko Hafto (Weeks) mein group karna (Simple Logic)
+            const weeks = groupDataIntoWeeksSimplified(data, DAYS_OF_WEEK_KEYS);
 
             // 2. Chart ka HTML banana
-            let tableHTML = generateChartHTML(weeks, DAYS_OF_WEEK);
+            let tableHTML = generateChartHTML(weeks, DAYS_OF_WEEK_KEYS);
             container.innerHTML = tableHTML;
         })
         .catch(error => {
             console.error('Data load error:', error);
-            container.innerHTML = '<h2 style="color:red; text-align:center;">चार्ट लोड करने में त्रुटि।</h2>';
+            container.innerHTML = '<h2 style="color:red; text-align:center;">चार्ट लोड करने में त्रुटि। कृपया data.json फाइल जाँचें।</h2>';
         });
 
-    // Function: Simple data array ko Weekly array mein badalna
-    function groupDataIntoWeeks(data) {
+    // Simplified Grouping Function: Monday record aate hi naya week shuru karta hai
+    function groupDataIntoWeeksSimplified(data, keys) {
         const weeks = [];
-        let currentWeek = null;
+        let currentWeek = { days: {}, records: [] };
+        
+        // Date format DD/MM/YY
+        const format = (dStr) => {
+            const d = new Date(dStr);
+            // Timezone issue se bachne ke liye thoda complex formatting
+            const day = d.getDate().toString().padStart(2, '0');
+            const month = (d.getMonth() + 1).toString().padStart(2, '0');
+            const year = String(d.getFullYear()).slice(-2);
+            return `${day}/${month}/${year}`;
+        };
 
         for (const record of data) {
-            const date = new Date(record.date);
-            const dayIndex = date.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+            const dayKey = record.day.slice(0, 3).toUpperCase(); 
 
-            // Naya hafta shuru karna (Aamtaur par Monday se)
-            // Ya agar pehla record Monday nahi hai, to bhi naya hafta shuru karein
-            if (dayIndex === 1 || !currentWeek) { 
-                const weekStartDate = new Date(date);
-                if (dayIndex !== 1) { // Agar pehla din Monday nahi hai, to date ko Monday tak piche le jaana
-                    weekStartDate.setDate(date.getDate() - (dayIndex === 0 ? 6 : dayIndex - 1));
-                }
+            if (dayKey === 'MON' && currentWeek.records.length > 0) {
+                // Agar Monday aaya aur current week mein pehle se data hai, to naya hafta shuru karo
+                const firstRecord = currentWeek.records[0];
+                const lastRecord = currentWeek.records[currentWeek.records.length - 1];
+                
+                currentWeek.startDate = format(firstRecord.date);
+                currentWeek.endDate = format(lastRecord.date);
 
-                const weekEndDate = new Date(weekStartDate);
-                weekEndDate.setDate(weekStartDate.getDate() + 5); // Week Saturday ko khatam hota hai
-
-                // Date format dd/mm/yy
-                const format = (d) => `${d.getDate()}/${d.getMonth() + 1}/${String(d.getFullYear()).slice(-2)}`;
-
-                currentWeek = {
-                    startDate: format(weekStartDate),
-                    endDate: format(weekEndDate),
-                    days: {} // Monday se Saturday ka data rakhega
-                };
                 weeks.push(currentWeek);
+                currentWeek = { days: {}, records: [] };
             }
-
-            // Record ko Week ke andar sahi din mein daalna
-            const dayKey = record.day.slice(0, 3).toUpperCase(); // MON, TUE, etc.
+            
             currentWeek.days[dayKey] = record;
+            currentWeek.records.push(record);
+        }
+
+        // Aakhri hafte ko add karna
+        if (currentWeek.records.length > 0) {
+            const firstRecord = currentWeek.records[0];
+            const lastRecord = currentWeek.records[currentWeek.records.length - 1];
+            
+            currentWeek.startDate = format(firstRecord.date);
+            currentWeek.endDate = format(lastRecord.date);
+            
+            weeks.push(currentWeek);
         }
         return weeks;
     }
 
     // Function: Weekly data se HTML table banana
-    function generateChartHTML(weeks, DAYS_OF_WEEK) {
-        // Table Header: Date aur Mon se Sat
+    function generateChartHTML(weeks, keys) {
         let tableHTML = '<table class="matka-grid"><thead><tr><th>Date</th><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th></tr></thead><tbody>';
 
-        // Har hafte (Week) ke liye ek Row
         weeks.forEach(week => {
-            // Row for Date Range
             tableHTML += `<tr class="date-row">`;
-            // Date Range Column
             tableHTML += `<td class="date-range">${week.startDate} <br/> to <br/> ${week.endDate}</td>`;
             
-            // Loop through Mon (1) to Sat (6)
-            for (let i = 1; i <= 6; i++) {
-                const dayName = DAYS_OF_WEEK[i].slice(0, 3).toUpperCase(); 
-                const record = week.days[dayName];
+            keys.forEach(dayKey => {
+                const record = week.days[dayKey];
                 
                 if (record) {
-                    // Ek hi cell mein Panna, Jodi, aur Panna ko alag-alag dikhana
                     const jodi = `${record.open_num}${record.close_num}`;
                     tableHTML += `<td class="data-cell">
                         <div class="panna-top">${record.open_panna}</div>
@@ -85,10 +86,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="panna-bottom">${record.close_panna}</div>
                     </td>`;
                 } else {
-                    // Agar us din ka data nahi hai
                     tableHTML += `<td class="empty-cell"></td>`;
                 }
-            }
+            });
             tableHTML += `</tr>`;
         });
 
