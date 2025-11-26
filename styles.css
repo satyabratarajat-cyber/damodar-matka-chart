@@ -75,4 +75,32 @@ footer {
     position: fixed;
     bottom: 0;
     width: 100%;
+
 }
+/* Naye Format ke liye CSS */
+.result-column {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+.result-cell-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px; /* Elements ke beech ki doori */
+}
+
+.panna {
+    color: #004d99; /* Blue color for Panna */
+    font-size: 0.8em;
+}
+
+.jodi-separator {
+    color: #333;
+    font-size: 1.2em;
+}
+
+/* Open aur Close ke numbers ka rang (Jo pehle se defined hai) */
+/*
+.open-number { color: green; }
+.close-number { color: red; }
+*/
