@@ -1,56 +1,98 @@
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('chart-container');
+    // Chart mein Monday se Saturday tak ke liye
+    const DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     
-    // 1. Data.json file ko fetch karna
     fetch('data.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            // 2. Data ko naya record upar dikhaane ke liye reverse karna
-            data.reverse(); 
+            // Pehle data ko date ke hisaab se sort karte hain
+            data.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            // 1. Data ko hafto (Weeks) mein group karna
+            const weeks = groupDataIntoWeeks(data);
 
-            // 3. Table banane ka kaam shuru karna (sirf 3 columns)
-            let tableHTML = '<table class="matka-chart"><thead><tr><th>दिनांक (Date)</th><th>दिन (Day)</th><th>परिणाम (Result)</th></tr></thead><tbody>';
-
-            // 4. Har data record ke liye table ki row banana
-            data.forEach(record => {
-                const rowClass = record.day.toLowerCase() === 'sunday' ? 'sunday' : '';
-
-                // Central result cell jahan Open aur Close ka data saath mein hoga
-                const resultCell = `
-                    <div class="result-cell-container">
-                        <span class="panna">${record.open_panna}</span>
-                        <span class="number open-number">${record.open_num}</span>
-                        <span class="jodi-separator">-</span>
-                        <span class="number close-number">${record.close_num}</span>
-                        <span class="panna">${record.close_panna}</span>
-                    </div>
-                `;
-
-                tableHTML += `<tr class="${rowClass}">`;
-                
-                // Column 1: Date
-                tableHTML += `<td>${record.date}</td>`;
-                
-                // Column 2: Day
-                tableHTML += `<td>${record.day}</td>`;
-                
-                // Column 3: Result (Open Panna + Open Num + Jodi + Close Num + Close Panna)
-                tableHTML += `<td class="result-column">${resultCell}</td>`;
-                
-                tableHTML += '</tr>';
-            });
-
-            // 5. Table ko band karna aur HTML ko container mein daalna
-            tableHTML += '</tbody></table>';
+            // 2. Chart ka HTML banana
+            let tableHTML = generateChartHTML(weeks, DAYS_OF_WEEK);
             container.innerHTML = tableHTML;
         })
         .catch(error => {
-            console.error('Data load karne mein gadbadi:', error);
-            container.innerHTML = '<p style="color:red;">चार्ट लोड करने में कोई समस्या आई। कृपया डेटा फ़ाइल जाँचें।</p>';
+            console.error('Data load error:', error);
+            container.innerHTML = '<h2 style="color:red; text-align:center;">चार्ट लोड करने में त्रुटि।</h2>';
         });
+
+    // Function: Simple data array ko Weekly array mein badalna
+    function groupDataIntoWeeks(data) {
+        const weeks = [];
+        let currentWeek = null;
+
+        for (const record of data) {
+            const date = new Date(record.date);
+            const dayIndex = date.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+
+            // Naya hafta shuru karna (Aamtaur par Monday se)
+            // Ya agar pehla record Monday nahi hai, to bhi naya hafta shuru karein
+            if (dayIndex === 1 || !currentWeek) { 
+                const weekStartDate = new Date(date);
+                if (dayIndex !== 1) { // Agar pehla din Monday nahi hai, to date ko Monday tak piche le jaana
+                    weekStartDate.setDate(date.getDate() - (dayIndex === 0 ? 6 : dayIndex - 1));
+                }
+
+                const weekEndDate = new Date(weekStartDate);
+                weekEndDate.setDate(weekStartDate.getDate() + 5); // Week Saturday ko khatam hota hai
+
+                // Date format dd/mm/yy
+                const format = (d) => `${d.getDate()}/${d.getMonth() + 1}/${String(d.getFullYear()).slice(-2)}`;
+
+                currentWeek = {
+                    startDate: format(weekStartDate),
+                    endDate: format(weekEndDate),
+                    days: {} // Monday se Saturday ka data rakhega
+                };
+                weeks.push(currentWeek);
+            }
+
+            // Record ko Week ke andar sahi din mein daalna
+            const dayKey = record.day.slice(0, 3).toUpperCase(); // MON, TUE, etc.
+            currentWeek.days[dayKey] = record;
+        }
+        return weeks;
+    }
+
+    // Function: Weekly data se HTML table banana
+    function generateChartHTML(weeks, DAYS_OF_WEEK) {
+        // Table Header: Date aur Mon se Sat
+        let tableHTML = '<table class="matka-grid"><thead><tr><th>Date</th><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th></tr></thead><tbody>';
+
+        // Har hafte (Week) ke liye ek Row
+        weeks.forEach(week => {
+            // Row for Date Range
+            tableHTML += `<tr class="date-row">`;
+            // Date Range Column
+            tableHTML += `<td class="date-range">${week.startDate} <br/> to <br/> ${week.endDate}</td>`;
+            
+            // Loop through Mon (1) to Sat (6)
+            for (let i = 1; i <= 6; i++) {
+                const dayName = DAYS_OF_WEEK[i].slice(0, 3).toUpperCase(); 
+                const record = week.days[dayName];
+                
+                if (record) {
+                    // Ek hi cell mein Panna, Jodi, aur Panna ko alag-alag dikhana
+                    const jodi = `${record.open_num}${record.close_num}`;
+                    tableHTML += `<td class="data-cell">
+                        <div class="panna-top">${record.open_panna}</div>
+                        <div class="jodi-mid">${jodi}</div>
+                        <div class="panna-bottom">${record.close_panna}</div>
+                    </td>`;
+                } else {
+                    // Agar us din ka data nahi hai
+                    tableHTML += `<td class="empty-cell"></td>`;
+                }
+            }
+            tableHTML += `</tr>`;
+        });
+
+        tableHTML += '</tbody></table>';
+        return tableHTML;
+    }
 });
