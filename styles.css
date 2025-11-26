@@ -1,5 +1,4 @@
-/* --- Weekly Grid Styling --- */
-
+/* --- Global Styling --- */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -26,6 +25,15 @@ h1 {
     padding: 10px;
 }
 
+footer {
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    margin-top: 20px;
+    font-size: 0.8em;
+}
+
+/* --- Weekly Grid Styling --- */
 .matka-grid {
     width: 95%;
     max-width: 1000px;
@@ -67,24 +75,29 @@ h1 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%; /* Cell ki puri height leni chahiye */
+    height: 100%; 
     padding: 5px 0;
 }
 
 .panna-top, .panna-bottom {
     font-size: 0.7em;
-    color: #333;
+    color: #004d99; /* Blue color for Panna */
     line-height: 1;
 }
 
 .jodi-mid {
     font-size: 1.6em; /* Bada Jodi Number */
     font-weight: 900;
-    color: red; /* Jodi ka rang (Jaise screenshot mein hai) */
+    color: red; /* Jodi ka rang (Reference site jaisa) */
     line-height: 1.1;
     margin: 2px 0;
 }
 
 .empty-cell {
     background-color: #fcfcfc;
+}
+
+/* Optional: Sunday row ko highlight karne ke liye */
+.sunday {
+    background-color: #ffcccc; /* Light red background */
 }
