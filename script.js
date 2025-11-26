@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
-            // Data ko date ke hisaab se sort karna (Zaroori)
+            // Data ko date ke hisaab se sort karna
             data.sort((a, b) => new Date(a.date) - new Date(b.date));
             
-            // 1. Data ko Hafto (Weeks) mein group karna (Simple Logic)
+            // 1. Data ko Hafto (Weeks) mein group karna (Sahi Date Parsing ke Saath)
             const weeks = groupDataIntoWeeksSimplified(data, DAYS_OF_WEEK_KEYS);
 
             // 2. Chart ka HTML banana
@@ -25,7 +25,18 @@ document.addEventListener('DOMContentLoaded', function() {
             container.innerHTML = '<h2 style="color:red; text-align:center;">चार्ट लोड करने में त्रुटि। कृपया data.json फाइल जाँचें।</h2>';
         });
 
-    // Simplified Grouping Function: Monday record aate hi naya week shuru karta hai
+    // Sahi Date Parsing Logic
+    function getDayKey(dateString) {
+        // YYYY-MM-DD format ko DD-MM-YYYY mein badalna taki Date Object local time par bane
+        const parts = dateString.split('-'); // [YYYY, MM, DD]
+        const dateObj = new Date(parts[0], parts[1] - 1, parts[2]); // new Date(Y, M-1, D)
+        
+        // Sunday (0), Monday (1), ... Saturday (6)
+        const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+        return dayNames[dateObj.getDay()];
+    }
+
+    // Simplified Grouping Function
     function groupDataIntoWeeksSimplified(data, keys) {
         const weeks = [];
         let currentWeek = { days: {}, records: [] };
@@ -39,16 +50,12 @@ document.addEventListener('DOMContentLoaded', function() {
             return `${day}/${month}/${year}`;
         };
         
-        // Sunday (0), Monday (1), ... Saturday (6)
-        const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-
         for (const record of data) {
-            // Date object se Day Key nikalna
-            const dateObj = new Date(record.date);
-            const dayKey = dayNames[dateObj.getDay()];
+            // Date String se Day Key nikalna
+            const dayKey = getDayKey(record.date);
 
             if (dayKey === 'MON' && currentWeek.records.length > 0) {
-                // Agar Monday aaya aur current week mein pehle se data hai, to naya hafta shuru karo
+                // Naya hafta shuru karo
                 const firstRecord = currentWeek.records[0];
                 const lastRecord = currentWeek.records[currentWeek.records.length - 1];
                 
@@ -79,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return weeks;
     }
 
-    // Function: Weekly data se HTML table banana
+    // Function: Weekly data se HTML table banana (No Change)
     function generateChartHTML(weeks, keys) {
         let tableHTML = '<table class="matka-grid"><thead><tr><th>Date</th><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th></tr></thead><tbody>';
 
