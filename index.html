@@ -15,7 +15,7 @@
   /* ===== CHART HEADER ===== */
   .chart-header{
     display:grid;
-    grid-template-columns:1.2fr repeat(6,1fr);
+    grid-template-columns:repeat(6,1fr);
     text-align:center;
     font-weight:900;
     font-size:14px;
@@ -25,16 +25,12 @@
   /* ===== WEEK ROW (ALWAYS HORIZONTAL) ===== */
   .week-row{
     display:grid;
-    grid-template-columns:1.2fr repeat(6,1fr);
+    grid-template-columns:repeat(6,1fr);
     column-gap:6px;
     align-items:center;
   }
 
-  .date-col{
-    text-align:center;
-    font-size:12px;
-    font-weight:700;
-  }
+  
 
   .daycell{
     display:flex;
@@ -118,19 +114,12 @@
 
   <!-- HEADER ROW -->
   <div class="chart-header">
-    <div>DATE</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+    <div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
   </div>
   <div style="width:100%; height:1px; background:purple; margin:6px 0;"></div>
 
   <!-- WEEK DATA ROW (RESPONSIVE FIXED GRID) -->
   <div class="week-row">
-
-    <!-- DATE COLUMN -->
-    <div class="date-col">
-      <div>01/03/2015</div>
-      <div>to</div>
-      <div>07/03/2015</div>
-    </div>
 
     <!-- MON -->
     <div class="daycell">
