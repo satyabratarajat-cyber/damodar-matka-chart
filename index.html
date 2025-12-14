@@ -5,52 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Damodar Chart</title>
 <style>
-  body {
-    margin: 0;
-    background: #0b0b0b;
-    color: #fff;
-    font-family: 'Trebuchet MS', 'Arial Black', Arial, sans-serif;
+  body{
+    margin:0;
+    background:#0b0b0b;
+    color:#fff;
+    font-family:'Trebuchet MS','Arial Black',Arial,sans-serif;
   }
 
-  /* ===== KALYAN PANEL CORE STYLES ===== */
-  .daycell{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:4px;
-    font-family:'Times New Roman', Georgia, serif;
-  }
-  .panna{
-    font-size:14px;
-    font-weight:700;
-    line-height:1.05;
-  }
-  .jodi{
-    font-size:26px;
-    font-weight:900;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin-top:2px;
-    min-width:34px;
-  }
-  .jodi.empty::before{
-    content:"—";
-    font-size:36px;
-    font-weight:900;
-  }
-
-  /* ===== MOBILE FIX (IMPORTANT) ===== */
-  @media (max-width: 768px) {
-    .panel-box{
-      width: 95vw !important;
-      max-width: 95vw !important;
-      min-width: unset !important;
-      padding: 10px !important;
-    }
-    .jodi{ font-size:28px; }
-    .panna{ font-size:14px; }
-  }
+  /* ===== CHART HEADER ===== */
   .chart-header{
     display:grid;
     grid-template-columns:1.2fr repeat(6,1fr);
@@ -60,34 +22,63 @@
     align-items:center;
   }
 
-  @media (max-width:768px){
-  /* KEEP HORIZONTAL STRUCTURE – ONLY SCALE DOWN */
+  /* ===== WEEK ROW (ALWAYS HORIZONTAL) ===== */
+  .week-row{
+    display:grid;
+    grid-template-columns:1.2fr repeat(6,1fr);
+    column-gap:6px;
+    align-items:center;
+  }
+
+  .date-col{
+    text-align:center;
+    font-size:12px;
+    font-weight:700;
+  }
+
+  .daycell{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+
+  .jodi{
+    font-size:30px;
+    font-weight:900;
+    min-width:36px;
+    text-align:center;
+    color:#000;
+  }
+
+  .jodi.empty::before{
+    content:"—";
+    font-size:34px;
+    font-weight:900;
+  }
+
+  /* ===== PANEL BOX ===== */
   .panel-box{
-    width:98vw !important;
-    max-width:98vw !important;
-    padding:8px !important;
+    width:32vw;
+    max-width:480px;
+    min-width:240px;
+    margin:20px auto;
+    border:3px solid purple;
+    border-radius:10px;
+    padding:10px;
+    background:#fff;
+    color:#000;
   }
-  .chart-header{ font-size:10px; }
-  .panna{ font-size:11px; line-height:1.05; }
-  .jodi{ font-size:20px; min-width:30px; }
-  .date-col{ font-size:10px; }
-}
-    .week-row{
-  display:grid;
-  grid-template-columns:1.2fr repeat(6,1fr);
-  column-gap:6px;
-}
-    .date-col{
-      text-align:center;
-      font-size:12px;
-      font-weight:700;
-      margin-bottom:6px;
+
+  /* ===== MOBILE: SAME STRUCTURE, ONLY SCALE ===== */
+  @media (max-width:768px){
+    .panel-box{
+      width:92vw;
+      max-width:92vw;
+      padding:8px;
     }
-    .daycell{
-      justify-content:center;
-      gap:10px;
-    }
-  }
+    .chart-header{font-size:10px;}
+    .date-col{font-size:10px;}
+    .jodi{font-size:26px;}
   }
 </style>
 </head>
@@ -123,7 +114,7 @@
 </div>
 
 <!-- NUMBER 13 : PURPLE BORDER CHART BOX (KALYAN PANEL STYLE) -->
-<div class="panel-box" style="width:37.5vw; max-width:520px; min-width:260px; margin:20px auto; border:3px solid purple; border-radius:10px; padding:12px; background:#ffffff; color:#000;">
+<div class="panel-box" style="width:32vw; max-width:480px; min-width:240px; margin:20px auto; border:3px solid purple; border-radius:10px; padding:10px; background:#ffffff; color:#000;">
 
   <!-- HEADER ROW -->
   <div class="chart-header">
