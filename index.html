@@ -33,12 +33,24 @@
     justify-content:center;
     margin-top:4px;
     min-width:40px;
-}
-.jodi.empty::before{
+  }
+  .jodi.empty::before{
     content:"—";
     font-size:36px;
     font-weight:900;
-}
+  }
+
+  /* ===== MOBILE FIX (IMPORTANT) ===== */
+  @media (max-width: 768px) {
+    .panel-box{
+      width: 95vw !important;
+      max-width: 95vw !important;
+      min-width: unset !important;
+      padding: 10px !important;
+    }
+    .jodi{ font-size:28px; }
+    .panna{ font-size:14px; }
+  }
 </style>
 </head>
 <body>
@@ -73,7 +85,7 @@
 </div>
 
 <!-- NUMBER 13 : PURPLE BORDER CHART BOX (KALYAN PANEL STYLE) -->
-<div style="width:50vw; max-width:600px; min-width:300px; margin:20px auto; border:3px solid purple; border-radius:10px; padding:14px; background:#ffffff; color:#000;">
+<div class="panel-box" style="width:50vw; max-width:600px; min-width:300px; margin:20px auto; border:3px solid purple; border-radius:10px; padding:14px; background:#ffffff; color:#000;">
 
   <!-- HEADER ROW -->
   <div style="display:grid; grid-template-columns:repeat(7,1fr); text-align:center; font-weight:900; font-size:14px;">
