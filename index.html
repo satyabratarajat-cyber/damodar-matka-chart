@@ -51,6 +51,20 @@
     .jodi{ font-size:28px; }
     .panna{ font-size:14px; }
   }
+  .chart-header{
+    display:grid;
+    grid-template-columns:1.2fr repeat(6,1fr);
+    text-align:center;
+    font-weight:900;
+    font-size:14px;
+    align-items:center;
+  }
+
+  @media (max-width:768px){
+    .chart-header{
+      font-size:12px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -88,7 +102,7 @@
 <div class="panel-box" style="width:50vw; max-width:600px; min-width:300px; margin:20px auto; border:3px solid purple; border-radius:10px; padding:14px; background:#ffffff; color:#000;">
 
   <!-- HEADER ROW -->
-  <div style="display:grid; grid-template-columns:repeat(7,1fr); text-align:center; font-weight:900; font-size:14px;">
+  <div class="chart-header">
     <div>DATE</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
   </div>
   <div style="width:100%; height:1px; background:purple; margin:6px 0;"></div>
