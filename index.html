@@ -198,24 +198,37 @@
 </div>
 
 <script>
-// ===== AUTO GENERATE 500 WEEKS DATA =====
+// ===== AUTO GENERATE 500 WEEKS DATA (STABLE / NON-CHANGING) =====
 const redJodis = ['00','11','22','33','44','55','66','77','88','99','05','50','16','61','27','72','38','83','49','94'];
 
-function randomJodi(){
-  return String(Math.floor(Math.random()*100)).padStart(2,'0');
+// get or create stable data
+let storedWeeks = localStorage.getItem('damodarWeeks');
+let weeksData;
+
+if(storedWeeks){
+  weeksData = JSON.parse(storedWeeks);
+}else{
+  weeksData = [];
+  for(let w=0; w<500; w++){
+    let week = [];
+    for(let d=0; d<6; d++){
+      week.push(String(Math.floor(Math.random()*100)).padStart(2,'0'));
+    }
+    weeksData.push(week);
+  }
+  localStorage.setItem('damodarWeeks', JSON.stringify(weeksData));
 }
 
 const weeksContainer = document.getElementById('weeks-container');
 
-for(let w=1; w<=500; w++){
+weeksData.forEach(week=>{
   const weekRow = document.createElement('div');
   weekRow.className = 'week-row';
 
-  for(let d=0; d<6; d++){
+  week.forEach(jodi=>{
     const cell = document.createElement('div');
     cell.className = 'daycell';
 
-    const jodi = randomJodi();
     const jodiDiv = document.createElement('div');
     jodiDiv.className = 'jodi';
     jodiDiv.innerText = jodi;
@@ -226,18 +239,17 @@ for(let w=1; w<=500; w++){
 
     cell.appendChild(jodiDiv);
     weekRow.appendChild(cell);
-  }
+  });
 
   weeksContainer.appendChild(weekRow);
 
-  // separator line
   const sep = document.createElement('div');
   sep.style.width='100%';
   sep.style.height='2px';
   sep.style.background='purple';
   sep.style.margin='8px 0';
   weeksContainer.appendChild(sep);
-}
+});
 </script>
 </body>
 </html>
