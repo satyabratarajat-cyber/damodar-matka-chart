@@ -220,35 +220,35 @@ allWeeks.forEach(week => {
   weeksContainer.appendChild(sep);
 });
 
-// ===== CURRENT WEEK (EDITABLE) =====
-const currentWeek = JSON.parse(localStorage.getItem('damodarWeekDisplay') || '[]');
-if (currentWeek.length) {
-  const weekRow = document.createElement('div');
-  weekRow.className = 'week-row';
+// ===== CURRENT WEEK (RUNNING) =====
+const currentWeek = JSON.parse(localStorage.getItem('damodarWeekDisplay') || '["","","","","",""]');
 
-  currentWeek.forEach(value => {
-    const cell = document.createElement('div');
-    cell.className = 'daycell';
+const currentRow = document.createElement('div');
+currentRow.className = 'week-row';
 
-    const jodiDiv = document.createElement('div');
-    jodiDiv.className = 'jodi';
+currentWeek.forEach(value => {
+  const cell = document.createElement('div');
+  cell.className = 'daycell';
 
-    if (!value || value.trim() === '') {
-      jodiDiv.classList.add('empty');
-    } else {
-      const cleanVal = value.replace(/-/g, '');
-      jodiDiv.innerText = cleanVal;
-      if (cleanVal.length === 2 && redJodis.includes(cleanVal)) {
-        jodiDiv.style.color = 'red';
-      }
+  const jodiDiv = document.createElement('div');
+  jodiDiv.className = 'jodi';
+
+  if (!value || value.trim() === '') {
+    jodiDiv.classList.add('empty');
+  } else {
+    const cleanVal = value.replace(/-/g, '');
+    jodiDiv.innerText = cleanVal;
+    if (cleanVal.length === 2 && redJodis.includes(cleanVal)) {
+      jodiDiv.style.color = 'red';
     }
+  }
 
-    cell.appendChild(jodiDiv);
-    weekRow.appendChild(cell);
-  });
+  cell.appendChild(jodiDiv);
+  currentRow.appendChild(cell);
+});
 
-  weeksContainer.appendChild(weekRow);
-}
+weeksContainer.appendChild(currentRow);
+
 
 </script>
 </body>
