@@ -95,13 +95,14 @@ textarea{
   <div class="box">
     <h2>Weekly Entry</h2>
 
-    <div class="row"><label>MON</label><input id="monA" placeholder="Open" /><input id="monB" placeholder="Close" /><button onclick="saveDay()">Update</button></div>
-    <div class="row"><label>TUE</label><input id="tueA" /><input id="tueB" /><button onclick="saveDay()">Update</button></div>
-    <div class="row"><label>WED</label><input id="wedA" /><input id="wedB" /><button onclick="saveDay()">Update</button></div>
-    <div class="row"><label>THU</label><input id="thuA" /><input id="thuB" /><button onclick="saveDay()">Update</button></div>
-    <div class="row"><label>FRI</label><input id="friA" /><input id="friB" /><button onclick="saveDay()">Update</button></div>
-    <div class="row"><label>SAT</label><input id="satA" /><input id="satB" /><button onclick="saveDay()">Update</button></div>
+    <div class="row"><label>MON</label><input id="monA" placeholder="Open" /><input id="monB" placeholder="Close" /></div>
+    <div class="row"><label>TUE</label><input id="tueA" /><input id="tueB" /></div>
+    <div class="row"><label>WED</label><input id="wedA" /><input id="wedB" /></div>
+    <div class="row"><label>THU</label><input id="thuA" /><input id="thuB" /></div>
+    <div class="row"><label>FRI</label><input id="friA" /><input id="friB" /></div>
+    <div class="row"><label>SAT</label><input id="satA" /><input id="satB" /></div>
 
+    <button class="full-btn" onclick="autoSaveWeek()">Save Week Data</button>
     <button class="full-btn" onclick="generateWeek()">Generate New Week</button>
     <textarea id="weekOut" readonly></textarea>
   </div>
