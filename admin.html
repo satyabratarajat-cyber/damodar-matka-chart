@@ -104,6 +104,7 @@ textarea{
 
     <button class="full-btn" onclick="autoSaveWeek()">Save Week Data</button>
     <button class="full-btn" onclick="generateWeek()">Generate New Week</button>
+    <button class="full-btn" style="background:#555;" onclick="deletePreviousNumber()">Delete Previous Number</button>
     <textarea id="weekOut" readonly></textarea>
   </div>
 </div>
@@ -162,10 +163,16 @@ function autoSaveWeek(){
     [friA.value,friB.value],
     [satA.value,satB.value]
   ];
-  // admin raw save
+
+  // SAVE UNDO SNAPSHOT BEFORE OVERWRITE
+  const prevRaw = JSON.parse(localStorage.getItem('damodarWeek') || 'null');
+  const prevFlat = JSON.parse(localStorage.getItem('damodarWeekDisplay') || 'null');
+  if(prevRaw && prevFlat){
+    localStorage.setItem('damodarWeekUndo', JSON.stringify({ raw: prevRaw, flat: prevFlat }));
+  }
+
   localStorage.setItem('damodarWeek',JSON.stringify(week));
 
-  // public-ready flat format: ["12-34", "", ...]
   const flat = week.map(d => (d[0] && d[1]) ? `${d[0]}-${d[1]}` : '');
   localStorage.setItem('damodarWeekDisplay', JSON.stringify(flat));
 
@@ -178,30 +185,22 @@ function generateWeek(){
   // 1) save latest edits
   autoSaveWeek();
 
-  // 2) read current flat week (public format)
   const currentFlat = JSON.parse(
     localStorage.getItem('damodarWeekDisplay') || '[]'
   );
 
-  // 3) read history
   const history = JSON.parse(
     localStorage.getItem('damodarWeeksHistory') || '[]'
   );
 
-  // 4) push current week into history (LOCK)
   history.push(currentFlat);
-  localStorage.setItem(
-    'damodarWeeksHistory',
-    JSON.stringify(history)
-  );
+  localStorage.setItem('damodarWeeksHistory', JSON.stringify(history));
 
-  // 5) clear inputs for new week
   ['mon','tue','wed','thu','fri','sat'].forEach(d=>{
     document.getElementById(d+'A').value='';
     document.getElementById(d+'B').value='';
   });
 
-  // 6) start new empty week (admin + public)
   localStorage.setItem('damodarWeek', JSON.stringify([
     ['',''],['',''],['',''],['',''],['',''],['','']
   ]));
@@ -210,8 +209,31 @@ function generateWeek(){
     '','','','','',''
   ]));
 
+  localStorage.removeItem('damodarWeekUndo');
+
   weekOut.value = 'WEEK LOCKED & NEW WEEK STARTED';
   alert('Week locked. New week started.');
+}
+
+// ===== DELETE PREVIOUS NUMBER (UNDO LAST SAVE) =====
+function deletePreviousNumber(){
+  const undo = JSON.parse(localStorage.getItem('damodarWeekUndo') || 'null');
+  if(!undo){
+    alert('No previous data to delete');
+    return;
+  }
+
+  localStorage.setItem('damodarWeek', JSON.stringify(undo.raw));
+  localStorage.setItem('damodarWeekDisplay', JSON.stringify(undo.flat));
+
+  const days=['mon','tue','wed','thu','fri','sat'];
+  days.forEach((d,i)=>{
+    document.getElementById(d+'A').value = undo.raw[i][0] || '';
+    document.getElementById(d+'B').value = undo.raw[i][1] || '';
+  });
+
+  localStorage.removeItem('damodarWeekUndo');
+  weekOut.value='PREVIOUS NUMBER RESTORED';
 }
 </script>
 
