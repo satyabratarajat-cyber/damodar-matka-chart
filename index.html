@@ -164,92 +164,62 @@
 </div>
 
 <script>
-// ================== ADMIN CONNECTED PUBLIC SCRIPT (FINAL) ==================
-// Rule:
-// 1) Daily: jo bhi admin me likha hoga wahi yahan dikhega
-// 2) Weekly: jo bhi likha hoga wahi dikhega
-// 3) Color effect ONLY jab 2-digit final jodi ho
+// ================== GLOBAL PUBLIC SCRIPT (JSON BASED) ==================
+// This page reads data from data.json (GLOBAL for all users)
 
 const redJodis = ['00','11','22','33','44','55','66','77','88','99','05','50','16','61','27','72','38','83','49','94'];
 
-// ===== DAILY DISPLAY (MANUAL ONLY) =====
-const dailyValue = localStorage.getItem('damodarDailyDisplay');
-if (dailyValue) {
-  document.querySelectorAll('#dailyDisplay').forEach(el => {
-    el.innerText = dailyValue.replace(/-/g, ' - ');
+fetch('data.json?_=' + Date.now())
+  .then(res => res.json())
+  .then(data => {
+    // ===== DAILY =====
+    if(data.daily){
+      document.querySelectorAll('#dailyDisplay').forEach(el => {
+        el.innerText = data.daily.replace(/-/g,' - ');
+      });
+    }
+
+    const weeksContainer = document.getElementById('weeks-container');
+    weeksContainer.innerHTML = '';
+
+    // ===== HISTORY WEEKS =====
+    (data.history || []).forEach(week => drawWeek(week));
+
+    // ===== CURRENT WEEK =====
+    if(data.current){
+      drawWeek(data.current);
+    }
   });
-}
 
-// ===== WEEKLY DISPLAY (MANUAL ONLY) =====
-const weeksContainer = document.getElementById('weeks-container');
-weeksContainer.innerHTML = '';
+function drawWeek(week){
+  const row = document.createElement('div');
+  row.className = 'week-row';
 
-// ===== FINALIZED WEEKS (LOCKED) =====
-const allWeeks = JSON.parse(localStorage.getItem('damodarWeeksHistory') || '[]');
-
-allWeeks.forEach(week => {
-  const weekRow = document.createElement('div');
-  weekRow.className = 'week-row';
-
-  week.forEach(value => {
+  week.forEach(val => {
     const cell = document.createElement('div');
     cell.className = 'daycell';
 
-    const jodiDiv = document.createElement('div');
-    jodiDiv.className = 'jodi';
+    const j = document.createElement('div');
+    j.className = 'jodi';
 
-    if (!value || value.trim() === '') {
-      jodiDiv.classList.add('empty');
-    } else {
-      const cleanVal = value.replace(/-/g, '');
-      jodiDiv.innerText = cleanVal;
-      if (cleanVal.length === 2 && redJodis.includes(cleanVal)) {
-        jodiDiv.style.color = 'red';
+    if(!val){
+      j.classList.add('empty');
+    }else{
+      const clean = val.replace(/-/g,'');
+      j.innerText = clean;
+      if(clean.length===2 && redJodis.includes(clean)){
+        j.style.color='red';
       }
     }
 
-    cell.appendChild(jodiDiv);
-    weekRow.appendChild(cell);
+    cell.appendChild(j);
+    row.appendChild(cell);
   });
 
-  weeksContainer.appendChild(weekRow);
+  weeksContainer.appendChild(row);
   const sep = document.createElement('div');
-  sep.style.height = '2px';
-  sep.style.background = 'purple';
-  sep.style.margin = '8px 0';
+  sep.style.height='2px';
+  sep.style.background='purple';
+  sep.style.margin='8px 0';
   weeksContainer.appendChild(sep);
-});
-
-// ===== CURRENT WEEK (RUNNING) =====
-const currentWeek = JSON.parse(localStorage.getItem('damodarWeekDisplay') || '["","","","","",""]');
-
-const currentRow = document.createElement('div');
-currentRow.className = 'week-row';
-
-currentWeek.forEach(value => {
-  const cell = document.createElement('div');
-  cell.className = 'daycell';
-
-  const jodiDiv = document.createElement('div');
-  jodiDiv.className = 'jodi';
-
-  if (!value || value.trim() === '') {
-    jodiDiv.classList.add('empty');
-  } else {
-    const cleanVal = value.replace(/-/g, '');
-    jodiDiv.innerText = cleanVal;
-    if (cleanVal.length === 2 && redJodis.includes(cleanVal)) {
-      jodiDiv.style.color = 'red';
-    }
-  }
-
-  cell.appendChild(jodiDiv);
-  currentRow.appendChild(cell);
-});
-
-weeksContainer.appendChild(currentRow);
-
-
-</script>
-</body>
-</html>
+}
