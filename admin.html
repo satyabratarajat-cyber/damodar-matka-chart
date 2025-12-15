@@ -116,20 +116,24 @@ const dailyInput=document.getElementById('daily');
 const dailyOut=document.getElementById('dailyOut');
 const weekOut=document.getElementById('weekOut');
 
-// ===== DAILY SAVE (MANUAL, FIXED) =====
+// ===== DAILY SAVE (MANUAL, FIXED + PUBLIC CONNECT) =====
 function saveDaily(){
   const v=dailyInput.value.trim();
   if(!v) return alert('Daily empty');
+  // save for admin
   localStorage.setItem('damodarDaily',v);
+  // save for public page (direct read)
+  localStorage.setItem('damodarDailyDisplay',v);
   dailyOut.value='SAVED & FIXED: '+v;
 }
+
 
 // ===== MANUAL DAY SAVE (NO AUTO GENERATE) =====
 function saveDay(){
   autoSaveWeek();
 }
 
-// ===== AUTO SAVE WEEK (MANUAL DATA ONLY) =====
+// ===== AUTO SAVE WEEK (MANUAL DATA ONLY + PUBLIC CONNECT) =====
 function autoSaveWeek(){
   const week=[
     [monA.value,monB.value],
@@ -139,9 +143,16 @@ function autoSaveWeek(){
     [friA.value,friB.value],
     [satA.value,satB.value]
   ];
+  // admin raw save
   localStorage.setItem('damodarWeek',JSON.stringify(week));
-  weekOut.value='SAVED (manual entries only)';
+
+  // public-ready flat format: ["12-34", "", ...]
+  const flat = week.map(d => (d[0] && d[1]) ? `${d[0]}-${d[1]}` : '');
+  localStorage.setItem('damodarWeekDisplay', JSON.stringify(flat));
+
+  weekOut.value='SAVED & FIXED (connected to public)';
 }
+
 
 // ===== WEEK END (LOCK CURRENT WEEK) =====
 function generateWeek(){
