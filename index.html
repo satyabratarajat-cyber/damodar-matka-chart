@@ -3,239 +3,253 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Damodar Admin Panel</title>
+<title>Damodar Chart</title>
 <style>
-body{
-  margin:0;
-  background:#0b0b0b;
-  font-family:'Trebuchet MS',Arial,sans-serif;
+  body{
+    margin:0;
+    background:#0b0b0b;
+    color:#fff;
+    font-family:'Trebuchet MS','Arial Black',Arial,sans-serif;
+  }
+
+  /* ===== CHART HEADER ===== */
+  .chart-header{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    text-align:center;
+    font-weight:900;
+    font-size:14px;
+    align-items:center;
 }
-.admin-wrap{
-  max-width:700px;
-  margin:20px auto;
+.chart-header > div{
+    border-right:1px solid purple;
 }
-.box{
-  background:#fff;
-  border:3px solid purple;
-  border-radius:12px;
-  padding:20px;
-  margin-bottom:20px;
+.chart-header > div:last-child{
+    border-right:none;
 }
-h2{
-  text-align:center;
-  color:purple;
-  margin-bottom:15px;
+
+  /* ===== WEEK ROW (ALWAYS HORIZONTAL) ===== */
+  .week-row{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    column-gap:6px;
+    align-items:center;
+  }
+
+  
+
+  .daycell{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-right:1px solid purple;
 }
-.row{
-  display:grid;
-  grid-template-columns:80px 1fr 1fr 140px;
-  gap:10px;
-  align-items:center;
-  margin-bottom:10px;
+.week-row > .daycell:last-child{
+    border-right:none;
 }
-.row label{font-weight:900;}
-input{
-  padding:8px;
-  font-size:15px;
-  text-align:center;
-  font-weight:900;
-}
-button{
-  padding:8px 10px;
-  background:#c1121f;
-  color:#fff;
-  font-weight:900;
-  border:none;
-  border-radius:20px;
-  cursor:pointer;
-}
-.full-btn{
-  width:100%;
-  padding:12px;
-  margin-top:15px;
-}
-textarea{
-  width:100%;
-  height:80px;
-  margin-top:10px;
-}
+
+  .jodi{
+    font-size:30px;
+    font-weight:900;
+    min-width:36px;
+    text-align:center;
+    color:#000;
+  }
+
+  .jodi.empty::before{
+    content:"—";
+    font-size:34px;
+    font-weight:900;
+  }
+
+  /* ===== PANEL BOX ===== */
+  .panel-box{
+    width:32vw;
+    max-width:480px;
+    min-width:240px;
+    margin:20px auto;
+    border:3px solid purple;
+    border-radius:10px;
+    padding:10px;
+    background:#fff;
+    color:#000;
+  }
+
+  /* ===== MOBILE: SAME STRUCTURE, ONLY SCALE ===== */
+  @media (max-width:768px){
+    .panel-box{
+      width:92vw;
+      max-width:92vw;
+      padding:8px;
+    }
+    .chart-header{font-size:10px;}
+    .date-col{font-size:10px;}
+    .jodi{font-size:26px;}
+  }
 </style>
 </head>
 <body>
 
-<!-- ===== ADMIN PASSWORD PROTECTION ===== -->
-<script>
-(function(){
-  const ADMIN_PASSWORD = "damodar@123"; // change password here
 
-  if(sessionStorage.getItem("damodarAdminAuth")==="yes") return;
+<header style="color:red; text-transform:uppercase; text-align:center; font-weight:900; font-size:22px;">DAMODAR CHART</header>
+<div class="sub-header" style="color:white; border-top:2px solid blue; padding:5px 0; text-align:center; font-weight:700;">Damodar Matka Chart Result</div>
+<div class="description" style="color:white; opacity:1; text-align:center; max-width:900px; margin:0 auto;">
+  This page belongs to Damodar Matka Chart. Here you will find useful data about Damodar probability numbers for brain improvement.
+</div>
 
-  const pass = prompt("Enter Admin Password:");
-  if(pass === ADMIN_PASSWORD){
-    sessionStorage.setItem("damodarAdminAuth","yes");
-  }else{
-    document.body.innerHTML="";
-    alert("Access Denied");
-  }
-})();
-</script>
+<!-- YELLOW STRIP BETWEEN BLUE LINES -->
+<div style="width:100%; height:5px; background:#0033cc; margin:14px 0;"></div>
 
+<div style="background:#ffff00; padding:12px 0; border:3px solid red; box-sizing:border-box;">
+  <div style="text-align:center; margin-top:0; color:#0033cc; font-weight:900; font-size:28px; text-transform:uppercase; letter-spacing:1px; font-family:'Times New Roman', Georgia, serif;">DAMODAR</div>
 
-<div class="admin-wrap">
+  <div id="dailyDisplay" style="text-align:center; margin-top:6px; font-size:24px; color:#000; font-weight:900; letter-spacing:1px; font-family:'Times New Roman', Georgia, serif;">---</div>
 
-  <!-- DAILY DISPLAY -->
-  <div class="box">
-    <h2>Daily Display Data</h2>
-    <input id="daily" placeholder="248-67-935" style="width:100%;font-size:18px;" />
-    <button class="full-btn" onclick="saveDaily()">Generate Now</button>
-    <textarea id="dailyOut" readonly></textarea>
-  </div>
-
-  <!-- WEEKLY ENTRY -->
-  <div class="box">
-    <h2>Weekly Entry</h2>
-
-    <div class="row"><label>MON</label><input id="monA" placeholder="Open" /><input id="monB" placeholder="Close" /></div>
-    <div class="row"><label>TUE</label><input id="tueA" /><input id="tueB" /></div>
-    <div class="row"><label>WED</label><input id="wedA" /><input id="wedB" /></div>
-    <div class="row"><label>THU</label><input id="thuA" /><input id="thuB" /></div>
-    <div class="row"><label>FRI</label><input id="friA" /><input id="friB" /></div>
-    <div class="row"><label>SAT</label><input id="satA" /><input id="satB" /></div>
-
-    <button class="full-btn" onclick="autoSaveWeek()">Save Week Data</button>
-    <button class="full-btn" onclick="generateWeek()">Generate New Week</button>
-    <button class="full-btn" style="background:#555;" onclick="deletePreviousNumber()">Delete Previous Number</button>
-    <textarea id="weekOut" readonly></textarea>
+  <div style="text-align:center; margin-top:8px;">
+    <button type="button" onclick="window.location.reload(true);" style="background:#c1121f; color:#d4af37; padding:8px 20px; border-radius:30px; font-size:14px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase; font-family:'Flemish Script BT','Segoe Script','Brush Script MT','Comic Sans MS',cursive; cursor:pointer;">refresh result</button>
   </div>
 </div>
 
+<div style="width:100%; height:5px; background:#0033cc; margin:14px 0;"></div>
+
+<!-- GO TO BOTTOM BUTTON -->
+<div style="text-align:center; margin:15px 0 25px;">
+  <button onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});" style="background:#0033cc; color:#fff; padding:8px 20px; border-radius:20px; font-size:14px; font-weight:900; font-family:'Arial Black', Impact, Arial, sans-serif;">GO TO BOTTOM</button>
+</div>
+
+<!-- NUMBER 13 : PURPLE BORDER CHART BOX (KALYAN PANEL STYLE) -->
+<div class="panel-box" style="width:32vw; max-width:480px; min-width:240px; margin:20px auto; border:3px solid purple; border-radius:10px; padding:10px; background:#ffffff; color:#000;">
+
+  <!-- HEADER ROW -->
+  <div class="chart-header">
+    <div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+  </div>
+  <div style="width:100%; height:1px; background:purple; margin:6px 0;"></div>
+
+  <!-- WEEK DATA CONTAINER (AUTO GENERATED) -->
+  <div id="weeks-container"></div>
+
+</div>
+
+    
+
+</div>
+
+<!-- GO TO TOP BUTTON -->
+<div style="text-align:center; margin:25px 0 10px;">
+  <button onclick="window.scrollTo({top: 0, behavior: 'smooth'});" style="background:purple; color:#fff; padding:10px 26px; border-radius:24px; font-size:14px; font-weight:900; font-family:'Arial Black', Impact, Arial, sans-serif; cursor:pointer;">
+    GO TO TOP
+  </button>
+</div>
+
+<!-- BLUE LINE BELOW GO TO TOP -->
+<div style="width:100%; height:5px; background:#0033cc; margin:0 0 14px;"></div>
+
+<!-- BOTTOM YELLOW STRIP (SAME AS TOP RESULT SETUP) -->
+<div style="background:#ffff00; padding:12px 0; border:3px solid red; box-sizing:border-box;">
+  <div style="text-align:center; margin-top:0; color:#0033cc; font-weight:900; font-size:28px; text-transform:uppercase; letter-spacing:1px; font-family:'Times New Roman', Georgia, serif;">DAMODAR</div>
+
+  <div id="dailyDisplay" style="text-align:center; margin-top:6px; font-size:24px; color:#000; font-weight:900; letter-spacing:1px; font-family:'Times New Roman', Georgia, serif;">---</div>
+
+  <div style="text-align:center; margin-top:8px;">
+    <button type="button" onclick="window.location.reload(true);" style="background:#c1121f; color:#d4af37; padding:8px 20px; border-radius:30px; font-size:14px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase; font-family:'Flemish Script BT','Segoe Script','Brush Script MT','Comic Sans MS',cursive; cursor:pointer;">refresh result</button>
+  </div>
+</div>
+
+<div style="width:100%; height:5px; background:#0033cc; margin:14px 0 10px;"></div>
+
+<!-- DISCLAIMER -->
+<div style="text-align:center; color:#ccc; font-size:12px; line-height:1.6; max-width:900px; margin:0 auto 40px; padding:0 12px;">
+  <strong>Disclaimer:</strong> This website is for informational and educational purposes only. We do not promote or support gambling in any form. All data shown here is based on analysis and past results and is provided only for learning and reference. Users are solely responsible for their actions and decisions. Please follow your local laws and regulations.
+</div>
+
 <script>
-// ===== LOAD SAVED DATA ON OPEN (CLEAN) =====
-window.addEventListener('load',()=>{
-  const dailyInput=document.getElementById('daily');
-  const dailyOut=document.getElementById('dailyOut');
-  const weekOut=document.getElementById('weekOut');
+// ================== ADMIN CONNECTED PUBLIC SCRIPT (FINAL) ==================
+// Rule:
+// 1) Daily: jo bhi admin me likha hoga wahi yahan dikhega
+// 2) Weekly: jo bhi likha hoga wahi dikhega
+// 3) Color effect ONLY jab 2-digit final jodi ho
 
-  const daily=localStorage.getItem('damodarDaily');
-  if(daily){
-    dailyInput.value=daily;
-    dailyOut.value='SAVED: '+daily;
-  }
+const redJodis = ['00','11','22','33','44','55','66','77','88','99','05','50','16','61','27','72','38','83','49','94'];
 
-  const week=JSON.parse(localStorage.getItem('damodarWeek')||'[]');
-  const days=['mon','tue','wed','thu','fri','sat'];
-  days.forEach((d,i)=>{
-    if(week[i]){
-      document.getElementById(d+'A').value=week[i][0] || '';
-      document.getElementById(d+'B').value=week[i][1] || '';
-    }
+// ===== DAILY DISPLAY (MANUAL ONLY) =====
+const dailyValue = localStorage.getItem('damodarDailyDisplay');
+if (dailyValue) {
+  document.querySelectorAll('#dailyDisplay').forEach(el => {
+    el.innerText = dailyValue.replace(/-/g, ' - ');
   });
+}
+
+// ===== WEEKLY DISPLAY (MANUAL ONLY) =====
+const weeksContainer = document.getElementById('weeks-container');
+weeksContainer.innerHTML = '';
+
+// ===== FINALIZED WEEKS (LOCKED) =====
+const allWeeks = JSON.parse(localStorage.getItem('damodarWeeksHistory') || '[]');
+
+allWeeks.forEach(week => {
+  const weekRow = document.createElement('div');
+  weekRow.className = 'week-row';
+
+  week.forEach(value => {
+    const cell = document.createElement('div');
+    cell.className = 'daycell';
+
+    const jodiDiv = document.createElement('div');
+    jodiDiv.className = 'jodi';
+
+    if (!value || value.trim() === '') {
+      jodiDiv.classList.add('empty');
+    } else {
+      const cleanVal = value.replace(/-/g, '');
+      jodiDiv.innerText = cleanVal;
+      if (cleanVal.length === 2 && redJodis.includes(cleanVal)) {
+        jodiDiv.style.color = 'red';
+      }
+    }
+
+    cell.appendChild(jodiDiv);
+    weekRow.appendChild(cell);
+  });
+
+  weeksContainer.appendChild(weekRow);
+  const sep = document.createElement('div');
+  sep.style.height = '2px';
+  sep.style.background = 'purple';
+  sep.style.margin = '8px 0';
+  weeksContainer.appendChild(sep);
 });
 
-const dailyInput=document.getElementById('daily');
-const dailyOut=document.getElementById('dailyOut');
-const weekOut=document.getElementById('weekOut');
+// ===== CURRENT WEEK (RUNNING) =====
+const currentWeek = JSON.parse(localStorage.getItem('damodarWeekDisplay') || '["","","","","",""]');
 
-// ===== DAILY SAVE (MANUAL, FIXED + PUBLIC CONNECT) =====
-function saveDaily(){
-  const v=dailyInput.value.trim();
-  if(!v) return alert('Daily empty');
-  // save for admin
-  localStorage.setItem('damodarDaily',v);
-  // save for public page (direct read)
-  localStorage.setItem('damodarDailyDisplay',v);
-  dailyOut.value='SAVED & FIXED: '+v;
-}
+const currentRow = document.createElement('div');
+currentRow.className = 'week-row';
 
+currentWeek.forEach(value => {
+  const cell = document.createElement('div');
+  cell.className = 'daycell';
 
-// ===== MANUAL DAY SAVE (NO AUTO GENERATE) =====
-function saveDay(){
-  autoSaveWeek();
-}
+  const jodiDiv = document.createElement('div');
+  jodiDiv.className = 'jodi';
 
-// ===== AUTO SAVE WEEK (MANUAL DATA ONLY + PUBLIC CONNECT) =====
-function autoSaveWeek(){
-  const week=[
-    [monA.value,monB.value],
-    [tueA.value,tueB.value],
-    [wedA.value,wedB.value],
-    [thuA.value,thuB.value],
-    [friA.value,friB.value],
-    [satA.value,satB.value]
-  ];
-
-  // SAVE UNDO SNAPSHOT BEFORE OVERWRITE
-  const prevRaw = JSON.parse(localStorage.getItem('damodarWeek') || 'null');
-  const prevFlat = JSON.parse(localStorage.getItem('damodarWeekDisplay') || 'null');
-  if(prevRaw && prevFlat){
-    localStorage.setItem('damodarWeekUndo', JSON.stringify({ raw: prevRaw, flat: prevFlat }));
+  if (!value || value.trim() === '') {
+    jodiDiv.classList.add('empty');
+  } else {
+    const cleanVal = value.replace(/-/g, '');
+    jodiDiv.innerText = cleanVal;
+    if (cleanVal.length === 2 && redJodis.includes(cleanVal)) {
+      jodiDiv.style.color = 'red';
+    }
   }
 
-  localStorage.setItem('damodarWeek',JSON.stringify(week));
+  cell.appendChild(jodiDiv);
+  currentRow.appendChild(cell);
+});
 
-  const flat = week.map(d => (d[0] && d[1]) ? `${d[0]}-${d[1]}` : '');
-  localStorage.setItem('damodarWeekDisplay', JSON.stringify(flat));
-
-  weekOut.value='SAVED & FIXED (connected to public)';
-}
+weeksContainer.appendChild(currentRow);
 
 
-// ===== WEEK END (LOCK CURRENT WEEK + SAVE TO HISTORY + START NEW) =====
-function generateWeek(){
-  // 1) save latest edits
-  autoSaveWeek();
-
-  const currentFlat = JSON.parse(
-    localStorage.getItem('damodarWeekDisplay') || '[]'
-  );
-
-  const history = JSON.parse(
-    localStorage.getItem('damodarWeeksHistory') || '[]'
-  );
-
-  history.push(currentFlat);
-  localStorage.setItem('damodarWeeksHistory', JSON.stringify(history));
-
-  ['mon','tue','wed','thu','fri','sat'].forEach(d=>{
-    document.getElementById(d+'A').value='';
-    document.getElementById(d+'B').value='';
-  });
-
-  localStorage.setItem('damodarWeek', JSON.stringify([
-    ['',''],['',''],['',''],['',''],['',''],['','']
-  ]));
-
-  localStorage.setItem('damodarWeekDisplay', JSON.stringify([
-    '','','','','',''
-  ]));
-
-  localStorage.removeItem('damodarWeekUndo');
-
-  weekOut.value = 'WEEK LOCKED & NEW WEEK STARTED';
-  alert('Week locked. New week started.');
-}
-
-// ===== DELETE PREVIOUS NUMBER (UNDO LAST SAVE) =====
-function deletePreviousNumber(){
-  const undo = JSON.parse(localStorage.getItem('damodarWeekUndo') || 'null');
-  if(!undo){
-    alert('No previous data to delete');
-    return;
-  }
-
-  localStorage.setItem('damodarWeek', JSON.stringify(undo.raw));
-  localStorage.setItem('damodarWeekDisplay', JSON.stringify(undo.flat));
-
-  const days=['mon','tue','wed','thu','fri','sat'];
-  days.forEach((d,i)=>{
-    document.getElementById(d+'A').value = undo.raw[i][0] || '';
-    document.getElementById(d+'B').value = undo.raw[i][1] || '';
-  });
-
-  localStorage.removeItem('damodarWeekUndo');
-  weekOut.value='PREVIOUS NUMBER RESTORED';
-}
 </script>
-
 </body>
 </html>
