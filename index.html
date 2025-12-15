@@ -184,9 +184,10 @@ if (dailyValue) {
 const weeksContainer = document.getElementById('weeks-container');
 weeksContainer.innerHTML = '';
 
-const week = JSON.parse(localStorage.getItem('damodarWeekDisplay') || '[]');
+// ===== FINALIZED WEEKS (LOCKED) =====
+const allWeeks = JSON.parse(localStorage.getItem('damodarWeeksHistory') || '[]');
 
-if (week.length) {
+allWeeks.forEach(week => {
   const weekRow = document.createElement('div');
   weekRow.className = 'week-row';
 
@@ -197,14 +198,12 @@ if (week.length) {
     const jodiDiv = document.createElement('div');
     jodiDiv.className = 'jodi';
 
-    // empty
     if (!value || value.trim() === '') {
       jodiDiv.classList.add('empty');
     } else {
-      jodiDiv.innerText = value;
-
-      // COLOR EFFECT ONLY IF FINAL 2-DIGIT JODI
-      if (value.length === 2 && redJodis.includes(value)) {
+      const cleanVal = value.replace(/-/g, '');
+      jodiDiv.innerText = cleanVal;
+      if (cleanVal.length === 2 && redJodis.includes(cleanVal)) {
         jodiDiv.style.color = 'red';
       }
     }
@@ -214,17 +213,43 @@ if (week.length) {
   });
 
   weeksContainer.appendChild(weekRow);
-
   const sep = document.createElement('div');
-  sep.style.width = '100%';
   sep.style.height = '2px';
   sep.style.background = 'purple';
   sep.style.margin = '8px 0';
   weeksContainer.appendChild(sep);
+});
 
-} else {
-  weeksContainer.innerHTML = '<div style="text-align:center;color:#666;font-weight:700;">No week data yet</div>';
+// ===== CURRENT WEEK (EDITABLE) =====
+const currentWeek = JSON.parse(localStorage.getItem('damodarWeekDisplay') || '[]');
+if (currentWeek.length) {
+  const weekRow = document.createElement('div');
+  weekRow.className = 'week-row';
+
+  currentWeek.forEach(value => {
+    const cell = document.createElement('div');
+    cell.className = 'daycell';
+
+    const jodiDiv = document.createElement('div');
+    jodiDiv.className = 'jodi';
+
+    if (!value || value.trim() === '') {
+      jodiDiv.classList.add('empty');
+    } else {
+      const cleanVal = value.replace(/-/g, '');
+      jodiDiv.innerText = cleanVal;
+      if (cleanVal.length === 2 && redJodis.includes(cleanVal)) {
+        jodiDiv.style.color = 'red';
+      }
+    }
+
+    cell.appendChild(jodiDiv);
+    weekRow.appendChild(cell);
+  });
+
+  weeksContainer.appendChild(weekRow);
 }
+
 </script>
 </body>
 </html>
