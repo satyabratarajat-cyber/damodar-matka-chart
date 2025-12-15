@@ -4,26 +4,69 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Damodar Admin Panel</title>
+
 <style>
-body{margin:0;background:#0b0b0b;font-family:Arial,sans-serif}
-.box{max-width:520px;margin:20px auto;background:#fff;border:3px solid purple;border-radius:10px;padding:15px}
-h2{text-align:center;color:purple;margin:0 0 10px}
-.row{display:grid;grid-template-columns:60px 1fr 1fr;gap:6px;margin-bottom:6px}
-input{padding:6px;font-weight:900;text-align:center}
-button{width:100%;padding:10px;margin-top:8px;font-weight:900;border:none;border-radius:20px;cursor:pointer}
-.save{background:#198754;color:#fff}
-.gen{background:#c1121f;color:#fff}
-.undo{background:#555;color:#fff}
+body{
+  margin:0;
+  background:#0b0b0b;
+  font-family:Arial, sans-serif;
+}
+.box{
+  max-width:520px;
+  margin:20px auto;
+  background:#fff;
+  border:3px solid purple;
+  border-radius:10px;
+  padding:15px;
+}
+h2{
+  margin:0 0 10px;
+  text-align:center;
+  color:purple;
+}
+.row{
+  display:grid;
+  grid-template-columns:60px 1fr 1fr;
+  gap:6px;
+  margin-bottom:6px;
+}
+label{
+  font-weight:900;
+}
+input{
+  padding:6px;
+  font-weight:900;
+  text-align:center;
+}
+button{
+  margin-top:8px;
+  width:100%;
+  padding:10px;
+  font-weight:900;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+}
+.save{background:#198754;color:#fff;}
+.gen{background:#c1121f;color:#fff;}
+.note{
+  font-size:12px;
+  color:#444;
+  text-align:center;
+  margin-top:6px;
+}
 </style>
 </head>
+
 <body>
 
+<!-- 🔐 PASSWORD -->
 <script>
 (function(){
-  const ADMIN_PASSWORD="damodar@123";
+  const ADMIN_PASSWORD = "damodar@123";
   if(sessionStorage.getItem("damodarAdminAuth")==="yes") return;
-  const p=prompt("Enter Admin Password");
-  if(p===ADMIN_PASSWORD){
+  const p = prompt("Enter Admin Password:");
+  if(p === ADMIN_PASSWORD){
     sessionStorage.setItem("damodarAdminAuth","yes");
   }else{
     document.body.innerHTML="";
@@ -32,49 +75,98 @@ button{width:100%;padding:10px;margin-top:8px;font-weight:900;border:none;border
 })();
 </script>
 
+<!-- DAILY -->
 <div class="box">
-<h2>Daily Display</h2>
-<input id="daily">
-<button class="save" onclick="saveDaily()">Save Daily</button>
+  <h2>Daily Result</h2>
+  <input id="daily" placeholder="248-67-935">
+  <button class="save" onclick="saveDaily()">Save Daily</button>
 </div>
 
+<!-- WEEKLY -->
 <div class="box">
-<h2>Weekly Entry</h2>
-<div class="row"><label>MON</label><input id="monA"><input id="monB"></div>
-<div class="row"><label>TUE</label><input id="tueA"><input id="tueB"></div>
-<div class="row"><label>WED</label><input id="wedA"><input id="wedB"></div>
-<div class="row"><label>THU</label><input id="thuA"><input id="thuB"></div>
-<div class="row"><label>FRI</label><input id="friA"><input id="friB"></div>
-<div class="row"><label>SAT</label><input id="satA"><input id="satB"></div>
+  <h2>Weekly Entry</h2>
 
-<button class="save" onclick="saveWeek()">Save Week Data</button>
-<button class="gen" onclick="endWeek()">Generate New Week</button>
+  <div class="row"><label>MON</label><input id="monA"><input id="monB"></div>
+  <div class="row"><label>TUE</label><input id="tueA"><input id="tueB"></div>
+  <div class="row"><label>WED</label><input id="wedA"><input id="wedB"></div>
+  <div class="row"><label>THU</label><input id="thuA"><input id="thuB"></div>
+  <div class="row"><label>FRI</label><input id="friA"><input id="friB"></div>
+  <div class="row"><label>SAT</label><input id="satA"><input id="satB"></div>
+
+  <button class="save" onclick="saveWeek()">Save Week Data</button>
+  <button class="gen" onclick="generateNewWeek()">Generate New Week</button>
+
+  <div class="note">
+    Save = update current week<br>
+    Generate = lock week + start new
+  </div>
 </div>
 
 <script>
+let GLOBAL_DATA = {
+  daily: "",
+  current: ["","","","","",""],
+  history: []
+};
+
+/* ===== LOAD EXISTING GLOBAL DATA ===== */
+fetch('/data.json?_=' + Date.now())
+  .then(r => r.json())
+  .then(d => {
+    GLOBAL_DATA = d;
+    daily.value = d.daily || "";
+    if(d.current){
+      const ids=['mon','tue','wed','thu','fri','sat'];
+      d.current.forEach((v,i)=>{
+        if(v){
+          document.getElementById(ids[i]+'A').value=v[0]||'';
+          document.getElementById(ids[i]+'B').value=v[1]||'';
+        }
+      });
+    }
+  });
+
+/* ===== SAVE DAILY ===== */
 function saveDaily(){
-  localStorage.setItem('damodarDailyDisplay',daily.value.trim());
+  GLOBAL_DATA.daily = daily.value.trim();
+  saveGlobal();
 }
 
+/* ===== SAVE WEEK ===== */
 function saveWeek(){
-  const week=[
-    monA.value+monB.value,
-    tueA.value+tueB.value,
-    wedA.value+wedB.value,
-    thuA.value+thuB.value,
-    friA.value+friB.value,
-    satA.value+satB.value
+  GLOBAL_DATA.current = [
+    [monA.value,monB.value],
+    [tueA.value,tueB.value],
+    [wedA.value,wedB.value],
+    [thuA.value,thuB.value],
+    [friA.value,friB.value],
+    [satA.value,satB.value]
   ];
-  localStorage.setItem('damodarWeekDisplay',JSON.stringify(week));
+  saveGlobal();
 }
 
-function endWeek(){
-  const cur=JSON.parse(localStorage.getItem('damodarWeekDisplay')||'[]');
-  const hist=JSON.parse(localStorage.getItem('damodarWeeksHistory')||'[]');
-  hist.push(cur);
-  localStorage.setItem('damodarWeeksHistory',JSON.stringify(hist));
-  localStorage.setItem('damodarWeekDisplay',JSON.stringify(["","","","","",""]));
-  location.reload();
+/* ===== GENERATE NEW WEEK ===== */
+function generateNewWeek(){
+  saveWeek();
+  GLOBAL_DATA.history.push(GLOBAL_DATA.current);
+  GLOBAL_DATA.current = [["",""],["",""],["",""],["",""],["",""],["",""]];
+  ['mon','tue','wed','thu','fri','sat'].forEach(d=>{
+    document.getElementById(d+'A').value='';
+    document.getElementById(d+'B').value='';
+  });
+  saveGlobal();
+  alert("Week locked & new week started");
+}
+
+/* ===== SAVE TO SERVER (GLOBAL) ===== */
+function saveGlobal(){
+  fetch('/.netlify/functions/saveData',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(GLOBAL_DATA)
+  })
+  .then(()=>alert("Global data saved"))
+  .catch(()=>alert("Save failed"));
 }
 </script>
 
