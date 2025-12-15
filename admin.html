@@ -1,47 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Damodar Admin Panel</title>
-
 <style>
 body{
   margin:0;
   background:#0b0b0b;
-  font-family:Arial, sans-serif;
+  font-family:'Trebuchet MS',Arial,sans-serif;
+}
+.admin-wrap{
+  max-width:700px;
+  margin:20px auto;
 }
 .box{
-  max-width:520px;
-  margin:20px auto;
   background:#fff;
   border:3px solid purple;
-  border-radius:10px;
-  padding:15px;
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:20px;
 }
 h2{
-  margin:0 0 10px;
   text-align:center;
   color:purple;
+  margin-bottom:15px;
 }
 .row{
   display:grid;
-  grid-template-columns:60px 1fr 1fr;
-  gap:6px;
-  margin-bottom:6px;
+  grid-template-columns:80px 1fr 1fr 140px;
+  gap:10px;
+  align-items:center;
+  margin-bottom:10px;
 }
-.row label{
-  font-weight:900;
-}
+.row label{font-weight:900;}
 input{
-  padding:6px;
-  font-weight:900;
+  padding:8px;
+  font-size:15px;
   text-align:center;
+  font-weight:900;
 }
 button{
-  margin-top:10px;
-  width:100%;
-  padding:10px;
+  padding:8px 10px;
   background:#c1121f;
   color:#fff;
   font-weight:900;
@@ -49,91 +49,134 @@ button{
   border-radius:20px;
   cursor:pointer;
 }
-.note{
-  margin-top:8px;
-  font-size:12px;
-  color:#444;
-  text-align:center;
+.full-btn{
+  width:100%;
+  padding:12px;
+  margin-top:15px;
+}
+textarea{
+  width:100%;
+  height:80px;
+  margin-top:10px;
 }
 </style>
 </head>
-
 <body>
 
-<!-- DAILY -->
-<div class="box">
-  <h2>Daily Display</h2>
-  <input id="daily" placeholder="248-67-935">
-  <button onclick="saveDaily()">SAVE DAILY</button>
-</div>
+<!-- ===== ADMIN PASSWORD PROTECTION ===== -->
+<script>
+(function(){
+  const ADMIN_PASSWORD = "damodar@123"; // change password here
 
-<!-- WEEKLY -->
-<div class="box">
-  <h2>Weekly Entry</h2>
+  if(sessionStorage.getItem("damodarAdminAuth")==="yes") return;
 
-  <div class="row"><label>MON</label><input id="mon"><input id="mon2"></div>
-  <div class="row"><label>TUE</label><input id="tue"><input id="tue2"></div>
-  <div class="row"><label>WED</label><input id="wed"><input id="wed2"></div>
-  <div class="row"><label>THU</label><input id="thu"><input id="thu2"></div>
-  <div class="row"><label>FRI</label><input id="fri"><input id="fri2"></div>
-  <div class="row"><label>SAT</label><input id="sat"><input id="sat2"></div>
+  const pass = prompt("Enter Admin Password:");
+  if(pass === ADMIN_PASSWORD){
+    sessionStorage.setItem("damodarAdminAuth","yes");
+  }else{
+    document.body.innerHTML="";
+    alert("Access Denied");
+  }
+})();
+</script>
 
-  <button onclick="saveWeek()">SAVE / UPDATE WEEK</button>
-  <button onclick="endWeek()">END WEEK & START NEW</button>
 
-  <div class="note">
-    SAVE = update same week<br>
-    END WEEK = lock + new week below
+<div class="admin-wrap">
+
+  <!-- DAILY DISPLAY -->
+  <div class="box">
+    <h2>Daily Display Data</h2>
+    <input id="daily" placeholder="248-67-935" style="width:100%;font-size:18px;" />
+    <button class="full-btn" onclick="saveDaily()">Generate Now</button>
+    <textarea id="dailyOut" readonly></textarea>
+  </div>
+
+  <!-- WEEKLY ENTRY -->
+  <div class="box">
+    <h2>Weekly Entry</h2>
+
+    <div class="row"><label>MON</label><input id="monA" placeholder="Open" /><input id="monB" placeholder="Close" /><button onclick="saveDay()">Update</button></div>
+    <div class="row"><label>TUE</label><input id="tueA" /><input id="tueB" /><button onclick="saveDay()">Update</button></div>
+    <div class="row"><label>WED</label><input id="wedA" /><input id="wedB" /><button onclick="saveDay()">Update</button></div>
+    <div class="row"><label>THU</label><input id="thuA" /><input id="thuB" /><button onclick="saveDay()">Update</button></div>
+    <div class="row"><label>FRI</label><input id="friA" /><input id="friB" /><button onclick="saveDay()">Update</button></div>
+    <div class="row"><label>SAT</label><input id="satA" /><input id="satB" /><button onclick="saveDay()">Update</button></div>
+
+    <button class="full-btn" onclick="generateWeek()">Generate New Week</button>
+    <textarea id="weekOut" readonly></textarea>
   </div>
 </div>
 
 <script>
-/* DAILY */
+// ===== LOAD SAVED DATA ON OPEN (CLEAN) =====
+window.addEventListener('load',()=>{
+  const dailyInput=document.getElementById('daily');
+  const dailyOut=document.getElementById('dailyOut');
+  const weekOut=document.getElementById('weekOut');
+
+  const daily=localStorage.getItem('damodarDaily');
+  if(daily){
+    dailyInput.value=daily;
+    dailyOut.value='SAVED: '+daily;
+  }
+
+  const week=JSON.parse(localStorage.getItem('damodarWeek')||'[]');
+  const days=['mon','tue','wed','thu','fri','sat'];
+  days.forEach((d,i)=>{
+    if(week[i]){
+      document.getElementById(d+'A').value=week[i][0] || '';
+      document.getElementById(d+'B').value=week[i][1] || '';
+    }
+  });
+});
+
+const dailyInput=document.getElementById('daily');
+const dailyOut=document.getElementById('dailyOut');
+const weekOut=document.getElementById('weekOut');
+
+// ===== DAILY SAVE (MANUAL, FIXED + PUBLIC CONNECT) =====
 function saveDaily(){
-  const v = document.getElementById('daily').value.trim();
+  const v=dailyInput.value.trim();
   if(!v) return alert('Daily empty');
-  localStorage.setItem('damodarDailyDisplay', v);
-  alert('Daily saved');
+  // save for admin
+  localStorage.setItem('damodarDaily',v);
+  // save for public page (direct read)
+  localStorage.setItem('damodarDailyDisplay',v);
+  dailyOut.value='SAVED & FIXED: '+v;
 }
 
-/* SAVE WEEK (same week) */
-function saveWeek(){
-  const week = [
-    (mon.value+mon2.value).trim(),
-    (tue.value+tue2.value).trim(),
-    (wed.value+wed2.value).trim(),
-    (thu.value+thu2.value).trim(),
-    (fri.value+fri2.value).trim(),
-    (sat.value+sat2.value).trim()
+
+// ===== MANUAL DAY SAVE (NO AUTO GENERATE) =====
+function saveDay(){
+  autoSaveWeek();
+}
+
+// ===== AUTO SAVE WEEK (MANUAL DATA ONLY + PUBLIC CONNECT) =====
+function autoSaveWeek(){
+  const week=[
+    [monA.value,monB.value],
+    [tueA.value,tueB.value],
+    [wedA.value,wedB.value],
+    [thuA.value,thuB.value],
+    [friA.value,friB.value],
+    [satA.value,satB.value]
   ];
-  localStorage.setItem('damodarWeekDisplay', JSON.stringify(week));
-  alert('Week updated');
+  // admin raw save
+  localStorage.setItem('damodarWeek',JSON.stringify(week));
+
+  // public-ready flat format: ["12-34", "", ...]
+  const flat = week.map(d => (d[0] && d[1]) ? `${d[0]}-${d[1]}` : '');
+  localStorage.setItem('damodarWeekDisplay', JSON.stringify(flat));
+
+  weekOut.value='SAVED & FIXED (connected to public)';
 }
 
-/* END WEEK */
-function endWeek(){
-  const current = JSON.parse(
-    localStorage.getItem('damodarWeekDisplay') || '["","","","","",""]'
-  );
 
-  const history = JSON.parse(
-    localStorage.getItem('damodarWeeksHistory') || '[]'
-  );
-
-  history.push(current);
-
-  localStorage.setItem(
-    'damodarWeeksHistory',
-    JSON.stringify(history)
-  );
-
-  localStorage.setItem(
-    'damodarWeekDisplay',
-    JSON.stringify(["","","","","",""])
-  );
-
-  alert('Week locked & new week started');
-  location.reload();
+// ===== WEEK END (LOCK CURRENT WEEK) =====
+function generateWeek(){
+  autoSaveWeek();
+  localStorage.setItem('damodarWeekLocked','yes');
+  alert('Week END: current data locked. Next week can start.');
 }
 </script>
 
