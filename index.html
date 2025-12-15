@@ -168,64 +168,63 @@
 </div>
 
 <script>
-// ===== GLOBAL CONSTANT DATA (SAME FOR ALL DEVICES) =====
-// DATA SOURCE: /data/weeks.json (STATIC FILE)
-// RULE: Existing data never changes, new weeks are APPENDED only
+// ================== ADMIN CONNECTED PUBLIC SCRIPT ==================
+// This page READS data written by admin panel (localStorage)
+// No random, no auto-generate here
 
 const redJodis = ['00','11','22','33','44','55','66','77','88','99','05','50','16','61','27','72','38','83','49','94'];
 
-const weeksContainer = document.getElementById('weeks-container');
+// ===== DAILY DISPLAY CONNECT =====
+const dailyTextEls = document.querySelectorAll('.daily-text, #dailyDisplayText');
+const dailyValue = localStorage.getItem('damodarDailyDisplay');
 
-// ===== FINAL: FIXED 500 WEEKS (SEEDED, SAME ON ALL DEVICES) =====
-function seededRandom(seed){
-  let x = Math.sin(seed++) * 10000;
-  return x - Math.floor(x);
-}
-
-const weeksData = [];
-let seed = 123456; // FIXED SEED = SAME DATA EVERYWHERE
-
-for(let w=0; w<500; w++){
-  const week = [];
-  for(let d=0; d<6; d++){
-    const num = Math.floor(seededRandom(seed++) * 100);
-    week.push(String(num).padStart(2,'0'));
-  }
-  weeksData.push(week);
-}
-
-renderWeeks(weeksData);
-
-function renderWeeks(weeksData){
-  weeksData.forEach(week => {
-    const weekRow = document.createElement('div');
-    weekRow.className = 'week-row';
-
-    week.forEach(jodi => {
-      const cell = document.createElement('div');
-      cell.className = 'daycell';
-
-      const jodiDiv = document.createElement('div');
-      jodiDiv.className = 'jodi';
-      jodiDiv.innerText = jodi;
-
-      if (redJodis.includes(jodi)) {
-        jodiDiv.style.color = 'red';
-      }
-
-      cell.appendChild(jodiDiv);
-      weekRow.appendChild(cell);
-    });
-
-    weeksContainer.appendChild(weekRow);
-
-    const sep = document.createElement('div');
-    sep.style.width = '100%';
-    sep.style.height = '2px';
-    sep.style.background = 'purple';
-    sep.style.margin = '8px 0';
-    weeksContainer.appendChild(sep);
+if(dailyValue){
+  // update ALL daily number places (top + bottom)
+  document.querySelectorAll('div').forEach(el=>{
+    if(el.innerText.trim()==='248 - 67 - 935'){
+      el.innerText = dailyValue.replace(/-/g,' - ');
+    }
   });
+}
+
+// ===== WEEKLY CHART CONNECT =====
+const weeksContainer = document.getElementById('weeks-container');
+weeksContainer.innerHTML = '';
+
+const week = JSON.parse(localStorage.getItem('damodarWeekDisplay') || '[]');
+
+if(week.length){
+  const weekRow = document.createElement('div');
+  weekRow.className = 'week-row';
+
+  week.forEach(jodi => {
+    const cell = document.createElement('div');
+    cell.className = 'daycell';
+
+    const jodiDiv = document.createElement('div');
+    jodiDiv.className = 'jodi';
+
+    if(jodi){
+      jodiDiv.innerText = jodi;
+      if(redJodis.includes(jodi)) jodiDiv.style.color = 'red';
+    }else{
+      jodiDiv.classList.add('empty');
+    }
+
+    cell.appendChild(jodiDiv);
+    weekRow.appendChild(cell);
+  });
+
+  weeksContainer.appendChild(weekRow);
+
+  const sep = document.createElement('div');
+  sep.style.width = '100%';
+  sep.style.height = '2px';
+  sep.style.background = 'purple';
+  sep.style.margin = '8px 0';
+  weeksContainer.appendChild(sep);
+}else{
+  weeksContainer.innerHTML = '<div style="text-align:center;color:#666;font-weight:700;">No week data yet</div>';
 }
 </script>
 </body>
