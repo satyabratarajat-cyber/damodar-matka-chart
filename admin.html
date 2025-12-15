@@ -77,12 +77,12 @@ textarea{
   <div class="box">
     <h2>Weekly Entry</h2>
 
-    <div class="row"><label>MON</label><input id="monA" placeholder="Open" /><input id="monB" placeholder="Close" /><button onclick="genDay('mon')">Generate</button></div>
-    <div class="row"><label>TUE</label><input id="tueA" /><input id="tueB" /><button onclick="genDay('tue')">Generate</button></div>
-    <div class="row"><label>WED</label><input id="wedA" /><input id="wedB" /><button onclick="genDay('wed')">Generate</button></div>
-    <div class="row"><label>THU</label><input id="thuA" /><input id="thuB" /><button onclick="genDay('thu')">Generate</button></div>
-    <div class="row"><label>FRI</label><input id="friA" /><input id="friB" /><button onclick="genDay('fri')">Generate</button></div>
-    <div class="row"><label>SAT</label><input id="satA" /><input id="satB" /><button onclick="genDay('sat')">Generate</button></div>
+    <div class="row"><label>MON</label><input id="monA" placeholder="Open" /><input id="monB" placeholder="Close" /><button onclick="saveDay()">Update</button></div>
+    <div class="row"><label>TUE</label><input id="tueA" /><input id="tueB" /><button onclick="saveDay()">Update</button></div>
+    <div class="row"><label>WED</label><input id="wedA" /><input id="wedB" /><button onclick="saveDay()">Update</button></div>
+    <div class="row"><label>THU</label><input id="thuA" /><input id="thuB" /><button onclick="saveDay()">Update</button></div>
+    <div class="row"><label>FRI</label><input id="friA" /><input id="friB" /><button onclick="saveDay()">Update</button></div>
+    <div class="row"><label>SAT</label><input id="satA" /><input id="satB" /><button onclick="saveDay()">Update</button></div>
 
     <button class="full-btn" onclick="generateWeek()">Generate New Week</button>
     <textarea id="weekOut" readonly></textarea>
@@ -90,24 +90,33 @@ textarea{
 </div>
 
 <script>
-// ---- LOAD SAVED DATA ON OPEN ----
+// ===== LOAD SAVED DATA ON OPEN (CLEAN) =====
 window.addEventListener('load',()=>{
+  const dailyInput=document.getElementById('daily');
+  const dailyOut=document.getElementById('dailyOut');
+  const weekOut=document.getElementById('weekOut');
+
   const daily=localStorage.getItem('damodarDaily');
-  if(daily){ dailyInput.value=daily; dailyOut.value='SAVED: '+daily; }
+  if(daily){
+    dailyInput.value=daily;
+    dailyOut.value='SAVED: '+daily;
+  }
 
   const week=JSON.parse(localStorage.getItem('damodarWeek')||'[]');
   const days=['mon','tue','wed','thu','fri','sat'];
   days.forEach((d,i)=>{
     if(week[i]){
-      document.getElementById(d+'A').value=week[i][0];
-      document.getElementById(d+'B').value=week[i][1];
+      document.getElementById(d+'A').value=week[i][0] || '';
+      document.getElementById(d+'B').value=week[i][1] || '';
     }
   });
 });
 
 const dailyInput=document.getElementById('daily');
+const dailyOut=document.getElementById('dailyOut');
+const weekOut=document.getElementById('weekOut');
 
-// ---- DAILY SAVE (FIXED) ----
+// ===== DAILY SAVE (MANUAL, FIXED) =====
 function saveDaily(){
   const v=dailyInput.value.trim();
   if(!v) return alert('Daily empty');
@@ -115,16 +124,12 @@ function saveDaily(){
   dailyOut.value='SAVED & FIXED: '+v;
 }
 
-// ---- GENERATE DAY + AUTO SAVE ----
-function genDay(d){
-  const a=document.getElementById(d+'A');
-  const b=document.getElementById(d+'B');
-  a.value=String(Math.floor(Math.random()*100)).padStart(2,'0');
-  b.value=String(Math.floor(Math.random()*100)).padStart(2,'0');
+// ===== MANUAL DAY SAVE (NO AUTO GENERATE) =====
+function saveDay(){
   autoSaveWeek();
 }
 
-// ---- AUTO SAVE WEEK ----
+// ===== AUTO SAVE WEEK (MANUAL DATA ONLY) =====
 function autoSaveWeek(){
   const week=[
     [monA.value,monB.value],
@@ -135,13 +140,14 @@ function autoSaveWeek(){
     [satA.value,satB.value]
   ];
   localStorage.setItem('damodarWeek',JSON.stringify(week));
-  weekOut.value='AUTO SAVED & FIXED';
+  weekOut.value='SAVED (manual entries only)';
 }
 
-// ---- NEW WEEK RESET ----
+// ===== WEEK END (LOCK CURRENT WEEK) =====
 function generateWeek(){
   autoSaveWeek();
-  alert('Week SAVED & LOCKED');
+  localStorage.setItem('damodarWeekLocked','yes');
+  alert('Week END: current data locked. Next week can start.');
 }
 </script>
 
