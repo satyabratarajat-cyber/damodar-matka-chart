@@ -172,11 +172,45 @@ function autoSaveWeek(){
 }
 
 
-// ===== WEEK END (LOCK CURRENT WEEK) =====
+// ===== WEEK END (LOCK CURRENT WEEK + SAVE TO HISTORY + START NEW) =====
 function generateWeek(){
+  // 1) save latest edits
   autoSaveWeek();
-  localStorage.setItem('damodarWeekLocked','yes');
-  alert('Week END: current data locked. Next week can start.');
+
+  // 2) read current flat week (public format)
+  const currentFlat = JSON.parse(
+    localStorage.getItem('damodarWeekDisplay') || '[]'
+  );
+
+  // 3) read history
+  const history = JSON.parse(
+    localStorage.getItem('damodarWeeksHistory') || '[]'
+  );
+
+  // 4) push current week into history (LOCK)
+  history.push(currentFlat);
+  localStorage.setItem(
+    'damodarWeeksHistory',
+    JSON.stringify(history)
+  );
+
+  // 5) clear inputs for new week
+  ['mon','tue','wed','thu','fri','sat'].forEach(d=>{
+    document.getElementById(d+'A').value='';
+    document.getElementById(d+'B').value='';
+  });
+
+  // 6) start new empty week (admin + public)
+  localStorage.setItem('damodarWeek', JSON.stringify([
+    ['',''],['',''],['',''],['',''],['',''],['','']
+  ]));
+
+  localStorage.setItem('damodarWeekDisplay', JSON.stringify([
+    '','','','','',''
+  ]));
+
+  weekOut.value = 'WEEK LOCKED & NEW WEEK STARTED';
+  alert('Week locked. New week started.');
 }
 </script>
 
