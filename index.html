@@ -103,9 +103,7 @@
 <div style="background:#ffff00; padding:12px 0; border:3px solid red; box-sizing:border-box;">
   <div style="text-align:center; margin-top:0; color:#0033cc; font-weight:900; font-size:28px; text-transform:uppercase; letter-spacing:1px; font-family:'Times New Roman', Georgia, serif;">DAMODAR</div>
 
-  <div style="text-align:center; margin-top:6px; font-size:24px; color:#000; font-weight:900; letter-spacing:1px; font-family:'Times New Roman', Georgia, serif;">
-    248&nbsp;-&nbsp;67&nbsp;-&nbsp;935
-  </div>
+  <div id="dailyDisplay" style="text-align:center; margin-top:6px; font-size:24px; color:#000; font-weight:900; letter-spacing:1px; font-family:'Times New Roman', Georgia, serif;">---</div>
 
   <div style="text-align:center; margin-top:8px;">
     <button type="button" onclick="window.location.reload(true);" style="background:#c1121f; color:#d4af37; padding:8px 20px; border-radius:30px; font-size:14px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase; font-family:'Flemish Script BT','Segoe Script','Brush Script MT','Comic Sans MS',cursive; cursor:pointer;">refresh result</button>
@@ -151,9 +149,7 @@
 <div style="background:#ffff00; padding:12px 0; border:3px solid red; box-sizing:border-box;">
   <div style="text-align:center; margin-top:0; color:#0033cc; font-weight:900; font-size:28px; text-transform:uppercase; letter-spacing:1px; font-family:'Times New Roman', Georgia, serif;">DAMODAR</div>
 
-  <div style="text-align:center; margin-top:6px; font-size:24px; color:#000; font-weight:900; letter-spacing:1px; font-family:'Times New Roman', Georgia, serif;">
-    248&nbsp;-&nbsp;67&nbsp;-&nbsp;935
-  </div>
+  <div id="dailyDisplay" style="text-align:center; margin-top:6px; font-size:24px; color:#000; font-weight:900; letter-spacing:1px; font-family:'Times New Roman', Georgia, serif;">---</div>
 
   <div style="text-align:center; margin-top:8px;">
     <button type="button" onclick="window.location.reload(true);" style="background:#c1121f; color:#d4af37; padding:8px 20px; border-radius:30px; font-size:14px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase; font-family:'Flemish Script BT','Segoe Script','Brush Script MT','Comic Sans MS',cursive; cursor:pointer;">refresh result</button>
@@ -168,47 +164,49 @@
 </div>
 
 <script>
-// ================== ADMIN CONNECTED PUBLIC SCRIPT ==================
-// This page READS data written by admin panel (localStorage)
-// No random, no auto-generate here
+// ================== ADMIN CONNECTED PUBLIC SCRIPT (FINAL) ==================
+// Rule:
+// 1) Daily: jo bhi admin me likha hoga wahi yahan dikhega
+// 2) Weekly: jo bhi likha hoga wahi dikhega
+// 3) Color effect ONLY jab 2-digit final jodi ho
 
 const redJodis = ['00','11','22','33','44','55','66','77','88','99','05','50','16','61','27','72','38','83','49','94'];
 
-// ===== DAILY DISPLAY CONNECT =====
-const dailyTextEls = document.querySelectorAll('.daily-text, #dailyDisplayText');
+// ===== DAILY DISPLAY (MANUAL ONLY) =====
 const dailyValue = localStorage.getItem('damodarDailyDisplay');
-
-if(dailyValue){
-  // update ALL daily number places (top + bottom)
-  document.querySelectorAll('div').forEach(el=>{
-    if(el.innerText.trim()==='248 - 67 - 935'){
-      el.innerText = dailyValue.replace(/-/g,' - ');
-    }
+if (dailyValue) {
+  document.querySelectorAll('#dailyDisplay').forEach(el => {
+    el.innerText = dailyValue.replace(/-/g, ' - ');
   });
 }
 
-// ===== WEEKLY CHART CONNECT =====
+// ===== WEEKLY DISPLAY (MANUAL ONLY) =====
 const weeksContainer = document.getElementById('weeks-container');
 weeksContainer.innerHTML = '';
 
 const week = JSON.parse(localStorage.getItem('damodarWeekDisplay') || '[]');
 
-if(week.length){
+if (week.length) {
   const weekRow = document.createElement('div');
   weekRow.className = 'week-row';
 
-  week.forEach(jodi => {
+  week.forEach(value => {
     const cell = document.createElement('div');
     cell.className = 'daycell';
 
     const jodiDiv = document.createElement('div');
     jodiDiv.className = 'jodi';
 
-    if(jodi){
-      jodiDiv.innerText = jodi;
-      if(redJodis.includes(jodi)) jodiDiv.style.color = 'red';
-    }else{
+    // empty
+    if (!value || value.trim() === '') {
       jodiDiv.classList.add('empty');
+    } else {
+      jodiDiv.innerText = value;
+
+      // COLOR EFFECT ONLY IF FINAL 2-DIGIT JODI
+      if (value.length === 2 && redJodis.includes(value)) {
+        jodiDiv.style.color = 'red';
+      }
     }
 
     cell.appendChild(jodiDiv);
@@ -223,7 +221,8 @@ if(week.length){
   sep.style.background = 'purple';
   sep.style.margin = '8px 0';
   weeksContainer.appendChild(sep);
-}else{
+
+} else {
   weeksContainer.innerHTML = '<div style="text-align:center;color:#666;font-weight:700;">No week data yet</div>';
 }
 </script>
