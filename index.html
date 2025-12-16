@@ -1,199 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Damodar Chart</title>
 
 <style>
-body{
-  margin:0;
-  background:#0b0b0b;
-  color:#fff;
-  font-family:Arial, Helvetica, sans-serif;
-}
-
-/* HEADER */
-.header{
-  text-align:center;
-  color:red;
-  font-weight:900;
-  font-size:22px;
-  padding:8px 0;
-}
-
-.blue-line{
-  height:4px;
-  background:#0033cc;
-  margin:8px 0;
-}
-
-/* YELLOW PANEL */
-.yellow-panel{
-  background:#ffff00;
-  border:3px solid red;
-  padding:12px 0;
-  text-align:center;
-}
-
-.yellow-panel h2{
-  margin:0;
-  color:#0033cc;
-  font-family:"Times New Roman", serif;
-  letter-spacing:1px;
-}
-
-#dailyTop, #dailyBottom{
-  font-size:22px;
-  font-weight:900;
-  color:#000;
-  margin:6px 0;
-}
-
-.refresh-btn{
-  background:#c1121f;
-  color:#d4af37;
-  border:none;
-  padding:8px 22px;
-  border-radius:30px;
-  font-weight:900;
-  cursor:pointer;
-}
-
-/* CHART PANEL */
-.chart-box{
-  max-width:900px;
-  margin:20px auto;
-  background:#fff;
-  color:#000;
-  border:3px solid purple;
-  border-radius:10px;
-  padding:10px;
-}
-
-.chart-header, .chart-row{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  text-align:center;
-}
-
-.chart-header div{
-  font-weight:900;
-}
-
-.chart-row div{
-  font-size:28px;
-  font-weight:900;
-  border-right:1px solid purple;
-  padding:10px 0;
-}
-
-.chart-row div:last-child,
-.chart-header div:last-child{
-  border-right:none;
-}
-
-.red{
-  color:red;
-}
-
-/* BUTTONS */
-.center{
-  text-align:center;
-  margin:15px 0;
-}
-
-.goto-btn{
-  background:purple;
-  color:#fff;
-  border:none;
-  padding:10px 26px;
-  border-radius:24px;
-  font-weight:900;
-}
-
-/* DISCLAIMER */
-.disclaimer{
-  max-width:900px;
-  margin:30px auto;
-  font-size:12px;
-  color:#ccc;
-  text-align:center;
-  line-height:1.6;
-  padding:0 12px;
-}
-
-/* MOBILE */
-@media(max-width:768px){
-  .chart-row div{font-size:22px;}
-}
+body{margin:0;background:#111;color:#fff;font-family:Arial}
+header{text-align:center;color:red;font-weight:900;font-size:22px;padding:10px}
+.yellow{background:#ffff00;border:3px solid red;padding:12px;text-align:center}
+.blue-line{height:4px;background:#0033cc;margin:10px 0}
+.table{max-width:900px;margin:20px auto;background:#fff;color:#000;border-radius:10px;padding:10px}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);text-align:center;font-weight:700}
+.cell{padding:10px;border-right:1px solid purple}
+.cell:last-child{border:none}
+.red{color:red;font-weight:900}
+.btn{margin:15px auto;display:block;padding:8px 20px;border-radius:20px;border:none;font-weight:900}
 </style>
 </head>
 
 <body>
 
-<div class="header">DAMODAR CHART</div>
-<div class="blue-line"></div>
+<header>DAMODAR CHART</header>
 
-<div class="yellow-panel">
-  <h2>DAMODAR</h2>
-  <div id="dailyTop">---</div>
-  <button class="refresh-btn" onclick="location.reload()">REFRESH RESULT</button>
+<div class="yellow">
+  <div style="font-size:26px;font-weight:900;color:#0033cc">DAMODAR</div>
+  <div id="daily" style="font-size:22px;font-weight:900"></div>
+  <button class="btn" onclick="location.reload()">REFRESH RESULT</button>
 </div>
 
 <div class="blue-line"></div>
 
-<div class="center">
-  <button class="goto-btn" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">
-    GO TO BOTTOM
-  </button>
-</div>
-
-<div class="chart-box">
-  <div class="chart-header">
-    <div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+<div class="table">
+  <div class="grid">
+    <div>MON</div><div>TUE</div><div>WED</div>
+    <div>THU</div><div>FRI</div><div>SAT</div>
   </div>
-  <hr>
-  <div id="weekRow" class="chart-row"></div>
+  <div class="blue-line"></div>
+  <div id="weeks"></div>
 </div>
 
-<div class="center">
-  <button class="goto-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-    GO TO TOP
-  </button>
-</div>
-
-<div class="blue-line"></div>
-
-<div class="yellow-panel">
-  <h2>DAMODAR</h2>
-  <div id="dailyBottom">---</div>
+<div class="yellow">
+  <div style="font-size:26px;font-weight:900;color:#0033cc">DAMODAR</div>
+  <div id="daily2" style="font-size:22px;font-weight:900"></div>
 </div>
 
 <div class="blue-line"></div>
 
-<div class="disclaimer">
-  <strong>Disclaimer:</strong> This website is for informational and educational purposes only.
-  We do not promote or support gambling in any form.
+<div style="text-align:center;font-size:12px;color:#ccc;padding:10px">
+Disclaimer: This site is for educational purpose only.
 </div>
 
 <script>
-fetch("data.json")
-.then(res => res.json())
-.then(data => {
-  document.getElementById("dailyTop").innerText = data.daily;
-  document.getElementById("dailyBottom").innerText = data.daily;
+fetch('data.json')
+.then(r=>r.json())
+.then(data=>{
+  document.getElementById('daily').innerText=data.daily;
+  document.getElementById('daily2').innerText=data.daily;
 
-  const redJodis=["00","11","22","33","44","55","66","77","88","99","05","50","16","61","27","72","38","83","49","94"];
-  const row=document.getElementById("weekRow");
-  row.innerHTML="";
-
-  data.currentWeek.forEach(n=>{
-    const d=document.createElement("div");
-    d.innerText = n || "—";
-    if(redJodis.includes(n)) d.classList.add("red");
-    row.appendChild(d);
+  const red=["00","11","22","33","44","55","66","77","88","99","05","50","16","61","27","72","38","83","49","94"];
+  let html="";
+  data.weeks.forEach(w=>{
+    html+='<div class="grid">';
+    w.forEach(n=>{
+      let cls=red.includes(n)?'red':'';
+      html+=`<div class="cell ${cls}">${n||'—'}</div>`;
+    });
+    html+='</div><div class="blue-line"></div>';
   });
+  document.getElementById('weeks').innerHTML=html;
 });
 </script>
 
