@@ -1,43 +1,55 @@
 <script>
-const DATA_URL = './data.json';
 const redJodis = ['00','11','22','33','44','55','66','77','88','99','05','50','16','61','27','72','38','83','49','94'];
 
-fetch(DATA_URL)
-  .then(res => res.json())
-  .then(data => {
+window.addEventListener('DOMContentLoaded', () => {
 
-    // DAILY
-    document.querySelectorAll('#dailyDisplay').forEach(el=>{
-      el.innerText = data.daily.replace(/-/g,' - ');
-    });
+  fetch('/data.json', { cache: 'no-store' })
+    .then(res => {
+      if (!res.ok) throw new Error('data.json not found');
+      return res.json();
+    })
+    .then(data => {
 
-    // WEEK
-    const container = document.getElementById('weeks-container');
-    container.innerHTML = '';
+      // DAILY
+      document.querySelectorAll('#dailyDisplay').forEach(el=>{
+        el.innerText = (data.daily || '---').replace(/-/g,' - ');
+      });
 
-    const row = document.createElement('div');
-    row.className = 'week-row';
+      // WEEK
+      const container = document.getElementById('weeks-container');
+      if (!container) return;
 
-    data.currentWeek.forEach(val=>{
-      const cell = document.createElement('div');
-      cell.className = 'daycell';
+      container.innerHTML = '';
 
-      const j = document.createElement('div');
-      j.className = 'jodi';
+      const row = document.createElement('div');
+      row.className = 'week-row';
 
-      if(!val){
-        j.innerText = '—';
-      } else {
-        j.innerText = val;
-        if(redJodis.includes(val)){
-          j.style.color = 'red';
+      (data.currentWeek || ["","","","","",""]).forEach(val=>{
+        const cell = document.createElement('div');
+        cell.className = 'daycell';
+
+        const j = document.createElement('div');
+        j.className = 'jodi';
+
+        if(!val){
+          j.innerText = '—';
+        } else {
+          j.innerText = val;
+          if(redJodis.includes(val)){
+            j.style.color = 'red';
+          }
         }
-      }
 
-      cell.appendChild(j);
-      row.appendChild(cell);
+        cell.appendChild(j);
+        row.appendChild(cell);
+      });
+
+      container.appendChild(row);
+    })
+    .catch(err => {
+      console.error(err);
+      document.body.innerHTML = '<h2 style="color:red;text-align:center">Data load error</h2>';
     });
 
-    container.appendChild(row);
-  });
+});
 </script>
