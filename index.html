@@ -25,4 +25,63 @@ body{
 .sub-title{margin:10px 0;font-size:16px;color:#ddd;}
 .blue-line{height:5px;background:#0033cc;margin:15px 0;}
 .yellow-strip{background:#ffeb3b;color:#000;padding:25px 10px;margin:20px 0;}
-.strip-title{font-size
+.strip-title{font-size:28px;font-weight:900;}
+.result-num{font-size:26px;font-weight:900;margin:10px 0;}
+.refresh-btn{background:maroon;color:#d4af37;border:none;padding:8px 22px;font-weight:900;cursor:pointer;}
+.goto-btn{background:#0033cc;color:#fff;border:none;padding:6px 16px;font-weight:700;cursor:pointer;margin:10px 0;}
+.panel-box{background:#fff;color:#000;border:2px solid purple;width:100%;margin:25px 0;}
+.panel-head{display:grid;grid-template-columns:repeat(6,1fr);font-weight:700;padding:10px 0;}
+.panel-line{height:1px;background:purple;}
+.panel-body{height:350px;}
+.disclaimer{font-size:12px;color:#ccc;text-align:left;line-height:1.6;margin:30px 0;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="data-area">
+    <div class="main-title">DAMODAR CHART</div>
+    <div class="sub-title">Damodar Matka Chart Result – brain exercise only</div>
+    <div class="blue-line"></div>
+
+```
+<!-- MAIN RESULT -->
+<div class="yellow-strip">
+  <div class="strip-title">DAMODAR</div>
+  <div class="result-num">248 - 67 - 935</div>
+  <button class="refresh-btn" onclick="location.reload()">REFRESH RESULT</button>
+</div>
+
+<button class="goto-btn" onclick="goBottom()">GO TO BOTTOM</button>
+
+<!-- PANEL -->
+<div class="panel-box">
+  <div class="panel-head">
+    <div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+  </div>
+  <div class="panel-line"></div>
+  <div class="panel-body"></div>
+</div>
+
+<button class="goto-btn" onclick="goTop()">GO TO TOP</button>
+
+<!-- BOTTOM RESULT SMALL -->
+<div class="yellow-strip">
+  <div class="strip-title">DAMODAR</div>
+  <div class="result-num">248 - 67 - 935</div>
+  <button class="refresh-btn" onclick="location.reload()">REFRESH RESULT</button>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+  Disclaimer: We are not responsible for any kind of financial loss. This site is only for brain exercise and informational purpose. Nothing on this website should be considered as gambling advice. Use at your own risk. 18+ only.
+</div>
+```
+
+  </div>
+</div>
+<script>
+function goBottom(){window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});}
+function goTop(){window.scrollTo({top:0,behavior:'smooth'});}
+</script>
+</body>
+</html>
