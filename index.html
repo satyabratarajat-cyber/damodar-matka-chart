@@ -8,37 +8,42 @@
 <style>
 body{
   margin:0;
-  background:#000;
+  background:#0b0b0b;
   color:#fff;
   font-family:Arial, sans-serif;
-  text-align:center;
 }
-
-.header{
-  color:red;
-  font-size:22px;
-  font-weight:bold;
-  margin-top:10px;
-}
-
-.blue-line{height:4px;background:#0033cc;margin:10px 0;}
+h1{color:red;text-align:center;margin:10px 0;}
+.blue-line{height:4px;background:#0033cc;margin:12px 0;}
 
 .yellow-box{
   background:#ffff00;
   border:3px solid red;
   padding:12px;
-  margin:10px;
+  text-align:center;
 }
-
 .yellow-box h2{
-  margin:0;
   color:#0033cc;
+  margin:0;
 }
-
 .daily{
   color:#000;
   font-size:22px;
   font-weight:bold;
+  margin:6px 0;
+}
+
+button{
+  padding:8px 20px;
+  border-radius:20px;
+  border:none;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.refresh{
+  background:#c1121f;
+  color:#d4af37;
+  margin-top:6px;
 }
 
 .panel{
@@ -53,30 +58,41 @@ body{
 .row{
   display:grid;
   grid-template-columns:repeat(6,1fr);
-  font-size:22px;
   font-weight:bold;
+  text-align:center;
 }
 
-.cell{padding:10px;border-right:1px solid purple;}
+.cell{
+  padding:10px;
+  border-right:1px solid purple;
+}
 .cell:last-child{border-right:none;}
 .red{color:red;}
+
+.disclaimer{
+  font-size:12px;
+  color:#ccc;
+  text-align:center;
+  padding:20px;
+}
 </style>
 </head>
 
 <body>
 
-<div class="header">DAMODAR CHART</div>
+<h1>DAMODAR CHART</h1>
 <div class="blue-line"></div>
 
 <div class="yellow-box">
   <h2>DAMODAR</h2>
   <div id="dailyTop" class="daily">---</div>
+  <button class="refresh" onclick="location.reload()">REFRESH RESULT</button>
 </div>
 
 <div class="blue-line"></div>
 
 <div class="panel">
-  <div class="row" style="font-size:14px;font-weight:bold;">
+  <div class="row" style="font-size:14px;">
     <div>MON</div><div>TUE</div><div>WED</div>
     <div>THU</div><div>FRI</div><div>SAT</div>
   </div>
@@ -89,6 +105,14 @@ body{
 <div class="yellow-box">
   <h2>DAMODAR</h2>
   <div id="dailyBottom" class="daily">---</div>
+  <button class="refresh" onclick="location.reload()">REFRESH RESULT</button>
+</div>
+
+<div class="blue-line"></div>
+
+<div class="disclaimer">
+  <strong>Disclaimer:</strong><br>
+  This site is for informational and educational purposes only.
 </div>
 
 <script>
