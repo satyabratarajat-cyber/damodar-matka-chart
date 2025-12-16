@@ -5,7 +5,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Damodar Matka Chart</title>
-
 <style>
 body{
   margin:0;
@@ -13,195 +12,17 @@ body{
   color:#fff;
   font-family:Arial, Helvetica, sans-serif;
 }
-
 .container{
   width:100%;
-  margin:0;
-  padding:20px 0;
   text-align:center;
 }
-
 .data-area{
   max-width:900px;
   margin:0 auto;
-  padding:0 20px;
+  padding:20px;
 }
-
-/* HEADINGS */
-.main-title{
-  color:red;
-  font-size:32px;
-  font-weight:900;
-  letter-spacing:1px;
-}
-
-.sub-title{
-  margin-top:10px;
-  font-size:18px;
-}
-
-.blue-line{
-  height:5px;
-  background:#0033cc;
-  margin:15px 0;
-}
-
-.desc{
-  font-size:14px;
-  color:#ddd;
-}
-
-/* YELLOW RESULT STRIP */
-.yellow-strip{
-  background:#ffeb3b;
-  color:#000;
-  padding:20px 10px;
-  margin-top:25px;
-}
-
-.strip-title{
-  font-size:28px;
-  font-weight:900;
-  letter-spacing:1px;
-}
-
-.result-num{
-  margin:10px 0;
-  font-size:26px;
-  font-weight:900;
-}
-
-.refresh-btn{
-  background:maroon;
-  color:#d4af37; /* golden */
-  border:none;
-  padding:8px 22px;
-  font-weight:900;
-  font-family:'Trebuchet MS', Arial, sans-serif;
-  letter-spacing:1px;
-  cursor:pointer;
-}
-
-.goto-btn{
-  background:#0033cc;
-  color:#fff;
-  border:none;
-  padding:6px 16px;
-  font-size:13px;
-  font-weight:700;
-  cursor:pointer;
-  margin:5px 0;
-}
-
-/* PANEL CHART */
-.panel-box{
-  width:50%;
-  min-width:300px;
-  margin:35px auto;
-  border:2px solid purple;
-  background:#fff;
-  color:#000;
-  padding:15px;
-}
-
-.panel-head{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  font-weight:700;
-}
-
-.panel-line{
-  height:1px;
-  background:purple;
-  margin-top:6px;
-}
-
-/* SECOND RESULT */
-.second-result{
-  margin:30px 0;
-  font-size:26px;
-  font-weight:900;
-}
-
-/* DISCLAIMER */
-.disclaimer{
-  font-size:12px;
-  color:#ccc;
-  text-align:left;
-  line-height:1.6;
-  margin-top:40px;
-}
-
-</style>
-
-</head>
-<body>
-
-<div class="container">
-
-  <div class="main-title">DAMODAR CHART</div>
-  <div class="sub-title">Damodar Matka Chart Result</div>
-  <div class="blue-line"></div>
-  <div class="desc">This website is for information purposes only.</div>
-
-  <!-- RESULT STRIP -->
-
-  <div class="blue-line"></div>
-  <div class="yellow-strip">
-    <div class="strip-title">DAMODAR</div>
-    <div class="result-num result-sync">248 - 67 - 935</div>
-    <button class="refresh-btn" onclick="refreshResult()">REFRESH</button>
-  </div>
-  <div class="blue-line"></div>
-  <button class="goto-btn" onclick="goBottom()">GO TO BOTTOM</button>
-  <div class="blue-line"></div>
-  <button class="goto-btn" onclick="goBottom()">GO TO BOTTOM</button>
-  <div class="yellow-strip">
-    <div class="strip-title">DAMODAR</div>
-    <div class="result-num result-sync">248 - 67 - 935</div>
-    <button class="refresh-btn" onclick="refreshResult()">REFRESH</button>
-  </div>
-  <div class="blue-line"></div>
-
-  <!-- PANEL CHART -->
-
-  <div class="panel-box">
-    <div class="panel-head">
-      <div>MON</div>
-      <div>TUE</div>
-      <div>WED</div>
-      <div>THU</div>
-      <div>FRI</div>
-      <div>SAT</div>
-    </div>
-    <div class="panel-line"></div>
-  </div>
-
-  <!-- DISCLAIMER -->
-
-  <div class="disclaimer">
-    Disclaimer: This website is only for informational and educational purposes. We do not support or promote any form of gambling. All information shown here is based on publicly available data and past results. Users are advised to play responsibly and at their own risk. This website is strictly for adults above 18 years of age. We shall not be responsible for any loss or damage arising from the use of information provided on this site.
-  </div>
-
-</div>
-
-<script>
-function refreshResult(){
-  // full page refresh
-  location.reload();
-});
-}
-
-function goBottom(){
-  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-}
-
-function goTop(){
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-});
-}
-</script>
-
-</body>
-</html>
+.main-title{color:red;font-size:32px;font-weight:900;}
+.sub-title{margin:10px 0;font-size:16px;color:#ddd;}
+.blue-line{height:5px;background:#0033cc;margin:15px 0;}
+.yellow-strip{background:#ffeb3b;color:#000;padding:25px 10px;margin:20px 0;}
+.strip-title{font-size
