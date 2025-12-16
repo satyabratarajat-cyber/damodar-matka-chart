@@ -1,19 +1,21 @@
-const fs = require('fs');
-const path = require('path');
+function saveDaily(){
+  const v = dailyInput.value.trim();
+  if(!v) return alert('Daily empty');
 
-exports.handler = async function (event) {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
-  }
-
-  const data = JSON.parse(event.body);
-
-  const filePath = path.join(process.cwd(), 'data.json');
-
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ success: true })
-  };
-};
+  fetch('update.php',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      password:"damodar@123",
+      daily:v
+    })
+  })
+  .then(r=>r.json())
+  .then(res=>{
+    if(res.status==="success"){
+      dailyOut.value="SAVED ON SERVER: "+v;
+    }else{
+      alert("Server error");
+    }
+  });
+}
