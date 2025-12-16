@@ -76,6 +76,17 @@ body{
   cursor:pointer;
 }
 
+.goto-btn{
+  background:#0033cc;
+  color:#fff;
+  border:none;
+  padding:6px 16px;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  margin:5px 0;
+}
+
 /* PANEL CHART */
 .panel-box{
   width:50%;
@@ -130,6 +141,7 @@ body{
   <!-- RESULT STRIP -->
 
   <div class="blue-line"></div>
+  <button class="goto-btn" onclick="goBottom()">GO TO BOTTOM</button>
   <div class="yellow-strip">
     <div class="strip-title">DAMODAR</div>
     <div class="result-num result-sync">248 - 67 - 935</div>
@@ -152,6 +164,8 @@ body{
   </div>
 
   <!-- SECOND RESULT (YELLOW) -->
+
+<button class="goto-btn" onclick="goTop()">GO TO TOP</button>
 
   <div class="blue-line"></div>
   <div class="yellow-strip">
@@ -178,6 +192,15 @@ function refreshResult(){
   document.querySelectorAll('.result-sync').forEach(el => {
     el.innerText = value;
   });
+}
+
+function goBottom(){
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+}
+
+function goTop(){
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
 }
 </script>
 
