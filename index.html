@@ -1,136 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Damodar Chart</title>
 
 <style>
-body{
-  margin:0;
-  background:#0b0b0b;
-  color:#fff;
-  font-family:Arial, sans-serif;
-}
-h1{color:red;text-align:center;margin:10px 0;}
-.blue-line{height:4px;background:#0033cc;margin:12px 0;}
-
-.yellow-box{
-  background:#ffff00;
-  border:3px solid red;
-  padding:12px;
-  text-align:center;
-}
-.yellow-box h2{
-  color:#0033cc;
-  margin:0;
-}
-.daily{
-  color:#000;
-  font-size:22px;
-  font-weight:bold;
-  margin:6px 0;
-}
-
-button{
-  padding:8px 20px;
-  border-radius:20px;
-  border:none;
-  cursor:pointer;
-  font-weight:bold;
-}
-
-.refresh{
-  background:#c1121f;
-  color:#d4af37;
-  margin-top:6px;
-}
-
-.panel{
-  background:#fff;
-  color:#000;
-  border:3px solid purple;
-  border-radius:10px;
-  padding:10px;
-  margin:15px;
-}
-
-.row{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  font-weight:bold;
-  text-align:center;
-}
-
-.cell{
-  padding:10px;
-  border-right:1px solid purple;
-}
-.cell:last-child{border-right:none;}
-.red{color:red;}
-
-.disclaimer{
-  font-size:12px;
-  color:#ccc;
-  text-align:center;
-  padding:20px;
-}
+body{margin:0;background:#0b0b0b;color:#fff;font-family:Arial}
+h1{text-align:center;color:red}
+.blue{height:4px;background:#0033cc;margin:10px 0}
+.yellow{background:#ffff00;border:3px solid red;padding:10px;text-align:center}
+.panel{max-width:900px;margin:20px auto;background:#fff;color:#000;border:3px solid purple;border-radius:10px;padding:10px}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);text-align:center}
+.cell{border-right:1px solid purple;padding:10px;font-size:28px;font-weight:bold}
+.cell:last-child{border-right:none}
+.red{color:red}
+button{padding:8px 18px;border-radius:20px;font-weight:bold}
 </style>
 </head>
 
 <body>
 
 <h1>DAMODAR CHART</h1>
-<div class="blue-line"></div>
+<div class="blue"></div>
 
-<div class="yellow-box">
+<div class="yellow">
   <h2>DAMODAR</h2>
-  <div id="dailyTop" class="daily">---</div>
-  <button class="refresh" onclick="location.reload()">REFRESH RESULT</button>
+  <div id="daily">---</div>
+  <button onclick="location.reload()">REFRESH RESULT</button>
 </div>
 
-<div class="blue-line"></div>
+<div class="blue"></div>
 
 <div class="panel">
-  <div class="row" style="font-size:14px;">
-    <div>MON</div><div>TUE</div><div>WED</div>
-    <div>THU</div><div>FRI</div><div>SAT</div>
+  <div class="grid">
+    <b>MON</b><b>TUE</b><b>WED</b><b>THU</b><b>FRI</b><b>SAT</b>
   </div>
   <hr>
-  <div id="weekRow" class="row"></div>
+  <div id="week" class="grid"></div>
 </div>
 
-<div class="blue-line"></div>
-
-<div class="yellow-box">
+<div class="yellow">
   <h2>DAMODAR</h2>
-  <div id="dailyBottom" class="daily">---</div>
-  <button class="refresh" onclick="location.reload()">REFRESH RESULT</button>
+  <div id="daily2">---</div>
 </div>
 
-<div class="blue-line"></div>
-
-<div class="disclaimer">
-  <strong>Disclaimer:</strong><br>
-  This site is for informational and educational purposes only.
-</div>
+<p style="text-align:center;color:#ccc;font-size:12px">
+Disclaimer: This website is for informational purpose only.
+</p>
 
 <script>
-fetch("/data.json",{cache:"no-store"})
+fetch("data.json")
 .then(r=>r.json())
-.then(d=>{
-  document.getElementById("dailyTop").innerText=d.daily||"---";
-  document.getElementById("dailyBottom").innerText=d.daily||"---";
+.then(data=>{
+  document.getElementById("daily").innerText=data.daily;
+  document.getElementById("daily2").innerText=data.daily;
 
-  const red=["00","11","22","33","44","55","66","77","88","99","05","50","16","61","27","72","38","83","49","94"];
-  const row=document.getElementById("weekRow");
-  row.innerHTML="";
+  const redJodis=["00","11","22","33","44","55","66","77","88","99","05","50","16","61","27","72","38","83","49","94"];
+  const w=document.getElementById("week");
 
-  d.currentWeek.forEach(n=>{
-    const div=document.createElement("div");
-    div.className="cell"+(red.includes(n)?" red":"");
-    div.innerText=n||"—";
-    row.appendChild(div);
+  data.currentWeek.forEach(n=>{
+    const d=document.createElement("div");
+    d.className="cell";
+    d.innerText=n||"-";
+    if(redJodis.includes(n)) d.classList.add("red");
+    w.appendChild(d);
   });
 });
 </script>
