@@ -1,76 +1,198 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Damodar Chart</title>
 
 <style>
-body{margin:0;background:#111;color:#fff;font-family:Arial}
-header{text-align:center;color:red;font-weight:900;font-size:22px;padding:10px}
-.yellow{background:#ffff00;border:3px solid red;padding:12px;text-align:center}
-.blue-line{height:4px;background:#0033cc;margin:10px 0}
-.table{max-width:900px;margin:20px auto;background:#fff;color:#000;border-radius:10px;padding:10px}
-.grid{display:grid;grid-template-columns:repeat(6,1fr);text-align:center;font-weight:700}
-.cell{padding:10px;border-right:1px solid purple}
-.cell:last-child{border:none}
-.red{color:red;font-weight:900}
-.btn{margin:15px auto;display:block;padding:8px 20px;border-radius:20px;border:none;font-weight:900}
+body{
+  margin:0;
+  background:#111;
+  color:#fff;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+/* ===== HEADER ===== */
+header{
+  text-align:center;
+  color:red;
+  font-weight:900;
+  font-size:22px;
+  padding:10px 0;
+}
+
+.sub{
+  text-align:center;
+  border-top:2px solid #0033cc;
+  padding:6px 0;
+  font-weight:700;
+}
+
+.desc{
+  text-align:center;
+  max-width:900px;
+  margin:0 auto;
+  font-size:14px;
+}
+
+/* ===== STRIPS ===== */
+.blue-line{height:4px;background:#0033cc;margin:14px 0;}
+
+.yellow{
+  background:#ffff00;
+  border:3px solid red;
+  padding:14px 0;
+  text-align:center;
+}
+
+.yellow h2{
+  margin:0;
+  color:#0033cc;
+  font-size:28px;
+  font-family:"Times New Roman", serif;
+}
+
+.yellow .num{
+  font-size:24px;
+  font-weight:900;
+  color:#000;
+  margin:6px 0;
+}
+
+.refresh{
+  background:#c1121f;
+  color:#d4af37;
+  border:none;
+  padding:8px 22px;
+  border-radius:30px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+/* ===== BUTTONS ===== */
+.btn{
+  display:block;
+  margin:20px auto;
+  background:#0033cc;
+  color:#fff;
+  padding:8px 22px;
+  border-radius:22px;
+  font-weight:900;
+  border:none;
+  cursor:pointer;
+}
+
+/* ===== CHART ===== */
+.chart{
+  background:#fff;
+  color:#000;
+  max-width:900px;
+  margin:20px auto;
+  border:3px solid purple;
+  border-radius:10px;
+  padding:10px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  text-align:center;
+  font-weight:900;
+}
+
+.cell{
+  padding:10px 0;
+  border-right:1px solid purple;
+}
+
+.cell:last-child{border-right:none;}
+
+.row{border-top:1px solid purple;}
+
+.red{color:red;}
+
+/* ===== FOOTER ===== */
+.disclaimer{
+  text-align:center;
+  font-size:12px;
+  color:#ccc;
+  max-width:900px;
+  margin:30px auto;
+  line-height:1.6;
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+  .grid{font-size:12px}
+  .yellow h2{font-size:22px}
+}
 </style>
 </head>
 
 <body>
 
 <header>DAMODAR CHART</header>
-
-<div class="yellow">
-  <div style="font-size:26px;font-weight:900;color:#0033cc">DAMODAR</div>
-  <div id="daily" style="font-size:22px;font-weight:900"></div>
-  <button class="btn" onclick="location.reload()">REFRESH RESULT</button>
+<div class="sub">Damodar Matka Chart Result</div>
+<div class="desc">
+This page belongs to Damodar Matka Chart. Here you will find useful data about Damodar probability numbers for brain improvement.
 </div>
 
 <div class="blue-line"></div>
 
-<div class="table">
+<!-- TOP YELLOW -->
+<div class="yellow">
+  <h2>DAMODAR</h2>
+  <div class="num">248 - 67 - 324</div>
+  <button class="refresh" onclick="location.reload()">REFRESH RESULT</button>
+</div>
+
+<div class="blue-line"></div>
+
+<button class="btn" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">
+GO TO BOTTOM
+</button>
+
+<!-- CHART -->
+<div class="chart">
   <div class="grid">
-    <div>MON</div><div>TUE</div><div>WED</div>
-    <div>THU</div><div>FRI</div><div>SAT</div>
+    <div class="cell">MON</div>
+    <div class="cell">TUE</div>
+    <div class="cell">WED</div>
+    <div class="cell">THU</div>
+    <div class="cell">FRI</div>
+    <div class="cell">SAT</div>
   </div>
-  <div class="blue-line"></div>
-  <div id="weeks"></div>
+
+  <div class="grid row">
+    <div class="cell">45</div>
+    <div class="cell red">38</div>
+    <div class="cell red">50</div>
+    <div class="cell">18</div>
+    <div class="cell">84</div>
+    <div class="cell">17</div>
+  </div>
 </div>
 
+<button class="btn" style="background:purple"
+onclick="window.scrollTo({top:0,behavior:'smooth'})">
+GO TO TOP
+</button>
+
+<div class="blue-line"></div>
+
+<!-- BOTTOM YELLOW -->
 <div class="yellow">
-  <div style="font-size:26px;font-weight:900;color:#0033cc">DAMODAR</div>
-  <div id="daily2" style="font-size:22px;font-weight:900"></div>
+  <h2>DAMODAR</h2>
+  <div class="num">248 - 67 - 324</div>
 </div>
 
 <div class="blue-line"></div>
 
-<div style="text-align:center;font-size:12px;color:#ccc;padding:10px">
-Disclaimer: This site is for educational purpose only.
+<div class="disclaimer">
+<strong>Disclaimer:</strong> This website is for informational and educational purposes only.
+We do not promote or support gambling in any form.
 </div>
-
-<script>
-fetch('data.json')
-.then(r=>r.json())
-.then(data=>{
-  document.getElementById('daily').innerText=data.daily;
-  document.getElementById('daily2').innerText=data.daily;
-
-  const red=["00","11","22","33","44","55","66","77","88","99","05","50","16","61","27","72","38","83","49","94"];
-  let html="";
-  data.weeks.forEach(w=>{
-    html+='<div class="grid">';
-    w.forEach(n=>{
-      let cls=red.includes(n)?'red':'';
-      html+=`<div class="cell ${cls}">${n||'—'}</div>`;
-    });
-    html+='</div><div class="blue-line"></div>';
-  });
-  document.getElementById('weeks').innerHTML=html;
-});
-</script>
 
 </body>
 </html>
