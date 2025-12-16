@@ -193,6 +193,28 @@ GO TO TOP
 <strong>Disclaimer:</strong> This website is for informational and educational purposes only.
 We do not promote or support gambling in any form.
 </div>
+<script>
+fetch("data.json")
+.then(r => r.json())
+.then(data => {
+  document.querySelectorAll(".num").forEach(el=>{
+    el.innerText = data.daily.replace(/-/g," - ");
+  });
+
+  const map = ["mon","tue","wed","thu","fri","sat"];
+  const cells = document.querySelectorAll(".chart .row .cell");
+
+  map.forEach((d,i)=>{
+    cells[i].innerText = data.week[d] || "";
+    if(["00","11","22","33","44","55","66","77","88","99",
+        "05","50","16","61","27","72","38","83","49","94"]
+        .includes(data.week[d])) {
+      cells[i].classList.add("red");
+    }
+  });
+});
+</script>
 
 </body>
 </html>
+
