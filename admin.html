@@ -1,59 +1,31 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Damodar Admin</title>
-<style>
-body{background:#111;color:#fff;font-family:Arial}
-.box{max-width:500px;margin:80px auto;background:#fff;color:#000;padding:20px;border-radius:10px}
-input,button{width:100%;padding:10px;margin:6px 0}
-button{background:#c1121f;color:#fff;border:none;font-weight:900}
-.hidden{display:none}
-</style>
-</head>
-<body>
-
-<div class="box" id="login">
-<h3>Admin Login</h3>
-<input type="password" id="pass" placeholder="Password">
-<button onclick="login()">Login</button>
-</div>
-
-<div class="box hidden" id="admin">
-<h3>Update Data</h3>
-<input id="daily" placeholder="Daily (248-67-324)">
-<input id="mon" placeholder="MON">
-<input id="tue" placeholder="TUE">
-<input id="wed" placeholder="WED">
-<input id="thu" placeholder="THU">
-<input id="fri" placeholder="FRI">
-<input id="sat" placeholder="SAT">
-
-<button onclick="generate()">Generate JSON</button>
-<textarea id="out" rows="8"></textarea>
-
-<p>⬆ Copy this & paste into <b>data.json</b> on GitHub</p>
-</div>
-
 <script>
 function login(){
-  if(document.getElementById("pass").value==="damodar@123"){
-    login.classList.add("hidden");
-    admin.classList.remove("hidden");
-  } else alert("Wrong password");
+  const password = document.getElementById("pass").value;
+  const loginBox = document.getElementById("login");
+  const adminBox = document.getElementById("admin");
+
+  if(password === "damodar@123"){
+    loginBox.style.display = "none";
+    adminBox.style.display = "block";
+  } else {
+    alert("Wrong password");
+  }
 }
 
 function generate(){
-  const json={
-    daily:daily.value,
+  const json = {
+    daily: document.getElementById("daily").value,
     week:{
-      mon:mon.value,tue:tue.value,wed:wed.value,
-      thu:thu.value,fri:fri.value,sat:sat.value
+      mon: document.getElementById("mon").value,
+      tue: document.getElementById("tue").value,
+      wed: document.getElementById("wed").value,
+      thu: document.getElementById("thu").value,
+      fri: document.getElementById("fri").value,
+      sat: document.getElementById("sat").value
     }
   };
-  out.value=JSON.stringify(json,null,2);
+
+  document.getElementById("out").value =
+    JSON.stringify(json, null, 2);
 }
 </script>
-
-</body>
-</html>
