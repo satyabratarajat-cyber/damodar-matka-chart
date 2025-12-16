@@ -1,172 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Damodar Admin Panel</title>
-
+<title>Damodar Admin</title>
 <style>
-body{
-  margin:0;
-  background:#0b0b0b;
-  font-family:Arial, sans-serif;
-}
-.box{
-  max-width:520px;
-  margin:20px auto;
-  background:#fff;
-  border:3px solid purple;
-  border-radius:10px;
-  padding:15px;
-}
-h2{
-  margin:0 0 10px;
-  text-align:center;
-  color:purple;
-}
-.row{
-  display:grid;
-  grid-template-columns:60px 1fr 1fr;
-  gap:6px;
-  margin-bottom:6px;
-}
-label{
-  font-weight:900;
-}
-input{
-  padding:6px;
-  font-weight:900;
-  text-align:center;
-}
-button{
-  margin-top:8px;
-  width:100%;
-  padding:10px;
-  font-weight:900;
-  border:none;
-  border-radius:20px;
-  cursor:pointer;
-}
-.save{background:#198754;color:#fff;}
-.gen{background:#c1121f;color:#fff;}
-.note{
-  font-size:12px;
-  color:#444;
-  text-align:center;
-  margin-top:6px;
-}
+body{background:#111;color:#fff;font-family:Arial}
+.box{max-width:500px;margin:80px auto;background:#fff;color:#000;padding:20px;border-radius:10px}
+input,button{width:100%;padding:10px;margin:6px 0}
+button{background:#c1121f;color:#fff;border:none;font-weight:900}
+.hidden{display:none}
 </style>
 </head>
-
 <body>
 
-<!-- 🔐 PASSWORD -->
-<script>
-(function(){
-  const ADMIN_PASSWORD = "damodar@123";
-  if(sessionStorage.getItem("damodarAdminAuth")==="yes") return;
-  const p = prompt("Enter Admin Password:");
-  if(p === ADMIN_PASSWORD){
-    sessionStorage.setItem("damodarAdminAuth","yes");
-  }else{
-    document.body.innerHTML="";
-    alert("Access Denied");
-  }
-})();
-</script>
-
-<!-- DAILY -->
-<div class="box">
-  <h2>Daily Result</h2>
-  <input id="daily" placeholder="248-67-935">
-  <button class="save" onclick="saveDaily()">Save Daily</button>
+<div class="box" id="login">
+<h3>Admin Login</h3>
+<input type="password" id="pass" placeholder="Password">
+<button onclick="login()">Login</button>
 </div>
 
-<!-- WEEKLY -->
-<div class="box">
-  <h2>Weekly Entry</h2>
+<div class="box hidden" id="admin">
+<h3>Update Data</h3>
+<input id="daily" placeholder="Daily (248-67-324)">
+<input id="mon" placeholder="MON">
+<input id="tue" placeholder="TUE">
+<input id="wed" placeholder="WED">
+<input id="thu" placeholder="THU">
+<input id="fri" placeholder="FRI">
+<input id="sat" placeholder="SAT">
 
-  <div class="row"><label>MON</label><input id="monA"><input id="monB"></div>
-  <div class="row"><label>TUE</label><input id="tueA"><input id="tueB"></div>
-  <div class="row"><label>WED</label><input id="wedA"><input id="wedB"></div>
-  <div class="row"><label>THU</label><input id="thuA"><input id="thuB"></div>
-  <div class="row"><label>FRI</label><input id="friA"><input id="friB"></div>
-  <div class="row"><label>SAT</label><input id="satA"><input id="satB"></div>
+<button onclick="generate()">Generate JSON</button>
+<textarea id="out" rows="8"></textarea>
 
-  <button class="save" onclick="saveWeek()">Save Week Data</button>
-  <button class="gen" onclick="generateNewWeek()">Generate New Week</button>
-
-  <div class="note">
-    Save = update current week<br>
-    Generate = lock week + start new
-  </div>
+<p>⬆ Copy this & paste into <b>data.json</b> on GitHub</p>
 </div>
 
 <script>
-let GLOBAL_DATA = {
-  daily: "",
-  current: ["","","","","",""],
-  history: []
-};
+function login(){
+  if(document.getElementById("pass").value==="damodar@123"){
+    login.classList.add("hidden");
+    admin.classList.remove("hidden");
+  } else alert("Wrong password");
+}
 
-/* ===== LOAD EXISTING GLOBAL DATA ===== */
-fetch('/data.json?_=' + Date.now())
-  .then(r => r.json())
-  .then(d => {
-    GLOBAL_DATA = d;
-    daily.value = d.daily || "";
-    if(d.current){
-      const ids=['mon','tue','wed','thu','fri','sat'];
-      d.current.forEach((v,i)=>{
-        if(v){
-          document.getElementById(ids[i]+'A').value=v[0]||'';
-          document.getElementById(ids[i]+'B').value=v[1]||'';
-        }
-      });
+function generate(){
+  const json={
+    daily:daily.value,
+    week:{
+      mon:mon.value,tue:tue.value,wed:wed.value,
+      thu:thu.value,fri:fri.value,sat:sat.value
     }
-  });
-
-/* ===== SAVE DAILY ===== */
-function saveDaily(){
-  GLOBAL_DATA.daily = daily.value.trim();
-  saveGlobal();
-}
-
-/* ===== SAVE WEEK ===== */
-function saveWeek(){
-  GLOBAL_DATA.current = [
-    [monA.value,monB.value],
-    [tueA.value,tueB.value],
-    [wedA.value,wedB.value],
-    [thuA.value,thuB.value],
-    [friA.value,friB.value],
-    [satA.value,satB.value]
-  ];
-  saveGlobal();
-}
-
-/* ===== GENERATE NEW WEEK ===== */
-function generateNewWeek(){
-  saveWeek();
-  GLOBAL_DATA.history.push(GLOBAL_DATA.current);
-  GLOBAL_DATA.current = [["",""],["",""],["",""],["",""],["",""],["",""]];
-  ['mon','tue','wed','thu','fri','sat'].forEach(d=>{
-    document.getElementById(d+'A').value='';
-    document.getElementById(d+'B').value='';
-  });
-  saveGlobal();
-  alert("Week locked & new week started");
-}
-
-/* ===== SAVE TO SERVER (GLOBAL) ===== */
-function saveGlobal(){
-  fetch('/.netlify/functions/saveData',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify(GLOBAL_DATA)
-  })
-  .then(()=>alert("Global data saved"))
-  .catch(()=>alert("Save failed"));
+  };
+  out.value=JSON.stringify(json,null,2);
 }
 </script>
 
