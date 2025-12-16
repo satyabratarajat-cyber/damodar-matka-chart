@@ -1,31 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Damodar Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+  background:#111;
+  font-family:Arial,Helvetica,sans-serif;
+  color:#000;
+}
+.box{
+  background:#fff;
+  width:320px;
+  margin:40px auto;
+  padding:20px;
+  border-radius:10px;
+}
+.hidden{display:none;}
+input,button{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  font-size:14px;
+}
+button{
+  background:#c1121f;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+textarea{
+  width:100%;
+  height:160px;
+  margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="box" id="login">
+  <h3>Admin Login</h3>
+  <input type="password" id="pass" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="box hidden" id="admin">
+  <h3>Update Data</h3>
+
+  <input id="daily" placeholder="Daily display eg: 248-67-324">
+
+  <input id="mon" placeholder="Mon">
+  <input id="tue" placeholder="Tue">
+  <input id="wed" placeholder="Wed">
+  <input id="thu" placeholder="Thu">
+  <input id="fri" placeholder="Fri">
+  <input id="sat" placeholder="Sat">
+
+  <button onclick="generate()">Generate JSON</button>
+
+  <textarea id="out" readonly></textarea>
+</div>
+
 <script>
 function login(){
-  const password = document.getElementById("pass").value;
-  const loginBox = document.getElementById("login");
-  const adminBox = document.getElementById("admin");
-
-  if(password === "damodar@123"){
-    loginBox.style.display = "none";
-    adminBox.style.display = "block";
+  const p = document.getElementById("pass").value;
+  if(p === "damodar@123"){
+    document.getElementById("login").style.display="none";
+    document.getElementById("admin").style.display="block";
   } else {
     alert("Wrong password");
   }
 }
 
 function generate(){
-  const json = {
+  const data = {
     daily: document.getElementById("daily").value,
     week:{
-      mon: document.getElementById("mon").value,
-      tue: document.getElementById("tue").value,
-      wed: document.getElementById("wed").value,
-      thu: document.getElementById("thu").value,
-      fri: document.getElementById("fri").value,
-      sat: document.getElementById("sat").value
+      mon:mon.value,tue:tue.value,wed:wed.value,
+      thu:thu.value,fri:fri.value,sat:sat.value
     }
   };
-
   document.getElementById("out").value =
-    JSON.stringify(json, null, 2);
+    JSON.stringify(data,null,2);
 }
 </script>
+
+</body>
+</html>
