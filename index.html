@@ -66,11 +66,13 @@ body{
 }
 
 .refresh-btn{
-  background:#000;
-  color:#ffeb3b;
+  background:maroon;
+  color:#d4af37; /* golden */
   border:none;
-  padding:6px 18px;
+  padding:8px 22px;
   font-weight:900;
+  font-family:'Trebuchet MS', Arial, sans-serif;
+  letter-spacing:1px;
   cursor:pointer;
 }
 
@@ -130,7 +132,7 @@ body{
   <div class="blue-line"></div>
   <div class="yellow-strip">
     <div class="strip-title">DAMODAR</div>
-    <div class="result-num" id="resultNum">248 - 67 - 935</div>
+    <div class="result-num result-sync">248 - 67 - 935</div>
     <button class="refresh-btn" onclick="refreshResult()">REFRESH</button>
   </div>
   <div class="blue-line"></div>
@@ -149,9 +151,15 @@ body{
     <div class="panel-line"></div>
   </div>
 
-  <!-- SECOND RESULT -->
+  <!-- SECOND RESULT (YELLOW) -->
 
-  <div class="second-result">248 - 67 - 935</div>
+  <div class="blue-line"></div>
+  <div class="yellow-strip">
+    <div class="strip-title">DAMODAR</div>
+    <div class="result-num result-sync">248 - 67 - 935</div>
+    <button class="refresh-btn" onclick="refreshResult()">REFRESH</button>
+  </div>
+  <div class="blue-line"></div>
 
   <!-- DISCLAIMER -->
 
@@ -166,7 +174,10 @@ function refreshResult(){
   const r = Math.floor(100 + Math.random()*900);
   const m = Math.floor(10 + Math.random()*90);
   const l = Math.floor(100 + Math.random()*900);
-  document.getElementById('resultNum').innerText = r + ' - ' + m + ' - ' + l;
+  const value = r + ' - ' + m + ' - ' + l;
+  document.querySelectorAll('.result-sync').forEach(el => {
+    el.innerText = value;
+  });
 }
 </script>
 
