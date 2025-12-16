@@ -1,60 +1,174 @@
 <!DOCTYPE html>
-<html lang="hi">
+
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>दामोदर मटका चार्ट - Damodar Matka Chart</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Damodar Matka Chart</title>
+
+<style>
+body{
+  margin:0;
+  background:#000;
+  color:#fff;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+.container{
+  max-width:900px;
+  margin:0 auto;
+  padding:20px;
+  text-align:center;
+}
+
+/* HEADINGS */
+.main-title{
+  color:red;
+  font-size:32px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.sub-title{
+  margin-top:10px;
+  font-size:18px;
+}
+
+.blue-line{
+  height:5px;
+  background:#0033cc;
+  margin:15px 0;
+}
+
+.desc{
+  font-size:14px;
+  color:#ddd;
+}
+
+/* YELLOW RESULT STRIP */
+.yellow-strip{
+  background:#ffeb3b;
+  color:#000;
+  padding:20px 10px;
+  margin-top:25px;
+}
+
+.strip-title{
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.result-num{
+  margin:10px 0;
+  font-size:26px;
+  font-weight:900;
+}
+
+.refresh-btn{
+  background:#000;
+  color:#ffeb3b;
+  border:none;
+  padding:6px 18px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+/* PANEL CHART */
+.panel-box{
+  width:50%;
+  min-width:300px;
+  margin:35px auto;
+  border:2px solid purple;
+  background:#fff;
+  color:#000;
+  padding:15px;
+}
+
+.panel-head{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  font-weight:700;
+}
+
+.panel-line{
+  height:1px;
+  background:purple;
+  margin-top:6px;
+}
+
+/* SECOND RESULT */
+.second-result{
+  margin:30px 0;
+  font-size:26px;
+  font-weight:900;
+}
+
+/* DISCLAIMER */
+.disclaimer{
+  font-size:12px;
+  color:#ccc;
+  text-align:left;
+  line-height:1.6;
+  margin-top:40px;
+}
+
+</style>
+
 </head>
 <body>
 
-    <div class="container">
-        
-        <header class="site-header">
-            <h1>दामोदर मटका चार्ट</h1>
-            <p>सबसे तेज़ और सटीक परिणाम</p>
-        </header>
+<div class="container">
 
-        <main class="chart-area">
-            
-            <h2>कल्याण चार्ट</h2>
-            <table class="matka-chart">
-                <thead>
-                    <tr>
-                        <th>दिन (Day)</th>
-                        <th>परिणाम (Result)</th>
-                        <th>जोड़ी (Jodi)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>सोमवार (Monday)</td>
-                        <td>257-**4**-130</td>
-                        <td>44</td>
-                    </tr>
-                    <tr>
-                        <td>मंगलवार (Tuesday)</td>
-                        <td>345-**2**-679</td>
-                        <td>22</td>
-                    </tr>
-                    <tr>
-                        <td>बुधवार (Wednesday)</td>
-                        <td>123-**6**-457</td>
-                        <td>66</td>
-                    </tr>
-                    </tbody>
-            </table>
+  <div class="main-title">DAMODAR CHART</div>
+  <div class="sub-title">Damodar Matka Chart Result</div>
+  <div class="blue-line"></div>
+  <div class="desc">This website is for information purposes only.</div>
 
-            <h2>आज का लाइव परिणाम</h2>
-            <div class="live-result">
-                <span>**8**</span>
-            </div>
+  <!-- RESULT STRIP -->
 
-        </main>
+  <div class="blue-line"></div>
+  <div class="yellow-strip">
+    <div class="strip-title">DAMODAR</div>
+    <div class="result-num" id="resultNum">248 - 67 - 935</div>
+    <button class="refresh-btn" onclick="refreshResult()">REFRESH</button>
+  </div>
+  <div class="blue-line"></div>
 
-        <footer class="site-footer">
-            <p>&copy; 2024 दामोदर मटका चार्ट. सभी अधिकार सुरक्षित।</p>
-        </footer>
+  <!-- PANEL CHART -->
 
-    </div> </body>
+  <div class="panel-box">
+    <div class="panel-head">
+      <div>MON</div>
+      <div>TUE</div>
+      <div>WED</div>
+      <div>THU</div>
+      <div>FRI</div>
+      <div>SAT</div>
+    </div>
+    <div class="panel-line"></div>
+  </div>
+
+  <!-- SECOND RESULT -->
+
+  <div class="second-result">248 - 67 - 935</div>
+
+  <!-- DISCLAIMER -->
+
+  <div class="disclaimer">
+    Disclaimer: This website is only for informational and educational purposes. We do not support or promote any form of gambling. All information shown here is based on publicly available data and past results. Users are advised to play responsibly and at their own risk. This website is strictly for adults above 18 years of age. We shall not be responsible for any loss or damage arising from the use of information provided on this site.
+  </div>
+
+</div>
+
+<script>
+function refreshResult(){
+  const r = Math.floor(100 + Math.random()*900);
+  const m = Math.floor(10 + Math.random()*90);
+  const l = Math.floor(100 + Math.random()*900);
+  document.getElementById('resultNum').innerText = r + ' - ' + m + ' - ' + l;
+}
+</script>
+
+</body>
 </html>
