@@ -1,55 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Damodar Chart</title>
+
+<style>
+body{
+  margin:0;
+  background:#000;
+  color:#fff;
+  font-family:Arial, sans-serif;
+  text-align:center;
+}
+
+.header{
+  color:red;
+  font-size:22px;
+  font-weight:bold;
+  margin-top:10px;
+}
+
+.blue-line{height:4px;background:#0033cc;margin:10px 0;}
+
+.yellow-box{
+  background:#ffff00;
+  border:3px solid red;
+  padding:12px;
+  margin:10px;
+}
+
+.yellow-box h2{
+  margin:0;
+  color:#0033cc;
+}
+
+.daily{
+  color:#000;
+  font-size:22px;
+  font-weight:bold;
+}
+
+.panel{
+  background:#fff;
+  color:#000;
+  border:3px solid purple;
+  border-radius:10px;
+  padding:10px;
+  margin:15px;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  font-size:22px;
+  font-weight:bold;
+}
+
+.cell{padding:10px;border-right:1px solid purple;}
+.cell:last-child{border-right:none;}
+.red{color:red;}
+</style>
+</head>
+
+<body>
+
+<div class="header">DAMODAR CHART</div>
+<div class="blue-line"></div>
+
+<div class="yellow-box">
+  <h2>DAMODAR</h2>
+  <div id="dailyTop" class="daily">---</div>
+</div>
+
+<div class="blue-line"></div>
+
+<div class="panel">
+  <div class="row" style="font-size:14px;font-weight:bold;">
+    <div>MON</div><div>TUE</div><div>WED</div>
+    <div>THU</div><div>FRI</div><div>SAT</div>
+  </div>
+  <hr>
+  <div id="weekRow" class="row"></div>
+</div>
+
+<div class="blue-line"></div>
+
+<div class="yellow-box">
+  <h2>DAMODAR</h2>
+  <div id="dailyBottom" class="daily">---</div>
+</div>
+
 <script>
-const redJodis = ['00','11','22','33','44','55','66','77','88','99','05','50','16','61','27','72','38','83','49','94'];
+fetch("/data.json",{cache:"no-store"})
+.then(r=>r.json())
+.then(d=>{
+  document.getElementById("dailyTop").innerText=d.daily||"---";
+  document.getElementById("dailyBottom").innerText=d.daily||"---";
 
-window.addEventListener('DOMContentLoaded', () => {
+  const red=["00","11","22","33","44","55","66","77","88","99","05","50","16","61","27","72","38","83","49","94"];
+  const row=document.getElementById("weekRow");
+  row.innerHTML="";
 
-  fetch('/data.json', { cache: 'no-store' })
-    .then(res => {
-      if (!res.ok) throw new Error('data.json not found');
-      return res.json();
-    })
-    .then(data => {
-
-      // DAILY
-      document.querySelectorAll('#dailyDisplay').forEach(el=>{
-        el.innerText = (data.daily || '---').replace(/-/g,' - ');
-      });
-
-      // WEEK
-      const container = document.getElementById('weeks-container');
-      if (!container) return;
-
-      container.innerHTML = '';
-
-      const row = document.createElement('div');
-      row.className = 'week-row';
-
-      (data.currentWeek || ["","","","","",""]).forEach(val=>{
-        const cell = document.createElement('div');
-        cell.className = 'daycell';
-
-        const j = document.createElement('div');
-        j.className = 'jodi';
-
-        if(!val){
-          j.innerText = '—';
-        } else {
-          j.innerText = val;
-          if(redJodis.includes(val)){
-            j.style.color = 'red';
-          }
-        }
-
-        cell.appendChild(j);
-        row.appendChild(cell);
-      });
-
-      container.appendChild(row);
-    })
-    .catch(err => {
-      console.error(err);
-      document.body.innerHTML = '<h2 style="color:red;text-align:center">Data load error</h2>';
-    });
-
+  d.currentWeek.forEach(n=>{
+    const div=document.createElement("div");
+    div.className="cell"+(red.includes(n)?" red":"");
+    div.innerText=n||"—";
+    row.appendChild(div);
+  });
 });
 </script>
+
+</body>
+</html>
