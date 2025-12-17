@@ -1,3 +1,2 @@
 [build]
   publish = "."
-Fix Netlify publish directory
