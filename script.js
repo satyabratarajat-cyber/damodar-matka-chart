@@ -1,11 +1,13 @@
-function loadResult(){
-  fetch("data.json")
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("mainResult").innerText = data.result;
-      document.getElementById("updateTime").innerText =
-        "Updated: " + data.updated_at;
+fetch("data.json")
+  .then(res => res.json())
+  .then(data => {
+    // ऊपर result
+    document.querySelectorAll(".live-result").forEach(el => {
+      el.innerText = data.result;
     });
-}
 
-loadResult();
+    // नीचे result (अगर same class है)
+    document.querySelectorAll(".live-result-bottom").forEach(el => {
+      el.innerText = data.result;
+    });
+  });
