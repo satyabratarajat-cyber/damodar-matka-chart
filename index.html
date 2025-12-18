@@ -111,18 +111,10 @@ header{
 .jodi{
   font-size:28px;
   font-weight:900;
-  color:#000; /* default BLACK */
+  color:#000;
 }
-
-/* ===== RED NUMBER ===== */
-.jodi.red{
-  color:red;
-}
-
-/* ===== EMPTY ===== */
-.jodi.empty{
-  color:#999;
-}
+.jodi.red{color:red;}
+.jodi.empty{color:#999;}
 
 .sep{
   height:2px;
@@ -189,6 +181,16 @@ This page belongs to Damodar Matka Chart. Here you will find useful data about D
 
 <div class="blue-line"></div>
 
+<!-- ===== GO TO TOP / BOTTOM ===== -->
+<div style="text-align:center; margin:25px 0;">
+  <button onclick="goTop()" style="background:#0033cc;color:#fff;padding:10px 24px;border-radius:22px;font-size:14px;font-weight:900;border:none;cursor:pointer;margin-right:10px;">
+    GO TO TOP
+  </button>
+  <button onclick="goBottom()" style="background:purple;color:#fff;padding:10px 24px;border-radius:22px;font-size:14px;font-weight:900;border:none;cursor:pointer;">
+    GO TO BOTTOM
+  </button>
+</div>
+
 <!-- ===== DISCLAIMER ===== -->
 <div class="disclaimer">
 <strong>Disclaimer:</strong>
@@ -198,43 +200,50 @@ All data shown here is based on analysis and past results.
 </div>
 
 <script>
-/* ===== FINAL RED JODI LIST ===== */
+/* RED NUMBERS */
 const redJodis = [
   "00","11","22","33","44","55","66","77","88","99",
   "05","50","16","61","27","72","38","83","49","94"
 ];
 
-fetch("data.json")
-  .then(res => res.json())
-  .then(data => {
+/* SCROLL */
+function goTop(){
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function goBottom(){
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
 
-    /* DAILY */
+/* DATA LOAD */
+fetch("data.json")
+  .then(res=>res.json())
+  .then(data=>{
+
     document.querySelectorAll(".dailyDisplay").forEach(el=>{
       el.innerText = data.daily || "---";
     });
 
-    const box = document.getElementById("weeks-container");
-    box.innerHTML = "";
+    const box=document.getElementById("weeks-container");
+    box.innerHTML="";
 
     function drawWeek(arr){
-      const row = document.createElement("div");
-      row.className = "week-row";
+      const row=document.createElement("div");
+      row.className="week-row";
 
       arr.forEach(v=>{
-        const c = document.createElement("div");
-        c.className = "daycell";
+        const c=document.createElement("div");
+        c.className="daycell";
+        const j=document.createElement("div");
+        j.className="jodi";
 
-        const j = document.createElement("div");
-        j.className = "jodi";
-
-        if(!v){
-          j.innerText = "—";
+        if(v===""){
+          j.innerText="—";
           j.classList.add("empty");
+        }else if(v==="*"){
+          j.innerText="*";
         }else{
-          j.innerText = v;
-          if(redJodis.includes(v)){
-            j.classList.add("red");
-          }
+          j.innerText=v;
+          if(redJodis.includes(v)) j.classList.add("red");
         }
 
         c.appendChild(j);
@@ -247,15 +256,8 @@ fetch("data.json")
       box.appendChild(s);
     }
 
-    /* HISTORY FIRST */
-    if(Array.isArray(data.history)){
-      data.history.forEach(drawWeek);
-    }
-
-    /* CURRENT LAST */
-    if(Array.isArray(data.current)){
-      drawWeek(data.current);
-    }
+    if(Array.isArray(data.history)) data.history.forEach(drawWeek);
+    if(Array.isArray(data.current)) drawWeek(data.current);
 
   });
 </script>
