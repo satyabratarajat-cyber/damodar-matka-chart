@@ -1,38 +1,232 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Damodar Test</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Damodar Matka Chart</title>
+
+<style>
+body{
+  margin:0;
+  background:#0b0b0b;
+  color:#fff;
+  font-family:Arial, sans-serif;
+}
+
+/* ===== TOP ===== */
+header{
+  color:red;
+  text-transform:uppercase;
+  text-align:center;
+  font-weight:900;
+  font-size:22px;
+  margin-top:10px;
+}
+.sub-header{
+  color:#fff;
+  border-top:2px solid blue;
+  padding:5px 0;
+  text-align:center;
+  font-weight:700;
+}
+.description{
+  text-align:center;
+  max-width:900px;
+  margin:0 auto;
+  padding:6px 10px;
+}
+
+/* ===== LINES ===== */
+.blue-line{
+  width:100%;
+  height:5px;
+  background:#0033cc;
+  margin:14px 0;
+}
+
+/* ===== YELLOW STRIP ===== */
+.yellow-strip{
+  background:#ffff00;
+  padding:12px 0;
+  border:3px solid red;
+  text-align:center;
+}
+.yellow-strip .title{
+  color:#0033cc;
+  font-weight:900;
+  font-size:28px;
+  font-family:'Times New Roman', Georgia, serif;
+}
+.dailyDisplay{
+  margin-top:6px;
+  font-size:24px;
+  color:#000;
+  font-weight:900;
+}
+.refresh-btn{
+  margin-top:8px;
+  background:#c1121f;
+  color:#d4af37;
+  padding:8px 20px;
+  border-radius:30px;
+  font-size:14px;
+  font-weight:900;
+  cursor:pointer;
+  border:none;
+}
+
+/* ===== PANEL ===== */
+.panel-box{
+  width:32vw;
+  max-width:480px;
+  min-width:240px;
+  margin:20px auto;
+  border:3px solid purple;
+  border-radius:10px;
+  padding:10px;
+  background:#fff;
+  color:#000;
+}
+.chart-header{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  text-align:center;
+  font-weight:900;
+  font-size:14px;
+}
+.chart-header div{border-right:1px solid purple;}
+.chart-header div:last-child{border-right:none;}
+.week-row{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  margin-top:6px;
+}
+.daycell{
+  text-align:center;
+  border-right:1px solid purple;
+}
+.daycell:last-child{border-right:none;}
+.jodi{
+  font-size:28px;
+  font-weight:900;
+}
+.sep{
+  height:2px;
+  background:purple;
+  margin:8px 0;
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+  .panel-box{width:92vw;}
+}
+
+/* ===== DISCLAIMER ===== */
+.disclaimer{
+  text-align:center;
+  color:#ccc;
+  font-size:12px;
+  line-height:1.6;
+  max-width:900px;
+  margin:20px auto 40px;
+  padding:0 12px;
+}
+</style>
 </head>
 
-<body style="background:black;color:white;text-align:center;font-family:Arial">
+<body>
 
-<h1 style="color:red">DAMODAR CHART</h1>
+<header>DAMODAR CHART</header>
+<div class="sub-header">Damodar Matka Chart Result</div>
 
-<h2 id="daily">---</h2>
+<div class="description">
+This page belongs to Damodar Matka Chart. Here you will find useful data about Damodar probability numbers.
+</div>
 
-<h3>MON TUE WED THU FRI SAT</h3>
-<div id="current"></div>
+<div class="blue-line"></div>
+
+<!-- ===== TOP RESULT ===== -->
+<div class="yellow-strip">
+  <div class="title">DAMODAR</div>
+  <div class="dailyDisplay">---</div>
+  <button class="refresh-btn" onclick="location.reload()">REFRESH RESULT</button>
+</div>
+
+<div class="blue-line"></div>
+
+<!-- ===== PANEL ===== -->
+<div class="panel-box">
+  <div class="chart-header">
+    <div>MON</div><div>TUE</div><div>WED</div>
+    <div>THU</div><div>FRI</div><div>SAT</div>
+  </div>
+  <div class="sep"></div>
+  <div id="weeks-container"></div>
+</div>
+
+<div class="blue-line"></div>
+
+<!-- ===== BOTTOM RESULT ===== -->
+<div class="yellow-strip">
+  <div class="title">DAMODAR</div>
+  <div class="dailyDisplay">---</div>
+  <button class="refresh-btn" onclick="location.reload()">REFRESH RESULT</button>
+</div>
+
+<div class="blue-line"></div>
+
+<!-- ===== DISCLAIMER ===== -->
+<div class="disclaimer">
+<strong>Disclaimer:</strong>
+This website is for informational and educational purposes only.
+We do not promote or support gambling in any form.
+All data shown here is based on analysis and past results.
+</div>
 
 <script>
+/* SIMPLE & WORKING JSON LOGIC */
+
 fetch("data.json")
   .then(res => res.json())
   .then(data => {
 
-    // DAILY
-    document.getElementById("daily").innerText = data.daily;
+    /* DAILY */
+    document.querySelectorAll(".dailyDisplay").forEach(el=>{
+      el.innerText = data.daily || "---";
+    });
 
-    // CURRENT
-    const box = document.getElementById("current");
+    const box = document.getElementById("weeks-container");
     box.innerHTML = "";
 
-    data.current.forEach(n => {
-      const span = document.createElement("span");
-      span.innerText = n + " ";
-      span.style.fontSize = "24px";
-      span.style.margin = "5px";
-      box.appendChild(span);
-    });
+    function drawWeek(arr){
+      const row = document.createElement("div");
+      row.className = "week-row";
+
+      arr.forEach(v=>{
+        const c=document.createElement("div");
+        c.className="daycell";
+        const j=document.createElement("div");
+        j.className="jodi";
+        j.innerText = v ? v : "—";
+        c.appendChild(j);
+        row.appendChild(c);
+      });
+
+      box.appendChild(row);
+      const s=document.createElement("div");
+      s.className="sep";
+      box.appendChild(s);
+    }
+
+    /* HISTORY */
+    if(Array.isArray(data.history)){
+      data.history.forEach(drawWeek);
+    }
+
+    /* CURRENT (LAST) */
+    if(Array.isArray(data.current)){
+      drawWeek(data.current);
+    }
 
   });
 </script>
