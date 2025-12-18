@@ -210,6 +210,12 @@ Please follow your local laws and regulations.
 </div>
 
 <script>
+/* ===== RED JODI LIST ===== */
+const redJodis = [
+  "00","11","22","33","44","55","66","77","88","99",
+  "05","50","16","61","27","72","38","83","49","94"
+];
+
 fetch("data.json?_=" + Date.now())
   .then(res => res.json())
   .then(data => {
@@ -232,9 +238,19 @@ fetch("data.json?_=" + Date.now())
       week.forEach(v=>{
         const c=document.createElement("div");
         c.className="daycell";
+
         const j=document.createElement("div");
         j.className="jodi";
-        j.innerText = v ? v : "—";   // 2-digit only
+
+        if(!v){
+          j.innerText = "—";
+        }else{
+          j.innerText = v;
+          if(redJodis.includes(v)){
+            j.style.color = "red";
+          }
+        }
+
         c.appendChild(j);
         row.appendChild(c);
       });
