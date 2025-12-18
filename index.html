@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Damodar Matka Chart</title>
 
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
 <style>
 body{
   margin:0;
@@ -12,8 +16,6 @@ body{
   color:#fff;
   font-family:'Trebuchet MS','Arial Black',Arial,sans-serif;
 }
-
-/* ===== TOP ===== */
 header{
   color:red;
   text-transform:uppercase;
@@ -22,7 +24,6 @@ header{
   font-size:22px;
   margin-top:10px;
 }
-
 .sub-header{
   color:white;
   border-top:2px solid blue;
@@ -30,7 +31,6 @@ header{
   text-align:center;
   font-weight:700;
 }
-
 .description{
   color:white;
   text-align:center;
@@ -38,39 +38,30 @@ header{
   margin:0 auto;
   padding:6px 10px;
 }
-
-/* ===== LINES ===== */
 .blue-line{
   width:100%;
   height:5px;
   background:#0033cc;
   margin:14px 0;
 }
-
-/* ===== YELLOW STRIP ===== */
 .yellow-strip{
   background:#ffff00;
   padding:12px 0;
   border:3px solid red;
   text-align:center;
 }
-
 .yellow-strip .title{
   color:#0033cc;
   font-weight:900;
   font-size:28px;
   font-family:'Times New Roman', Georgia, serif;
 }
-
 .dailyDisplay{
   margin-top:6px;
   font-size:24px;
   color:#000;
   font-weight:900;
-  letter-spacing:1px;
-  font-family:'Times New Roman', Georgia, serif;
 }
-
 .refresh-btn{
   margin-top:8px;
   background:#c1121f;
@@ -79,13 +70,9 @@ header{
   border-radius:30px;
   font-size:14px;
   font-weight:900;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
   cursor:pointer;
   border:none;
 }
-
-/* ===== PANEL ===== */
 .panel-box{
   width:32vw;
   max-width:480px;
@@ -97,7 +84,6 @@ header{
   background:#fff;
   color:#000;
 }
-
 .chart-header{
   display:grid;
   grid-template-columns:repeat(6,1fr);
@@ -105,47 +91,32 @@ header{
   font-weight:900;
   font-size:14px;
 }
-
-.chart-header div{
-  border-right:1px solid purple;
-}
-.chart-header div:last-child{
-  border-right:none;
-}
-
+.chart-header div{border-right:1px solid purple;}
+.chart-header div:last-child{border-right:none;}
 .week-row{
   display:grid;
   grid-template-columns:repeat(6,1fr);
   margin-top:6px;
 }
-
 .daycell{
   text-align:center;
   border-right:1px solid purple;
 }
-.daycell:last-child{
-  border-right:none;
-}
-
+.daycell:last-child{border-right:none;}
 .jodi{
   font-size:30px;
   font-weight:900;
   color:#000;
 }
-
 .sep{
   height:2px;
   background:purple;
   margin:8px 0;
 }
-
-/* ===== MOBILE ===== */
 @media(max-width:768px){
   .panel-box{width:92vw;}
   .jodi{font-size:26px;}
 }
-
-/* ===== DISCLAIMER ===== */
 .disclaimer{
   text-align:center;
   color:#ccc;
@@ -169,16 +140,14 @@ This page belongs to Damodar Matka Chart. Here you will find useful data about D
 
 <div class="blue-line"></div>
 
-<!-- ===== TOP RESULT ===== -->
 <div class="yellow-strip">
   <div class="title">DAMODAR</div>
   <div class="dailyDisplay">---</div>
-  <button class="refresh-btn" onclick="location.reload()">REFRESH RESULT</button>
+  <button class="refresh-btn" onclick="location.reload(true)">REFRESH RESULT</button>
 </div>
 
 <div class="blue-line"></div>
 
-<!-- ===== PANEL ===== -->
 <div class="panel-box">
   <div class="chart-header">
     <div>MON</div><div>TUE</div><div>WED</div>
@@ -190,86 +159,82 @@ This page belongs to Damodar Matka Chart. Here you will find useful data about D
 
 <div class="blue-line"></div>
 
-<!-- ===== BOTTOM RESULT ===== -->
 <div class="yellow-strip">
   <div class="title">DAMODAR</div>
   <div class="dailyDisplay">---</div>
-  <button class="refresh-btn" onclick="location.reload()">REFRESH RESULT</button>
+  <button class="refresh-btn" onclick="location.reload(true)">REFRESH RESULT</button>
 </div>
 
 <div class="blue-line"></div>
 
-<!-- ===== DISCLAIMER ===== -->
 <div class="disclaimer">
 <strong>Disclaimer:</strong>
 This website is for informational and educational purposes only.
 We do not promote or support gambling in any form.
-All data shown here is based on analysis and past results and is provided only for learning and reference.
-Users are solely responsible for their actions and decisions.
-Please follow your local laws and regulations.
 </div>
 
 <script>
-/* ===== RED JODI LIST ===== */
+/* 🔥 REMOVE ANY SERVICE WORKER (CACHE KILL) */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(r => {
+    r.forEach(reg => reg.unregister());
+  });
+}
+
+/* RED JODI */
 const redJodis = [
   "00","11","22","33","44","55","66","77","88","99",
   "05","50","16","61","27","72","38","83","49","94"
 ];
 
-fetch("data.json?_=" + Date.now())
-  .then(res => res.json())
-  .then(data => {
+/* 🔥 HARD NO-CACHE FETCH */
+fetch("data.json?ts=" + Date.now() + "&r=" + Math.random(), {
+  cache: "no-store"
+})
+.then(res => res.json())
+.then(data => {
 
-    /* DAILY (TOP + BOTTOM) */
-    if(data.daily){
-      document.querySelectorAll(".dailyDisplay").forEach(el=>{
-        el.innerText = data.daily.replace(/-/g," - ");
-      });
-    }
+  console.log("JSON LOADED:", data); // DEBUG
 
-    /* PANEL */
-    const box = document.getElementById("weeks-container");
-    box.innerHTML = "";
+  if(data.daily){
+    document.querySelectorAll(".dailyDisplay").forEach(el=>{
+      el.innerText = data.daily.replace(/-/g," - ");
+    });
+  }
 
-    function drawWeek(week){
-      const row=document.createElement("div");
-      row.className="week-row";
+  const box = document.getElementById("weeks-container");
+  box.innerHTML = "";
 
-      week.forEach(v=>{
-        const c=document.createElement("div");
-        c.className="daycell";
+  function drawWeek(week){
+    const row=document.createElement("div");
+    row.className="week-row";
 
-        const j=document.createElement("div");
-        j.className="jodi";
+    week.forEach(v=>{
+      const c=document.createElement("div");
+      c.className="daycell";
+      const j=document.createElement("div");
+      j.className="jodi";
+      if(!v){
+        j.innerText="—";
+      }else{
+        j.innerText=v;
+        if(redJodis.includes(v)) j.style.color="red";
+      }
+      c.appendChild(j);
+      row.appendChild(c);
+    });
 
-        if(!v){
-          j.innerText = "—";
-        }else{
-          j.innerText = v;
-          if(redJodis.includes(v)){
-            j.style.color = "red";
-          }
-        }
+    box.appendChild(row);
+    const s=document.createElement("div");
+    s.className="sep";
+    box.appendChild(s);
+  }
 
-        c.appendChild(j);
-        row.appendChild(c);
-      });
+  if(Array.isArray(data.history)) data.history.forEach(drawWeek);
+  if(Array.isArray(data.current)) drawWeek(data.current);
 
-      box.appendChild(row);
-      const s=document.createElement("div");
-      s.className="sep";
-      box.appendChild(s);
-    }
-
-    if(Array.isArray(data.history)){
-      data.history.forEach(drawWeek);
-    }
-    if(Array.isArray(data.current)){
-      drawWeek(data.current);
-    }
-
-  })
-  .catch(e=>console.error("JSON ERROR",e));
+})
+.catch(e=>console.error("JSON ERROR",e));
 </script>
 
 </body>
