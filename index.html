@@ -96,6 +96,7 @@ header{
 }
 .chart-header div{border-right:1px solid purple;}
 .chart-header div:last-child{border-right:none;}
+
 .week-row{
   display:grid;
   grid-template-columns:repeat(6,1fr);
@@ -106,10 +107,23 @@ header{
   border-right:1px solid purple;
 }
 .daycell:last-child{border-right:none;}
+
 .jodi{
   font-size:28px;
   font-weight:900;
+  color:#000; /* default BLACK */
 }
+
+/* ===== RED NUMBER ===== */
+.jodi.red{
+  color:red;
+}
+
+/* ===== EMPTY ===== */
+.jodi.empty{
+  color:#999;
+}
+
 .sep{
   height:2px;
   background:purple;
@@ -184,7 +198,11 @@ All data shown here is based on analysis and past results.
 </div>
 
 <script>
-/* SIMPLE & WORKING JSON LOGIC */
+/* ===== FINAL RED JODI LIST ===== */
+const redJodis = [
+  "00","11","22","33","44","55","66","77","88","99",
+  "05","50","16","61","27","72","38","83","49","94"
+];
 
 fetch("data.json")
   .then(res => res.json())
@@ -203,11 +221,22 @@ fetch("data.json")
       row.className = "week-row";
 
       arr.forEach(v=>{
-        const c=document.createElement("div");
-        c.className="daycell";
-        const j=document.createElement("div");
-        j.className="jodi";
-        j.innerText = v ? v : "—";
+        const c = document.createElement("div");
+        c.className = "daycell";
+
+        const j = document.createElement("div");
+        j.className = "jodi";
+
+        if(!v){
+          j.innerText = "—";
+          j.classList.add("empty");
+        }else{
+          j.innerText = v;
+          if(redJodis.includes(v)){
+            j.classList.add("red");
+          }
+        }
+
         c.appendChild(j);
         row.appendChild(c);
       });
@@ -218,12 +247,12 @@ fetch("data.json")
       box.appendChild(s);
     }
 
-    /* HISTORY */
+    /* HISTORY FIRST */
     if(Array.isArray(data.history)){
       data.history.forEach(drawWeek);
     }
 
-    /* CURRENT (LAST) */
+    /* CURRENT LAST */
     if(Array.isArray(data.current)){
       drawWeek(data.current);
     }
