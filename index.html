@@ -122,6 +122,18 @@ header{
   margin:8px 0;
 }
 
+/* ===== NAV BUTTON ===== */
+.nav-btn{
+  background:#0033cc;
+  color:#fff;
+  padding:10px 26px;
+  border-radius:24px;
+  font-size:14px;
+  font-weight:900;
+  border:none;
+  cursor:pointer;
+}
+
 /* ===== MOBILE ===== */
 @media(max-width:768px){
   .panel-box{width:92vw;}
@@ -160,7 +172,12 @@ This page belongs to Damodar Matka Chart. Here you will find useful data about D
 
 <div class="blue-line"></div>
 
-<!-- ===== PANEL ===== -->
+<!-- 🔽 GO TO BOTTOM (DATA AREA KE UPAR) -->
+<div style="text-align:center; margin:10px 0;">
+  <button class="nav-btn" onclick="goBottom()">GO TO BOTTOM</button>
+</div>
+
+<!-- ===== DATA AREA / PANEL ===== -->
 <div class="panel-box">
   <div class="chart-header">
     <div>MON</div><div>TUE</div><div>WED</div>
@@ -168,6 +185,11 @@ This page belongs to Damodar Matka Chart. Here you will find useful data about D
   </div>
   <div class="sep"></div>
   <div id="weeks-container"></div>
+</div>
+
+<!-- 🔼 GO TO TOP (DATA AREA KE NICHE) -->
+<div style="text-align:center; margin:10px 0 20px;">
+  <button class="nav-btn" onclick="goTop()">GO TO TOP</button>
 </div>
 
 <div class="blue-line"></div>
@@ -181,16 +203,6 @@ This page belongs to Damodar Matka Chart. Here you will find useful data about D
 
 <div class="blue-line"></div>
 
-<!-- ===== GO TO TOP / BOTTOM ===== -->
-<div style="text-align:center; margin:25px 0;">
-  <button onclick="goTop()" style="background:#0033cc;color:#fff;padding:10px 24px;border-radius:22px;font-size:14px;font-weight:900;border:none;cursor:pointer;margin-right:10px;">
-    GO TO TOP
-  </button>
-  <button onclick="goBottom()" style="background:purple;color:#fff;padding:10px 24px;border-radius:22px;font-size:14px;font-weight:900;border:none;cursor:pointer;">
-    GO TO BOTTOM
-  </button>
-</div>
-
 <!-- ===== DISCLAIMER ===== -->
 <div class="disclaimer">
 <strong>Disclaimer:</strong>
@@ -201,9 +213,9 @@ All data shown here is based on analysis and past results.
 
 <script>
 /* RED NUMBERS */
-const redJodis = [
-  "00","11","22","33","44","55","66","77","88","99",
-  "05","50","16","61","27","72","38","83","49","94"
+const redJodis=[
+"00","11","22","33","44","55","66","77","88","99",
+"05","50","16","61","27","72","38","83","49","94"
 ];
 
 /* SCROLL */
@@ -216,50 +228,50 @@ function goBottom(){
 
 /* DATA LOAD */
 fetch("data.json")
-  .then(res=>res.json())
-  .then(data=>{
+.then(r=>r.json())
+.then(data=>{
 
-    document.querySelectorAll(".dailyDisplay").forEach(el=>{
-      el.innerText = data.daily || "---";
+  document.querySelectorAll(".dailyDisplay").forEach(el=>{
+    el.innerText=data.daily||"---";
+  });
+
+  const box=document.getElementById("weeks-container");
+  box.innerHTML="";
+
+  function drawWeek(arr){
+    const row=document.createElement("div");
+    row.className="week-row";
+
+    arr.forEach(v=>{
+      const c=document.createElement("div");
+      c.className="daycell";
+      const j=document.createElement("div");
+      j.className="jodi";
+
+      if(v===""){
+        j.innerText="—";
+        j.classList.add("empty");
+      }else if(v==="*"){
+        j.innerText="*";
+      }else{
+        j.innerText=v;
+        if(redJodis.includes(v)) j.classList.add("red");
+      }
+
+      c.appendChild(j);
+      row.appendChild(c);
     });
 
-    const box=document.getElementById("weeks-container");
-    box.innerHTML="";
+    box.appendChild(row);
+    const s=document.createElement("div");
+    s.className="sep";
+    box.appendChild(s);
+  }
 
-    function drawWeek(arr){
-      const row=document.createElement("div");
-      row.className="week-row";
+  if(Array.isArray(data.history)) data.history.forEach(drawWeek);
+  if(Array.isArray(data.current)) drawWeek(data.current);
 
-      arr.forEach(v=>{
-        const c=document.createElement("div");
-        c.className="daycell";
-        const j=document.createElement("div");
-        j.className="jodi";
-
-        if(v===""){
-          j.innerText="—";
-          j.classList.add("empty");
-        }else if(v==="*"){
-          j.innerText="*";
-        }else{
-          j.innerText=v;
-          if(redJodis.includes(v)) j.classList.add("red");
-        }
-
-        c.appendChild(j);
-        row.appendChild(c);
-      });
-
-      box.appendChild(row);
-      const s=document.createElement("div");
-      s.className="sep";
-      box.appendChild(s);
-    }
-
-    if(Array.isArray(data.history)) data.history.forEach(drawWeek);
-    if(Array.isArray(data.current)) drawWeek(data.current);
-
-  });
+});
 </script>
 
 </body>
