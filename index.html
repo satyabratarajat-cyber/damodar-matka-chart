@@ -35,6 +35,18 @@ header{
   padding:6px 10px;
 }
 
+/* ===== WARNING ===== */
+.warning{
+  background:#330000;
+  color:#ffcc00;
+  border:2px solid red;
+  padding:10px;
+  margin:10px auto;
+  max-width:900px;
+  font-size:13px;
+  display:none;
+}
+
 /* ===== LINES ===== */
 .blue-line{
   width:100%;
@@ -120,7 +132,7 @@ header{
   margin:8px 0;
 }
 
-/* ===== BUTTON ===== */
+/* ===== NAV BUTTON ===== */
 .nav-btn{
   background:#0033cc;
   color:#fff;
@@ -157,9 +169,10 @@ header{
 This page is for informational purposes only.
 </div>
 
+<div id="warningBox" class="warning"></div>
+
 <div class="blue-line"></div>
 
-<!-- TOP RESULT -->
 <div class="yellow-strip">
   <div class="title">DAMODAR</div>
   <div class="dailyDisplay">---</div>
@@ -168,12 +181,10 @@ This page is for informational purposes only.
 
 <div class="blue-line"></div>
 
-<!-- GO TO BOTTOM (DATA AREA KE UPAR) -->
 <div style="text-align:center;">
   <button class="nav-btn" onclick="goBottom()">GO TO BOTTOM</button>
 </div>
 
-<!-- DATA AREA -->
 <div class="panel-box">
   <div class="chart-header">
     <div>MON</div><div>TUE</div><div>WED</div>
@@ -183,14 +194,12 @@ This page is for informational purposes only.
   <div id="weeks-container"></div>
 </div>
 
-<!-- GO TO TOP (DATA AREA KE NICHE) -->
 <div style="text-align:center; margin-bottom:20px;">
   <button class="nav-btn" onclick="goTop()">GO TO TOP</button>
 </div>
 
 <div class="blue-line"></div>
 
-<!-- BOTTOM RESULT -->
 <div class="yellow-strip">
   <div class="title">DAMODAR</div>
   <div class="dailyDisplay">---</div>
@@ -204,6 +213,7 @@ This page is for informational purposes only.
 </div>
 
 <script>
+/* ===== CONFIG ===== */
 const redJodis=[
 "00","11","22","33","44","55","66","77","88","99",
 "05","50","16","61","27","72","38","83","49","94"
@@ -216,40 +226,65 @@ function goBottom(){
   window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
 }
 
+/* ===== VALIDATION ===== */
+function isValidValue(v){
+  if(v==="") return true;
+  if(v==="*" || v==="**") return true;
+  if(/^\d{2}$/.test(v)) return true;
+  return false;
+}
+
+const warnings=[];
+function warn(msg){
+  warnings.push(msg);
+}
+
+/* ===== DATA LOAD ===== */
 fetch("data.json?_="+Date.now())
 .then(r=>r.json())
 .then(data=>{
 
+  if(typeof data.daily!=="string"){
+    warn("Invalid daily value");
+  }
+
   document.querySelectorAll(".dailyDisplay").forEach(el=>{
-    el.innerText=data.daily||"---";
+    el.innerText=(data.daily||"---");
   });
 
   const box=document.getElementById("weeks-container");
   box.innerHTML="";
 
-  function drawWeek(arr){
+  function drawWeek(arr,idx,type){
+    if(!Array.isArray(arr) || arr.length!==6){
+      warn(`${type} row ${idx+1} must have exactly 6 values`);
+      return;
+    }
+
     const row=document.createElement("div");
     row.className="week-row";
 
-    arr.forEach(v=>{
+    arr.forEach((v,i)=>{
       const c=document.createElement("div");
       c.className="daycell";
       const j=document.createElement("div");
       j.className="jodi";
 
-      if(v===""){
+      if(!isValidValue(v)){
+        warn(`Invalid value "${v}" at ${type} row ${idx+1}, column ${i+1}`);
         j.innerText="—";
         j.classList.add("empty");
-
-      }else if(v==="*" || v==="**"){
+      }
+      else if(v===""){
+        j.innerText="—";
+        j.classList.add("empty");
+      }
+      else if(v==="*" || v==="**"){
         j.innerText=v;
-        j.style.color="#000";
-
-      }else{
+      }
+      else{
         j.innerText=v;
-        if(redJodis.includes(v)){
-          j.classList.add("red");
-        }
+        if(redJodis.includes(v)) j.classList.add("red");
       }
 
       c.appendChild(j);
@@ -262,9 +297,29 @@ fetch("data.json?_="+Date.now())
     box.appendChild(s);
   }
 
-  if(Array.isArray(data.history)) data.history.forEach(drawWeek);
-  if(Array.isArray(data.current)) drawWeek(data.current);
+  if(Array.isArray(data.history)){
+    data.history.forEach((w,i)=>drawWeek(w,i,"History"));
+  }else{
+    warn("History must be an array");
+  }
 
+  if(Array.isArray(data.current)){
+    drawWeek(data.current,0,"Current");
+  }else{
+    warn("Current must be an array");
+  }
+
+  if(warnings.length){
+    const wb=document.getElementById("warningBox");
+    wb.innerHTML="<strong>Data Warning:</strong><br>"+warnings.join("<br>");
+    wb.style.display="block";
+    console.warn("DATA WARNINGS:",warnings);
+  }
+
+})
+.catch(e=>{
+  alert("data.json ERROR — invalid JSON");
+  console.error(e);
 });
 </script>
 
