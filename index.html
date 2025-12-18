@@ -1,240 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Damodar Matka Chart</title>
-
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
-
-<style>
-body{
-  margin:0;
-  background:#0b0b0b;
-  color:#fff;
-  font-family:'Trebuchet MS','Arial Black',Arial,sans-serif;
-}
-header{
-  color:red;
-  text-transform:uppercase;
-  text-align:center;
-  font-weight:900;
-  font-size:22px;
-  margin-top:10px;
-}
-.sub-header{
-  color:white;
-  border-top:2px solid blue;
-  padding:5px 0;
-  text-align:center;
-  font-weight:700;
-}
-.description{
-  color:white;
-  text-align:center;
-  max-width:900px;
-  margin:0 auto;
-  padding:6px 10px;
-}
-.blue-line{
-  width:100%;
-  height:5px;
-  background:#0033cc;
-  margin:14px 0;
-}
-.yellow-strip{
-  background:#ffff00;
-  padding:12px 0;
-  border:3px solid red;
-  text-align:center;
-}
-.yellow-strip .title{
-  color:#0033cc;
-  font-weight:900;
-  font-size:28px;
-  font-family:'Times New Roman', Georgia, serif;
-}
-.dailyDisplay{
-  margin-top:6px;
-  font-size:24px;
-  color:#000;
-  font-weight:900;
-}
-.refresh-btn{
-  margin-top:8px;
-  background:#c1121f;
-  color:#d4af37;
-  padding:8px 20px;
-  border-radius:30px;
-  font-size:14px;
-  font-weight:900;
-  cursor:pointer;
-  border:none;
-}
-.panel-box{
-  width:32vw;
-  max-width:480px;
-  min-width:240px;
-  margin:20px auto;
-  border:3px solid purple;
-  border-radius:10px;
-  padding:10px;
-  background:#fff;
-  color:#000;
-}
-.chart-header{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  text-align:center;
-  font-weight:900;
-  font-size:14px;
-}
-.chart-header div{border-right:1px solid purple;}
-.chart-header div:last-child{border-right:none;}
-.week-row{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  margin-top:6px;
-}
-.daycell{
-  text-align:center;
-  border-right:1px solid purple;
-}
-.daycell:last-child{border-right:none;}
-.jodi{
-  font-size:30px;
-  font-weight:900;
-  color:#000;
-}
-.sep{
-  height:2px;
-  background:purple;
-  margin:8px 0;
-}
-@media(max-width:768px){
-  .panel-box{width:92vw;}
-  .jodi{font-size:26px;}
-}
-.disclaimer{
-  text-align:center;
-  color:#ccc;
-  font-size:12px;
-  line-height:1.6;
-  max-width:900px;
-  margin:20px auto 40px;
-  padding:0 12px;
-}
-</style>
+<meta charset="UTF-8">
+<title>Damodar Test</title>
 </head>
 
-<body>
+<body style="background:black;color:white;text-align:center;font-family:Arial">
 
-<header>DAMODAR CHART</header>
-<div class="sub-header">Damodar Matka Chart Result</div>
+<h1 style="color:red">DAMODAR CHART</h1>
 
-<div class="description">
-This page belongs to Damodar Matka Chart. Here you will find useful data about Damodar probability numbers.
-</div>
+<h2 id="daily">---</h2>
 
-<div class="blue-line"></div>
-
-<div class="yellow-strip">
-  <div class="title">DAMODAR</div>
-  <div class="dailyDisplay">---</div>
-  <button class="refresh-btn" onclick="location.reload(true)">REFRESH RESULT</button>
-</div>
-
-<div class="blue-line"></div>
-
-<div class="panel-box">
-  <div class="chart-header">
-    <div>MON</div><div>TUE</div><div>WED</div>
-    <div>THU</div><div>FRI</div><div>SAT</div>
-  </div>
-  <div class="sep"></div>
-  <div id="weeks-container"></div>
-</div>
-
-<div class="blue-line"></div>
-
-<div class="yellow-strip">
-  <div class="title">DAMODAR</div>
-  <div class="dailyDisplay">---</div>
-  <button class="refresh-btn" onclick="location.reload(true)">REFRESH RESULT</button>
-</div>
-
-<div class="blue-line"></div>
-
-<div class="disclaimer">
-<strong>Disclaimer:</strong>
-This website is for informational and educational purposes only.
-We do not promote or support gambling in any form.
-</div>
+<h3>MON TUE WED THU FRI SAT</h3>
+<div id="current"></div>
 
 <script>
-/* 🔥 REMOVE ANY SERVICE WORKER (CACHE KILL) */
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(r => {
-    r.forEach(reg => reg.unregister());
+fetch("data.json")
+  .then(res => res.json())
+  .then(data => {
+
+    // DAILY
+    document.getElementById("daily").innerText = data.daily;
+
+    // CURRENT
+    const box = document.getElementById("current");
+    box.innerHTML = "";
+
+    data.current.forEach(n => {
+      const span = document.createElement("span");
+      span.innerText = n + " ";
+      span.style.fontSize = "24px";
+      span.style.margin = "5px";
+      box.appendChild(span);
+    });
+
   });
-}
-
-/* RED JODI */
-const redJodis = [
-  "00","11","22","33","44","55","66","77","88","99",
-  "05","50","16","61","27","72","38","83","49","94"
-];
-
-/* 🔥 HARD NO-CACHE FETCH */
-fetch("data.json?ts=" + Date.now() + "&r=" + Math.random(), {
-  cache: "no-store"
-})
-.then(res => res.json())
-.then(data => {
-
-  console.log("JSON LOADED:", data); // DEBUG
-
-  if(data.daily){
-    document.querySelectorAll(".dailyDisplay").forEach(el=>{
-      el.innerText = data.daily.replace(/-/g," - ");
-    });
-  }
-
-  const box = document.getElementById("weeks-container");
-  box.innerHTML = "";
-
-  function drawWeek(week){
-    const row=document.createElement("div");
-    row.className="week-row";
-
-    week.forEach(v=>{
-      const c=document.createElement("div");
-      c.className="daycell";
-      const j=document.createElement("div");
-      j.className="jodi";
-      if(!v){
-        j.innerText="—";
-      }else{
-        j.innerText=v;
-        if(redJodis.includes(v)) j.style.color="red";
-      }
-      c.appendChild(j);
-      row.appendChild(c);
-    });
-
-    box.appendChild(row);
-    const s=document.createElement("div");
-    s.className="sep";
-    box.appendChild(s);
-  }
-
-  if(Array.isArray(data.history)) data.history.forEach(drawWeek);
-  if(Array.isArray(data.current)) drawWeek(data.current);
-
-})
-.catch(e=>console.error("JSON ERROR",e));
 </script>
 
 </body>
