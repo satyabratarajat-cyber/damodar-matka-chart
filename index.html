@@ -3,223 +3,233 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Damodar Chart</title>
+<title>Damodar Matka Chart</title>
+
 <style>
-  body{
-    margin:0;
-    background:#0b0b0b;
-    color:#fff;
-    font-family:'Trebuchet MS','Arial Black',Arial,sans-serif;
-  }
-
-  /* ===== CHART HEADER ===== */
-  .chart-header{
-    display:grid;
-    grid-template-columns:repeat(6,1fr);
-    text-align:center;
-    font-weight:900;
-    font-size:14px;
-    align-items:center;
-}
-.chart-header > div{
-    border-right:1px solid purple;
-}
-.chart-header > div:last-child{
-    border-right:none;
+body{
+  margin:0;
+  background:#0b0b0b;
+  color:#fff;
+  font-family:'Trebuchet MS','Arial Black',Arial,sans-serif;
 }
 
-  /* ===== WEEK ROW (ALWAYS HORIZONTAL) ===== */
-  .week-row{
-    display:grid;
-    grid-template-columns:repeat(6,1fr);
-    column-gap:6px;
-    align-items:center;
-  }
-
-  
-
-  .daycell{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    border-right:1px solid purple;
-}
-.week-row > .daycell:last-child{
-    border-right:none;
+/* HEADER */
+header{
+  color:red;
+  text-transform:uppercase;
+  text-align:center;
+  font-weight:900;
+  font-size:22px;
+  margin-top:10px;
 }
 
-  .jodi{
-    font-size:30px;
-    font-weight:900;
-    min-width:36px;
-    text-align:center;
-    color:#000;
-  }
+.sub-header{
+  color:#fff;
+  border-top:2px solid blue;
+  padding:5px 0;
+  text-align:center;
+  font-weight:700;
+}
 
-  .jodi.empty::before{
-    content:"—";
-    font-size:34px;
-    font-weight:900;
-  }
+.description{
+  color:#fff;
+  text-align:center;
+  max-width:900px;
+  margin:0 auto;
+  padding:6px 10px;
+}
 
-  /* ===== PANEL BOX ===== */
-  .panel-box{
-    width:32vw;
-    max-width:480px;
-    min-width:240px;
-    margin:20px auto;
-    border:3px solid purple;
-    border-radius:10px;
-    padding:10px;
-    background:#fff;
-    color:#000;
-  }
+/* LINES */
+.blue-line{
+  width:100%;
+  height:5px;
+  background:#0033cc;
+  margin:14px 0;
+}
 
-  /* ===== MOBILE: SAME STRUCTURE, ONLY SCALE ===== */
-  @media (max-width:768px){
-    .panel-box{
-      width:92vw;
-      max-width:92vw;
-      padding:8px;
-    }
-    .chart-header{font-size:10px;}
-    .date-col{font-size:10px;}
-    .jodi{font-size:26px;}
-  }
+/* YELLOW STRIP */
+.yellow-strip{
+  background:#ffff00;
+  padding:12px 0;
+  border:3px solid red;
+  text-align:center;
+}
+
+.yellow-strip .title{
+  color:#0033cc;
+  font-weight:900;
+  font-size:28px;
+  font-family:'Times New Roman', Georgia, serif;
+}
+
+.dailyDisplay{
+  margin-top:6px;
+  font-size:24px;
+  color:#000;
+  font-weight:900;
+  letter-spacing:1px;
+  font-family:'Times New Roman', Georgia, serif;
+}
+
+/* PANEL */
+.panel-box{
+  width:32vw;
+  max-width:480px;
+  min-width:240px;
+  margin:20px auto;
+  border:3px solid purple;
+  border-radius:10px;
+  padding:10px;
+  background:#fff;
+  color:#000;
+}
+
+.chart-header{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  text-align:center;
+  font-weight:900;
+  font-size:14px;
+}
+
+.chart-header div{
+  border-right:1px solid purple;
+}
+
+.chart-header div:last-child{
+  border-right:none;
+}
+
+.week-row{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  margin-top:6px;
+}
+
+.daycell{
+  text-align:center;
+  border-right:1px solid purple;
+}
+
+.daycell:last-child{
+  border-right:none;
+}
+
+.jodi{
+  font-size:30px;
+  font-weight:900;
+  color:#000;
+}
+
+.sep{
+  height:2px;
+  background:purple;
+  margin:8px 0;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .panel-box{width:92vw;}
+  .jodi{font-size:26px;}
+}
+
+/* DISCLAIMER */
+.disclaimer{
+  text-align:center;
+  color:#ccc;
+  font-size:12px;
+  line-height:1.6;
+  max-width:900px;
+  margin:20px auto 40px;
+  padding:0 12px;
+}
 </style>
 </head>
+
 <body>
 
+<header>DAMODAR CHART</header>
+<div class="sub-header">Damodar Matka Chart Result</div>
 
-<header style="color:red; text-transform:uppercase; text-align:center; font-weight:900; font-size:22px;">DAMODAR CHART</header>
-<div class="sub-header" style="color:white; border-top:2px solid blue; padding:5px 0; text-align:center; font-weight:700;">Damodar Matka Chart Result</div>
-<div class="description" style="color:white; opacity:1; text-align:center; max-width:900px; margin:0 auto;">
-  This page belongs to Damodar Matka Chart. Here you will find useful data about Damodar probability numbers for brain improvement.
+<div class="description">
+This page belongs to Damodar Matka Chart. Here you will find useful data about Damodar probability numbers.
 </div>
 
-<!-- YELLOW STRIP BETWEEN BLUE LINES -->
-<div style="width:100%; height:5px; background:#0033cc; margin:14px 0;"></div>
+<div class="blue-line"></div>
 
-<div style="background:#ffff00; padding:12px 0; border:3px solid red; box-sizing:border-box;">
-  <div style="text-align:center; margin-top:0; color:#0033cc; font-weight:900; font-size:28px; text-transform:uppercase; letter-spacing:1px; font-family:'Times New Roman', Georgia, serif;">DAMODAR</div>
-
-  <div id="dailyDisplay" style="text-align:center; margin-top:6px; font-size:24px; color:#000; font-weight:900; letter-spacing:1px; font-family:'Times New Roman', Georgia, serif;">---</div>
-
-  <div style="text-align:center; margin-top:8px;">
-    <button type="button" onclick="window.location.reload(true);" style="background:#c1121f; color:#d4af37; padding:8px 20px; border-radius:30px; font-size:14px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase; font-family:'Flemish Script BT','Segoe Script','Brush Script MT','Comic Sans MS',cursive; cursor:pointer;">refresh result</button>
-  </div>
+<div class="yellow-strip">
+  <div class="title">DAMODAR</div>
+  <div class="dailyDisplay">---</div>
 </div>
 
-<div style="width:100%; height:5px; background:#0033cc; margin:14px 0;"></div>
+<div class="blue-line"></div>
 
-<!-- GO TO BOTTOM BUTTON -->
-<div style="text-align:center; margin:15px 0 25px;">
-  <button onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});" style="background:#0033cc; color:#fff; padding:8px 20px; border-radius:20px; font-size:14px; font-weight:900; font-family:'Arial Black', Impact, Arial, sans-serif;">GO TO BOTTOM</button>
-</div>
-
-<!-- NUMBER 13 : PURPLE BORDER CHART BOX (KALYAN PANEL STYLE) -->
-<div class="panel-box" style="width:32vw; max-width:480px; min-width:240px; margin:20px auto; border:3px solid purple; border-radius:10px; padding:10px; background:#ffffff; color:#000;">
-
-  <!-- HEADER ROW -->
+<div class="panel-box">
   <div class="chart-header">
     <div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
   </div>
-  <div style="width:100%; height:1px; background:purple; margin:6px 0;"></div>
-
-  <!-- WEEK DATA CONTAINER (AUTO GENERATED) -->
+  <div class="sep"></div>
   <div id="weeks-container"></div>
-
 </div>
 
-    
+<div class="blue-line"></div>
 
+<div class="yellow-strip">
+  <div class="title">DAMODAR</div>
+  <div class="dailyDisplay">---</div>
 </div>
 
-<!-- GO TO TOP BUTTON -->
-<div style="text-align:center; margin:25px 0 10px;">
-  <button onclick="window.scrollTo({top: 0, behavior: 'smooth'});" style="background:purple; color:#fff; padding:10px 26px; border-radius:24px; font-size:14px; font-weight:900; font-family:'Arial Black', Impact, Arial, sans-serif; cursor:pointer;">
-    GO TO TOP
-  </button>
-</div>
+<div class="blue-line"></div>
 
-<!-- BLUE LINE BELOW GO TO TOP -->
-<div style="width:100%; height:5px; background:#0033cc; margin:0 0 14px;"></div>
-
-<!-- BOTTOM YELLOW STRIP (SAME AS TOP RESULT SETUP) -->
-<div style="background:#ffff00; padding:12px 0; border:3px solid red; box-sizing:border-box;">
-  <div style="text-align:center; margin-top:0; color:#0033cc; font-weight:900; font-size:28px; text-transform:uppercase; letter-spacing:1px; font-family:'Times New Roman', Georgia, serif;">DAMODAR</div>
-
-  <div id="dailyDisplay" style="text-align:center; margin-top:6px; font-size:24px; color:#000; font-weight:900; letter-spacing:1px; font-family:'Times New Roman', Georgia, serif;">---</div>
-
-  <div style="text-align:center; margin-top:8px;">
-    <button type="button" onclick="window.location.reload(true);" style="background:#c1121f; color:#d4af37; padding:8px 20px; border-radius:30px; font-size:14px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase; font-family:'Flemish Script BT','Segoe Script','Brush Script MT','Comic Sans MS',cursive; cursor:pointer;">refresh result</button>
-  </div>
-</div>
-
-<div style="width:100%; height:5px; background:#0033cc; margin:14px 0 10px;"></div>
-
-<!-- DISCLAIMER -->
-<div style="text-align:center; color:#ccc; font-size:12px; line-height:1.6; max-width:900px; margin:0 auto 40px; padding:0 12px;">
-  <strong>Disclaimer:</strong> This website is for informational and educational purposes only. We do not promote or support gambling in any form. All data shown here is based on analysis and past results and is provided only for learning and reference. Users are solely responsible for their actions and decisions. Please follow your local laws and regulations.
+<div class="disclaimer">
+<strong>Disclaimer:</strong> This website is for informational and educational purposes only.
+We do not promote or support gambling in any form.
 </div>
 
 <script>
-// ================== GLOBAL PUBLIC SCRIPT (JSON BASED) ==================
-// This page reads data from data.json (GLOBAL for all users)
-
-const redJodis = ['00','11','22','33','44','55','66','77','88','99','05','50','16','61','27','72','38','83','49','94'];
-
-fetch('data.json?_=' + Date.now())
-  .then(res => res.json())
+fetch("data.json?_=" + Date.now())
+  .then(r => r.json())
   .then(data => {
-    // ===== DAILY =====
+
     if(data.daily){
-      document.querySelectorAll('#dailyDisplay').forEach(el => {
-        el.innerText = data.daily.replace(/-/g,' - ');
+      document.querySelectorAll(".dailyDisplay").forEach(el=>{
+        el.innerText = data.daily.replace(/-/g," - ");
       });
     }
 
-    const weeksContainer = document.getElementById('weeks-container');
-    weeksContainer.innerHTML = '';
+    const container = document.getElementById("weeks-container");
+    container.innerHTML = "";
 
-    // ===== HISTORY WEEKS =====
-    (data.history || []).forEach(week => drawWeek(week));
+    function drawWeek(week){
+      const row=document.createElement("div");
+      row.className="week-row";
 
-    // ===== CURRENT WEEK =====
-    if(data.current){
+      week.forEach(v=>{
+        const c=document.createElement("div");
+        c.className="daycell";
+        const j=document.createElement("div");
+        j.className="jodi";
+        j.innerText = v ? v.replace("-","") : "—";
+        c.appendChild(j);
+        row.appendChild(c);
+      });
+
+      container.appendChild(row);
+      const s=document.createElement("div");
+      s.className="sep";
+      container.appendChild(s);
+    }
+
+    if(Array.isArray(data.history)){
+      data.history.forEach(drawWeek);
+    }
+    if(Array.isArray(data.current)){
       drawWeek(data.current);
     }
-  });
 
-function drawWeek(week){
-  const row = document.createElement('div');
-  row.className = 'week-row';
+  })
+  .catch(e=>console.error(e));
+</script>
 
-  week.forEach(val => {
-    const cell = document.createElement('div');
-    cell.className = 'daycell';
-
-    const j = document.createElement('div');
-    j.className = 'jodi';
-
-    if(!val){
-      j.classList.add('empty');
-    }else{
-      const clean = val.replace(/-/g,'');
-      j.innerText = clean;
-      if(clean.length===2 && redJodis.includes(clean)){
-        j.style.color='red';
-      }
-    }
-
-    cell.appendChild(j);
-    row.appendChild(cell);
-  });
-
-  weeksContainer.appendChild(row);
-  const sep = document.createElement('div');
-  sep.style.height='2px';
-  sep.style.background='purple';
-  sep.style.margin='8px 0';
-  weeksContainer.appendChild(sep);
-}
+</body>
+</html>
