@@ -13,10 +13,9 @@ body{
   font-family:Arial, sans-serif;
 }
 
-/* ===== TOP ===== */
+/* ===== HEADER ===== */
 header{
   color:red;
-  text-transform:uppercase;
   text-align:center;
   font-weight:900;
   font-size:22px;
@@ -25,8 +24,8 @@ header{
 .sub-header{
   color:#fff;
   border-top:2px solid blue;
-  padding:5px 0;
   text-align:center;
+  padding:6px 0;
   font-weight:700;
 }
 .description{
@@ -47,21 +46,20 @@ header{
 /* ===== YELLOW STRIP ===== */
 .yellow-strip{
   background:#ffff00;
-  padding:12px 0;
   border:3px solid red;
+  padding:12px 0;
   text-align:center;
 }
 .yellow-strip .title{
   color:#0033cc;
   font-weight:900;
   font-size:28px;
-  font-family:'Times New Roman', Georgia, serif;
 }
 .dailyDisplay{
-  margin-top:6px;
   font-size:24px;
-  color:#000;
   font-weight:900;
+  color:#000;
+  margin-top:6px;
 }
 .refresh-btn{
   margin-top:8px;
@@ -69,10 +67,9 @@ header{
   color:#d4af37;
   padding:8px 20px;
   border-radius:30px;
-  font-size:14px;
   font-weight:900;
-  cursor:pointer;
   border:none;
+  cursor:pointer;
 }
 
 /* ===== PANEL ===== */
@@ -92,9 +89,10 @@ header{
   grid-template-columns:repeat(6,1fr);
   text-align:center;
   font-weight:900;
-  font-size:14px;
 }
-.chart-header div{border-right:1px solid purple;}
+.chart-header div{
+  border-right:1px solid purple;
+}
 .chart-header div:last-child{border-right:none;}
 
 .week-row{
@@ -122,19 +120,17 @@ header{
   margin:8px 0;
 }
 
-/* ===== NAV BUTTON ===== */
+/* ===== BUTTON ===== */
 .nav-btn{
   background:#0033cc;
   color:#fff;
   padding:10px 26px;
   border-radius:24px;
-  font-size:14px;
   font-weight:900;
   border:none;
   cursor:pointer;
 }
 
-/* ===== MOBILE ===== */
 @media(max-width:768px){
   .panel-box{width:92vw;}
 }
@@ -158,12 +154,12 @@ header{
 <div class="sub-header">Damodar Matka Chart Result</div>
 
 <div class="description">
-This page belongs to Damodar Matka Chart. Here you will find useful data about Damodar probability numbers.
+This page is for informational purposes only.
 </div>
 
 <div class="blue-line"></div>
 
-<!-- ===== TOP RESULT ===== -->
+<!-- TOP RESULT -->
 <div class="yellow-strip">
   <div class="title">DAMODAR</div>
   <div class="dailyDisplay">---</div>
@@ -172,12 +168,12 @@ This page belongs to Damodar Matka Chart. Here you will find useful data about D
 
 <div class="blue-line"></div>
 
-<!-- 🔽 GO TO BOTTOM (DATA AREA KE UPAR) -->
-<div style="text-align:center; margin:10px 0;">
+<!-- GO TO BOTTOM (DATA AREA KE UPAR) -->
+<div style="text-align:center;">
   <button class="nav-btn" onclick="goBottom()">GO TO BOTTOM</button>
 </div>
 
-<!-- ===== DATA AREA / PANEL ===== -->
+<!-- DATA AREA -->
 <div class="panel-box">
   <div class="chart-header">
     <div>MON</div><div>TUE</div><div>WED</div>
@@ -187,14 +183,14 @@ This page belongs to Damodar Matka Chart. Here you will find useful data about D
   <div id="weeks-container"></div>
 </div>
 
-<!-- 🔼 GO TO TOP (DATA AREA KE NICHE) -->
-<div style="text-align:center; margin:10px 0 20px;">
+<!-- GO TO TOP (DATA AREA KE NICHE) -->
+<div style="text-align:center; margin-bottom:20px;">
   <button class="nav-btn" onclick="goTop()">GO TO TOP</button>
 </div>
 
 <div class="blue-line"></div>
 
-<!-- ===== BOTTOM RESULT ===== -->
+<!-- BOTTOM RESULT -->
 <div class="yellow-strip">
   <div class="title">DAMODAR</div>
   <div class="dailyDisplay">---</div>
@@ -203,31 +199,24 @@ This page belongs to Damodar Matka Chart. Here you will find useful data about D
 
 <div class="blue-line"></div>
 
-<!-- ===== DISCLAIMER ===== -->
 <div class="disclaimer">
-<strong>Disclaimer:</strong>
-This website is for informational and educational purposes only.
-We do not promote or support gambling in any form.
-All data shown here is based on analysis and past results.
+<strong>Disclaimer:</strong> Educational purpose only.
 </div>
 
 <script>
-/* RED NUMBERS */
 const redJodis=[
 "00","11","22","33","44","55","66","77","88","99",
 "05","50","16","61","27","72","38","83","49","94"
 ];
 
-/* SCROLL */
 function goTop(){
-  window.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 function goBottom(){
-  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+  window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
 }
 
-/* DATA LOAD */
-fetch("data.json")
+fetch("data.json?_="+Date.now())
 .then(r=>r.json())
 .then(data=>{
 
@@ -251,11 +240,16 @@ fetch("data.json")
       if(v===""){
         j.innerText="—";
         j.classList.add("empty");
-      }else if(v==="*"){
-        j.innerText="*";
+
+      }else if(v==="*" || v==="**"){
+        j.innerText=v;
+        j.style.color="#000";
+
       }else{
         j.innerText=v;
-        if(redJodis.includes(v)) j.classList.add("red");
+        if(redJodis.includes(v)){
+          j.classList.add("red");
+        }
       }
 
       c.appendChild(j);
