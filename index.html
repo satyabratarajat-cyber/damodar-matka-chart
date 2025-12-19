@@ -66,12 +66,14 @@ header{
   color:#0033cc;
   font-weight:900;
   font-size:28px;
+  font-family:"Times New Roman", Georgia, serif;
 }
 .dailyDisplay{
   font-size:24px;
   font-weight:900;
   color:#000;
   margin-top:6px;
+  font-family:"Times New Roman", Georgia, serif;
 }
 .refresh-btn{
   margin-top:8px;
@@ -118,9 +120,12 @@ header{
 }
 .daycell:last-child{border-right:none;}
 
+/* ===== OPTION-1 FONT (FINAL) ===== */
 .jodi{
-  font-size:28px;
+  font-family:"Times New Roman", Georgia, serif;
+  font-size:30px;
   font-weight:900;
+  letter-spacing:1px;
   color:#000;
 }
 .jodi.red{color:red;}
@@ -145,6 +150,7 @@ header{
 
 @media(max-width:768px){
   .panel-box{width:92vw;}
+  .jodi{font-size:26px;}
 }
 
 /* ===== DISCLAIMER ===== */
@@ -166,13 +172,14 @@ header{
 <div class="sub-header">Damodar Matka Chart Result</div>
 
 <div class="description">
-This page is for informational purposes only.
+This page is intended strictly for informational and educational purposes only.
 </div>
 
 <div id="warningBox" class="warning"></div>
 
 <div class="blue-line"></div>
 
+<!-- TOP RESULT -->
 <div class="yellow-strip">
   <div class="title">DAMODAR</div>
   <div class="dailyDisplay">---</div>
@@ -181,10 +188,12 @@ This page is for informational purposes only.
 
 <div class="blue-line"></div>
 
+<!-- GO TO BOTTOM -->
 <div style="text-align:center;">
   <button class="nav-btn" onclick="goBottom()">GO TO BOTTOM</button>
 </div>
 
+<!-- DATA AREA -->
 <div class="panel-box">
   <div class="chart-header">
     <div>MON</div><div>TUE</div><div>WED</div>
@@ -194,12 +203,14 @@ This page is for informational purposes only.
   <div id="weeks-container"></div>
 </div>
 
+<!-- GO TO TOP -->
 <div style="text-align:center; margin-bottom:20px;">
   <button class="nav-btn" onclick="goTop()">GO TO TOP</button>
 </div>
 
 <div class="blue-line"></div>
 
+<!-- BOTTOM RESULT -->
 <div class="yellow-strip">
   <div class="title">DAMODAR</div>
   <div class="dailyDisplay">---</div>
@@ -208,12 +219,15 @@ This page is for informational purposes only.
 
 <div class="blue-line"></div>
 
+<!-- DISCLAIMER -->
 <div class="disclaimer">
-<strong>Disclaimer:</strong> Educational purpose only.
+<strong>Disclaimer:</strong><br><br>
+This website is intended strictly for informational, educational, and research purposes only.
+We do not promote or support gambling or illegal activities in any form.
+All information is provided “as is” and users are solely responsible for their actions.
 </div>
 
 <script>
-/* ===== CONFIG ===== */
 const redJodis=[
 "00","11","22","33","44","55","66","77","88","99",
 "05","50","16","61","27","72","38","83","49","94"
@@ -235,21 +249,15 @@ function isValidValue(v){
 }
 
 const warnings=[];
-function warn(msg){
-  warnings.push(msg);
-}
+function warn(msg){warnings.push(msg);}
 
-/* ===== DATA LOAD ===== */
+/* ===== LOAD DATA ===== */
 fetch("data.json?_="+Date.now())
 .then(r=>r.json())
 .then(data=>{
 
-  if(typeof data.daily!=="string"){
-    warn("Invalid daily value");
-  }
-
   document.querySelectorAll(".dailyDisplay").forEach(el=>{
-    el.innerText=(data.daily||"---");
+    el.innerText=data.daily||"---";
   });
 
   const box=document.getElementById("weeks-container");
@@ -257,10 +265,9 @@ fetch("data.json?_="+Date.now())
 
   function drawWeek(arr,idx,type){
     if(!Array.isArray(arr) || arr.length!==6){
-      warn(`${type} row ${idx+1} must have exactly 6 values`);
+      warn(type+" row "+(idx+1)+" must have 6 values");
       return;
     }
-
     const row=document.createElement("div");
     row.className="week-row";
 
@@ -271,18 +278,15 @@ fetch("data.json?_="+Date.now())
       j.className="jodi";
 
       if(!isValidValue(v)){
-        warn(`Invalid value "${v}" at ${type} row ${idx+1}, column ${i+1}`);
+        warn("Invalid value '"+v+"' at "+type+" row "+(idx+1));
         j.innerText="—";
         j.classList.add("empty");
-      }
-      else if(v===""){
+      }else if(v===""){
         j.innerText="—";
         j.classList.add("empty");
-      }
-      else if(v==="*" || v==="**"){
+      }else if(v==="*" || v==="**"){
         j.innerText=v;
-      }
-      else{
+      }else{
         j.innerText=v;
         if(redJodis.includes(v)) j.classList.add("red");
       }
@@ -299,27 +303,19 @@ fetch("data.json?_="+Date.now())
 
   if(Array.isArray(data.history)){
     data.history.forEach((w,i)=>drawWeek(w,i,"History"));
-  }else{
-    warn("History must be an array");
   }
-
   if(Array.isArray(data.current)){
     drawWeek(data.current,0,"Current");
-  }else{
-    warn("Current must be an array");
   }
 
   if(warnings.length){
     const wb=document.getElementById("warningBox");
     wb.innerHTML="<strong>Data Warning:</strong><br>"+warnings.join("<br>");
     wb.style.display="block";
-    console.warn("DATA WARNINGS:",warnings);
   }
-
 })
-.catch(e=>{
-  alert("data.json ERROR — invalid JSON");
-  console.error(e);
+.catch(()=>{
+  alert("data.json error or invalid JSON");
 });
 </script>
 
