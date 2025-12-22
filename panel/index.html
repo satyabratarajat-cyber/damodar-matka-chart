@@ -24,6 +24,7 @@ header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10p
 .day-jodi.red{color:#c1121f;text-shadow:0 0 2px #ff9999;}
 
 .disclaimer{text-align:center;color:#ccc;font-size:12px;line-height:1.6;max-width:900px;margin:20px auto 40px;padding:0 12px;}
+.nav-btn{margin-top:8px;background:#0033cc;color:#fff;padding:8px 22px;border-radius:24px;font-weight:900;border:none;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -33,17 +34,28 @@ header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10p
 <div class="description">This page is intended strictly for informational and educational purposes only.</div>
 
 <div class="blue-line"></div>
-<div class="yellow-strip"><div class="title">DAMODAR</div><div class="dailyDisplay">---</div></div>
+<div class="yellow-strip"><div class="title">DAMODAR</div><div class="dailyDisplay">---</div><button class="nav-btn" onclick="location.reload()">REFRESH</button></div>
 <div class="blue-line"></div>
+
+<div style="text-align:center;margin:10px 0;"><button class="nav-btn" onclick="goBottom()">GO TO BOTTOM</button></div>
 
 <div class="panel-box" id="weeks"></div>
 
+<div style="text-align:center;margin:10px 0;"><button class="nav-btn" onclick="goTop()">GO TO TOP</button></div>
+
 <div class="blue-line"></div>
 <div class="yellow-strip"><div class="title">DAMODAR</div><div class="dailyDisplay">---</div></div>
+
+<div style="text-align:center;margin:12px 0;">
+  <button class="nav-btn" onclick="window.location.href='/'">HOME</button>
+  <button class="nav-btn" style="margin-left:10px" onclick="window.location.href='/index.html'">JODI CHART</button>
+</div>
 
 <div class="disclaimer"><strong>Disclaimer:</strong><br>Information only.</div>
 
 <script>
+function goTop(){window.scrollTo({top:0,behavior:'smooth'});}function goBottom(){window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});} 
+
 document.addEventListener('DOMContentLoaded',()=>{
 
 // ===== PANEL MASTER =====
