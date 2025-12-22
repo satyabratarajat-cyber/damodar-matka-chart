@@ -102,11 +102,20 @@ function renderDayCell(arr){
   </div>`;
 }
 
-// ===== LOAD & RENDER DATA =====
+// ===== LOAD DAILY FROM ROOT JSON =====
+fetch('/data.json?_='+Date.now())
+  .then(r=>r.json())
+  .then(rootData=>{
+    if(rootData && rootData.daily){
+      document.querySelectorAll('.dailyDisplay').forEach(el=>el.textContent=rootData.daily);
+    }
+  })
+  .catch(()=>{});
+
+// ===== LOAD & RENDER PANEL DATA =====
 fetch('./data.json?_='+Date.now())
   .then(r=>r.json())
   .then(sampleData=>{
-    document.querySelectorAll('.dailyDisplay').forEach(el=>el.textContent=sampleData.daily||'---');
     const weeksBox=document.getElementById('weeks');
     weeksBox.innerHTML='';
 
@@ -119,7 +128,7 @@ fetch('./data.json?_='+Date.now())
       weeksBox.insertAdjacentHTML('beforeend',`<div style="display:grid;grid-template-columns:86px repeat(6,1fr);gap:2px;background:#ffcccc;padding:2px;text-align:center"><div><div style="font-size:12px;color:#000">${w.dateRange.from}</div><div style="font-size:11px;color:#000">to</div><div style="font-size:12px;color:#000">${w.dateRange.to}</div></div><div>${renderDayCell(w.panel.mon)}</div><div>${renderDayCell(w.panel.tue)}</div><div>${renderDayCell(w.panel.wed)}</div><div>${renderDayCell(w.panel.thu)}</div><div>${renderDayCell(w.panel.fri)}</div><div>${renderDayCell(w.panel.sat)}</div></div>`);
     });
   })
-  .catch(()=>alert('data.json load error'));
+  .catch(()=>alert('panel/data.json load error'));
 
 });
 </script>
