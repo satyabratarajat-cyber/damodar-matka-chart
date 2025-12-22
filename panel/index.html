@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Damodar Panel Chart</title>
+
+<style>
+body{margin:0;background:#0b0b0b;color:#fff;font-family:Arial,sans-serif;}
+header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10px;}
+.sub-header{color:#fff;border-top:2px solid blue;text-align:center;padding:2px 0;font-weight:700;}
+.description{text-align:center;max-width:900px;margin:0 auto;padding:2px 10px;}
+.blue-line{width:100%;height:5px;background:#0033cc;margin:14px 0;}
+.yellow-strip{background:#ffff00;border:3px solid red;padding:12px 0;text-align:center;}
+.yellow-strip .title{color:#0033cc;font-weight:900;font-size:28px;font-family:"Times New Roman",Georgia,serif;}
+.dailyDisplay{font-size:24px;font-weight:900;color:#000;margin-top:6px;font-family:"Times New Roman",Georgia,serif;}
+
+.panel-box{max-width:900px;width:62.5vw;margin:14px auto;border:3px solid purple;border-radius:8px;padding:0;background:#b30000;color:#fff;}
+
+.day-col{display:flex;align-items:center;justify-content:center;gap:4px;}
+.left-panel,.right-panel{display:flex;flex-direction:column;gap:1px;}
+.day-top,.day-bottom{font-size:12px;font-weight:700;line-height:1;color:#000;}
+.day-jodi{font-size:32px;font-weight:900;min-width:34px;text-align:center;font-family:"Times New Roman",Georgia,serif;color:#000;}
+.day-jodi.red{color:#c1121f;text-shadow:0 0 2px #ff9999;}
+
+.disclaimer{text-align:center;color:#ccc;font-size:12px;line-height:1.6;max-width:900px;margin:20px auto 40px;padding:0 12px;}
+</style>
+</head>
+<body>
+
+<header>DAMODAR CHART</header>
+<div class="sub-header">Damodar Panel Chart Result</div>
+<div class="description">This page is intended strictly for informational and educational purposes only.</div>
+
+<div class="blue-line"></div>
+<div class="yellow-strip"><div class="title">DAMODAR</div><div class="dailyDisplay">---</div></div>
+<div class="blue-line"></div>
+
+<div class="panel-box" id="weeks"></div>
+
+<div class="blue-line"></div>
+<div class="yellow-strip"><div class="title">DAMODAR</div><div class="dailyDisplay">---</div></div>
+
+<div class="disclaimer"><strong>Disclaimer:</strong><br>Information only.</div>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+
+// ===== PANEL MASTER =====
+const PANEL_MASTER={
+  0:["118","127","136","145","190","226","235","244","280","334","370","460","550","299","389","479","488","569","578","668","677"],
+  1:["100","119","128","137","146","155","227","236","245","290","335","344","380","470","560","399","489","579","588","669","678"],
+  2:["110","200","129","138","147","156","228","237","246","255","336","345","390","480","570","660","499","589","679","688","778"],
+  3:["777","444","120","300","111","139","148","157","166","229","238","247","256","337","346","355","445","490","580","670","599","689","779","788"],
+  4:["112","130","220","400","149","158","167","239","248","257","266","338","347","356","446","455","590","680","770","699","789"],
+  5:["113","122","140","230","500","159","168","177","249","258","267","339","348","357","366","447","456","690","780","799","889"],
+  6:["888","555","114","123","150","240","330","600","222","169","178","259","268","277","349","358","367","448","457","466","556","790","880","899"],
+  7:["115","124","133","160","223","250","340","377","449","458","467","557","566","890","700","179","188","269","278","359","368"],
+  8:["116","125","134","170","224","233","260","350","440","800","189","279","288","369","378","459","468","477","558","567","990"],
+  9:["199","289","379","388","469","478","559","568","577","667","999","666","117","126","135","144","180","225","234","270","360","450","900","333"]
+};
+
+// ===== HELPERS =====
+const specialJodi=["00","11","22","33","44","55","66","77","88","99","05","50","16","61","27","72","38","83","49","94"];
+
+function pickRandom(arr){
+  if(!Array.isArray(arr)||!arr.length) return "";
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
+function renderDayCell(arr){
+  if(!Array.isArray(arr)||arr.length!==7) return '—';
+
+  const jodi=arr[3];
+  const openDigit=jodi[0];
+  const closeDigit=jodi[1];
+
+  const leftPanel=PANEL_MASTER[openDigit]?pickRandom(PANEL_MASTER[openDigit]):"---";
+  const rightPanel=PANEL_MASTER[closeDigit]?pickRandom(PANEL_MASTER[closeDigit]):"---";
+
+  const [l1,l2,l3]=String(leftPanel).padStart(3,'0').split('');
+  const [r1,r2,r3]=String(rightPanel).padStart(3,'0').split('');
+
+  const jClass=specialJodi.includes(jodi)?'day-jodi red':'day-jodi';
+
+  return `<div class="day-col">
+    <div class="left-panel"><div class="day-top">${l1}</div><div class="day-top">${l2}</div><div class="day-top">${l3}</div></div>
+    <div class="${jClass}">${jodi}</div>
+    <div class="right-panel"><div class="day-bottom">${r1}</div><div class="day-bottom">${r2}</div><div class="day-bottom">${r3}</div></div>
+  </div>`;
+}
+
+// ===== LOAD & RENDER DATA =====
+fetch('./data.json?_='+Date.now())
+  .then(r=>r.json())
+  .then(sampleData=>{
+    document.querySelectorAll('.dailyDisplay').forEach(el=>el.textContent=sampleData.daily||'---');
+    const weeksBox=document.getElementById('weeks');
+    weeksBox.innerHTML='';
+
+    sampleData.weeks.forEach((w,idx)=>{
+      if(idx===0){
+        weeksBox.insertAdjacentHTML('beforeend',`<div style="display:grid;grid-template-columns:86px repeat(6,1fr);text-align:center;font-weight:900;color:#000;background:#ffcccc;padding:2px"><div>DATE</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div></div>`);
+      } else {
+        weeksBox.insertAdjacentHTML('beforeend','<div style="height:1px;background:#0033cc"></div>');
+      }
+      weeksBox.insertAdjacentHTML('beforeend',`<div style="display:grid;grid-template-columns:86px repeat(6,1fr);gap:2px;background:#ffcccc;padding:2px;text-align:center"><div><div style="font-size:12px;color:#000">${w.dateRange.from}</div><div style="font-size:11px;color:#000">to</div><div style="font-size:12px;color:#000">${w.dateRange.to}</div></div><div>${renderDayCell(w.panel.mon)}</div><div>${renderDayCell(w.panel.tue)}</div><div>${renderDayCell(w.panel.wed)}</div><div>${renderDayCell(w.panel.thu)}</div><div>${renderDayCell(w.panel.fri)}</div><div>${renderDayCell(w.panel.sat)}</div></div>`);
+    });
+  })
+  .catch(()=>alert('data.json load error'));
+
+});
+</script>
+</body>
+</html>
