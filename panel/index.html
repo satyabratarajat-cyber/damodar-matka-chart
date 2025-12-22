@@ -13,122 +13,120 @@ header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10p
 .blue-line{width:100%;height:5px;background:#0033cc;margin:14px 0;}
 .yellow-strip{background:#ffff00;border:3px solid red;padding:12px 0;text-align:center;}
 .yellow-strip .title{color:#0033cc;font-weight:900;font-size:28px;font-family:"Times New Roman",Georgia,serif;}
-.dailyDisplay{font-size:24px;font-weight:900;color:#000;margin-top:6px;}
-.panel-box{max-width:900px;width:50vw;margin:14px auto;border:3px solid purple;border-radius:8px;padding:6px;background:#b30000;}
-.day-col{display:flex;align-items:center;justify-content:center;gap:6px;}
-.left-panel,.right-panel{display:flex;flex-direction:column;}
-.lp,.rp{font-size:12px;font-weight:700;color:#000;line-height:1;}
-.jodi{font-size:34px;font-weight:900;color:#000;}
-.jodi.red{color:#c1121f;}
-.nav-btn{background:#0033cc;color:#fff;padding:8px 22px;border-radius:24px;font-weight:900;border:none;cursor:pointer;margin:6px;}
-.info{text-align:center;color:#fff;padding:20px;}
+.dailyDisplay{font-size:24px;font-weight:900;color:#000;margin-top:6px;font-family:"Times New Roman",Georgia,serif;}
+.panel-box{max-width:900px;width:62.5%;margin:14px auto;border:3px solid purple;border-radius:8px;padding:6px;background:#b30000;color:#fff;min-height:120px;}
+.day-col{display:flex;align-items:center;justify-content:center;gap:4px;}
+.left-panel,.right-panel{display:flex;flex-direction:column;gap:1px;}
+.day-top,.day-bottom{font-size:12px;font-weight:700;line-height:1;color:#000;}
+.day-jodi{font-size:32px;font-weight:900;min-width:34px;text-align:center;font-family:"Times New Roman",Georgia,serif;color:#000;}
+.day-jodi.red{color:#c1121f;text-shadow:0 0 2px #ff9999;}
+.disclaimer{text-align:center;color:#ccc;font-size:12px;line-height:1.6;max-width:900px;margin:20px auto 40px;padding:0 12px;}
+.nav-btn{margin-top:8px;background:#0033cc;color:#fff;padding:8px 22px;border-radius:24px;font-weight:900;border:none;cursor:pointer;}
+.info{color:#fff;text-align:center;font-size:14px;padding:20px;}
+@media(max-width:768px){
+  .panel-box{width:96%;max-width:none;}
+  .day-jodi{font-size:26px;}
+  .day-top,.day-bottom{font-size:11px;}
+  header{font-size:18px;}
+  .yellow-strip .title{font-size:22px;}
+}
 </style>
 </head>
-
 <body>
 
 <header>DAMODAR CHART</header>
 <div class="sub-header">Damodar Panel Chart Result</div>
+<div class="description">This page is intended strictly for informational and educational purposes only.</div>
 
 <div class="blue-line"></div>
-
-<div class="yellow-strip">
-  <div class="title">DAMODAR</div>
-  <div class="dailyDisplay">---</div>
-  <button class="nav-btn" onclick="location.reload()">REFRESH</button>
-</div>
-
+<div class="yellow-strip"><div class="title">DAMODAR</div><div class="dailyDisplay">---</div><button class="nav-btn" onclick="location.reload()">REFRESH</button></div>
 <div class="blue-line"></div>
 
-<div style="text-align:center">
-  <button class="nav-btn" onclick="goBottom()">GO TO BOTTOM</button>
-</div>
-
-<div class="panel-box" id="weeks">
-  <div class="info">Loading panel data…</div>
-</div>
-
-<div style="text-align:center">
-  <button class="nav-btn" onclick="goTop()">GO TO TOP</button>
-</div>
+<div style="text-align:center;margin:10px 0;"><button class="nav-btn" onclick="goBottom()">GO TO BOTTOM</button></div>
+<div class="panel-box" id="weeks"><div class="info">Panel data loading…</div></div>
+<div style="text-align:center;margin:10px 0;"><button class="nav-btn" onclick="goTop()">GO TO TOP</button></div>
 
 <div class="blue-line"></div>
+<div class="yellow-strip"><div class="title">DAMODAR</div><div class="dailyDisplay">---</div></div>
 
-<div class="yellow-strip">
-  <div class="title">DAMODAR</div>
-  <div class="dailyDisplay">---</div>
+<div style="text-align:center;margin:12px 0;">
+  <button class="nav-btn" onclick="window.location.href='/'">HOME</button>
+  <button class="nav-btn" style="margin-left:10px" onclick="window.location.href='/index.html'">JODI CHART</button>
 </div>
 
-<div style="text-align:center">
-  <button class="nav-btn" onclick="location.href='/'">HOME</button>
-  <button class="nav-btn" onclick="location.href='/index.html'">JODI CHART</button>
-</div>
+<div class="disclaimer"><strong>Disclaimer:</strong><br>Information only.</div>
 
 <script>
-function goTop(){window.scrollTo({top:0,behavior:'smooth'});}
-function goBottom(){window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});}
+function goTop(){window.scrollTo({top:0,behavior:'smooth'});}function goBottom(){window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});} 
+
+document.addEventListener('DOMContentLoaded',()=>{
+
+const PANEL_MASTER={
+  0:["118","127","136","145","190","226","235","244","280","334","370","460","550","299","389","479","488","569","578","668","677"],
+  1:["100","119","128","137","146","155","227","236","245","290","335","344","380","470","560","399","489","579","588","669","678"],
+  2:["110","200","129","138","147","156","228","237","246","255","336","345","390","480","570","660","499","589","679","688","778"],
+  3:["777","444","120","300","111","139","148","157","166","229","238","247","256","337","346","355","445","490","580","670","599","689","779","788"],
+  4:["112","130","220","400","149","158","167","239","248","257","266","338","347","356","446","455","590","680","770","699","789"],
+  5:["113","122","140","230","500","159","168","177","249","258","267","339","348","357","366","447","456","690","780","799","889"],
+  6:["888","555","114","123","150","240","330","600","222","169","178","259","268","277","349","358","367","448","457","466","556","790","880","899"],
+  7:["115","124","133","160","223","250","340","377","449","458","467","557","566","890","700","179","188","269","278","359","368"],
+  8:["116","125","134","170","224","233","260","350","440","800","189","279","288","369","378","459","468","477","558","567","990"],
+  9:["199","289","379","388","469","478","559","568","577","667","999","666","117","126","135","144","180","225","234","270","360","450","900","333"]
+};
 
 const specialJodi=["00","11","22","33","44","55","66","77","88","99","05","50","16","61","27","72","38","83","49","94"];
 
-function renderDay(day){
-  if(!day || !day.jodi) return '';
-  const L=day.L||'', R=day.R||'';
-  const cls=specialJodi.includes(day.jodi)?'jodi red':'jodi';
+function pickRandom(arr){return arr[Math.floor(Math.random()*arr.length)];}
 
-  return `
-  <div class="day-col">
-    <div class="left-panel">
-      <div class="lp">${L[0]||''}</div>
-      <div class="lp">${L[1]||''}</div>
-      <div class="lp">${L[2]||''}</div>
-    </div>
-    <div class="${cls}">${day.jodi}</div>
-    <div class="right-panel">
-      <div class="rp">${R[0]||''}</div>
-      <div class="rp">${R[1]||''}</div>
-      <div class="rp">${R[2]||''}</div>
-    </div>
-  </div>`;
+function renderDayCell(arr){
+  const jodi=arr[3];
+  const open=jodi[0], close=jodi[1];
+  const left=pickRandom(PANEL_MASTER[open]);
+  const right=pickRandom(PANEL_MASTER[close]);
+  const [l1,l2,l3]=left.split('');
+  const [r1,r2,r3]=right.split('');
+  const cls=specialJodi.includes(jodi)?'day-jodi red':'day-jodi';
+  return `<div class="day-col"><div class="left-panel"><div class="day-top">${l1}</div><div class="day-top">${l2}</div><div class="day-top">${l3}</div></div><div class="${cls}">${jodi}</div><div class="right-panel"><div class="day-bottom">${r1}</div><div class="day-bottom">${r2}</div><div class="day-bottom">${r3}</div></div></div>`;
 }
 
 function renderWeeks(data){
   const box=document.getElementById('weeks');
   box.innerHTML='';
-  if(!data.weeks || !data.weeks.length){
-    box.innerHTML='<div class="info">No data</div>';return;
+  if(!data.weeks.length){
+    box.innerHTML='<div class="info">No panel history available yet.</div>';
+    return;
   }
-
   data.weeks.forEach((w,i)=>{
-    if(i>0) box.innerHTML+='<div style="height:1px;background:#0033cc"></div>';
-    box.innerHTML+=`
-    <div style="display:grid;grid-template-columns:86px repeat(6,1fr);background:#ffcccc;text-align:center;color:#000">
-      <div>
-        <div>${w.from}</div>
-        <div style="font-size:11px">to</div>
-        <div>${w.to}</div>
-      </div>
-      <div>${renderDay(w.days.mon)}</div>
-      <div>${renderDay(w.days.tue)}</div>
-      <div>${renderDay(w.days.wed)}</div>
-      <div>${renderDay(w.days.thu)}</div>
-      <div>${renderDay(w.days.fri)}</div>
-      <div>${renderDay(w.days.sat)}</div>
-    </div>`;
+    if(i===0){
+      box.insertAdjacentHTML('beforeend',`<div style="display:grid;grid-template-columns:86px repeat(6,1fr);background:#ffcccc;color:#000;font-weight:900;text-align:center"><div>DATE</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div></div>`);
+    } else {
+      box.insertAdjacentHTML('beforeend','<div style="height:1px;background:#0033cc"></div>');
+    }
+    box.insertAdjacentHTML('beforeend',`<div style="display:grid;grid-template-columns:86px repeat(6,1fr);gap:2px;background:#ffcccc;text-align:center"><div><div style="font-size:12px;color:#000">${w.dateRange.from}</div><div style="font-size:11px;color:#000">to</div><div style="font-size:12px;color:#000">${w.dateRange.to}</div></div><div>${renderDayCell(w.panel.mon)}</div><div>${renderDayCell(w.panel.tue)}</div><div>${renderDayCell(w.panel.wed)}</div><div>${renderDayCell(w.panel.thu)}</div><div>${renderDayCell(w.panel.fri)}</div><div>${renderDayCell(w.panel.sat)}</div></div>`);
   });
 }
 
-// DAILY RESULT (root data.json)
+// daily number from root
 fetch('/data.json')
   .then(r=>r.json())
-  .then(d=>document.querySelectorAll('.dailyDisplay').forEach(e=>e.textContent=d.daily||'---'))
+  .then(d=>document.querySelectorAll('.dailyDisplay').forEach(el=>el.textContent=d.daily||'---'))
   .catch(()=>{});
 
-// PANEL DATA
+// panel history
 fetch('./data.json?_='+Date.now())
-  .then(r=>r.json())
-  .then(renderWeeks)
-  .catch(()=>document.getElementById('weeks').innerHTML='<div class="info">panel/data.json missing</div>');
-</script>
+  .then(r=>{
+    if(!r.ok) throw new Error('missing');
+    return r.json();
+  })
+  .then(data=>{
+    if(!data || !Array.isArray(data.weeks)) throw new Error('format');
+    renderWeeks(data);
+  })
+  .catch(()=>{
+    document.getElementById('weeks').innerHTML='<div class="info">panel/data.json not found or invalid.<br>Create <b>panel/data.json</b> with a <code>weeks</code> array.</div>';
+  });
 
+});
+</script>
 </body>
 </html>
