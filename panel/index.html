@@ -23,9 +23,20 @@ header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10p
 .disclaimer{text-align:center;color:#ccc;font-size:12px;line-height:1.6;max-width:900px;margin:20px auto 40px;padding:0 12px;}
 .nav-btn{margin-top:8px;background:#0033cc;color:#fff;padding:8px 22px;border-radius:24px;font-weight:900;border:none;cursor:pointer;}
 .info{color:#fff;text-align:center;font-size:14px;padding:20px;}
-@media(max-width:700px){
-  .panel-box{width:96%;max-width:none;}
-  .day-jodi{font-size:22px;}
+@media(max-width:768px){
+  .panel-box{width:100%;max-width:none;padding:4px;overflow-x:auto;}
+  .day-col{gap:2px;}
+  .day-jodi{font-size:22px;min-width:28px;}
+  .day-top,.day-bottom{font-size:10px;}
+  header{font-size:17px;}
+  .yellow-strip .title{font-size:20px;}
+}
+
+@media(max-width:420px){
+  .day-jodi{font-size:20px;}
+  .day-top,.day-bottom{font-size:9px;}
+}
+  .day-jodi{font-size:26px;}
   .day-top,.day-bottom{font-size:11px;}
   header{font-size:18px;}
   .yellow-strip .title{font-size:22px;}
