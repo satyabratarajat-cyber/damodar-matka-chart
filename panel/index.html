@@ -13,20 +13,44 @@ header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10p
 .blue-line{width:100%;height:5px;background:#0033cc;margin:14px 0;}
 .yellow-strip{background:#ffff00;border:3px solid red;padding:12px 0;text-align:center;}
 .yellow-strip .title{color:#0033cc;font-weight:900;font-size:28px;font-family:"Times New Roman",Georgia,serif;}
-.dailyDisplay{font-size:24px;font-weight:900;color:#000;margin-top:6px;font-family:"Times New Roman",Georgia,serif;}
-.panel-box{max-width:760px;width:55%;margin:10px auto;border:3px solid purple;border-radius:8px;padding:6px;background:#b30000;color:#fff;min-height:120px;}
-.day-col{display:flex;align-items:center;justify-content:center;gap:4px;}
-.left-panel,.right-panel{display:flex;flex-direction:column;gap:1px;}
-.day-top,.day-bottom{font-size:12px;font-weight:700;line-height:1;color:#000;}
-.day-jodi{font-size:32px;font-weight:900;min-width:34px;text-align:center;font-family:"Times New Roman",Georgia,serif;color:#000;}
-.day-jodi.red{color:#c1121f;text-shadow:0 0 2px #ff9999;}
+.dailyDisplay{font-size:32px;font-weight:900;margin-top:6px;font-family:'Times New Roman',serif;font-style:italic;color:#000;letter-spacing:2px;line-height:1;text-shadow:1px 1px 1px rgba(0,0,0,.35);} 
+.dailyDisplay.red{color:#b30000;text-shadow:1px 1px 1px rgba(0,0,0,.7);} 
+.panel-box{max-width:none;width:66%;margin:10px auto;border:5px solid #5a2d82;border-radius:0;padding:0;background:#ffffff;color:#000;min-height:120px;box-shadow:0 0 6px rgba(0,0,0,.3);}  
+.day-col{display:flex;align-items:center;justify-content:center;gap:6px;padding:2px 0;}
+.left-panel,.right-panel{display:flex;flex-direction:column;gap:0;}
+.day-top,.day-bottom{font-size:14px;font-weight:700;line-height:1.05;color:#5b5b5b;font-family:'Times New Roman',serif;letter-spacing:2px;}
+
+/* JODI digits spacing */
+.day-jodi{font-size:26px;letter-spacing:1px;font-weight:900;font-family:'Times New Roman',serif;font-style:italic;line-height:1;color:#000;text-shadow:1px 1px 1px rgba(0,0,0,.35);} 
+.day-jodi .digit{display:inline-block;}
+.day-jodi.red{color:#d33;text-shadow:1px 1px 1px rgba(0,0,0,.35);} 
+
+/* POSITION LOGIC */
+.digit-2{font-size:0.9em;font-weight:900;font-family:'Georgia','Times New Roman',serif;font-style:italic;transform:translateY(0) scaleX(.95);} 
+.digit-1{font-size:0.85em;font-weight:900;font-family:'Georgia','Times New Roman',serif;font-style:italic;transform:translateY(0) scaleX(.9);} 
+.digit-0{font-size:0.9em;font-weight:900;font-family:'Georgia','Times New Roman',serif;font-style:italic;transform:translateY(0) skewX(-3deg) scaleX(.98);} 
+.digit-6{font-size:1em;font-weight:900;font-family:'Georgia','Times New Roman',serif;font-style:italic;transform:translateY(-3px) skewX(-3deg) scaleX(.98);} 
+.digit-8{font-size:1em;font-weight:900;font-family:'Georgia','Times New Roman',serif;font-style:italic;transform:translateY(-2px) skewX(-3deg) scaleX(.98);} 
+.digit-9{font-size:1em;font-weight:900;font-family:'Georgia','Times New Roman',serif;font-style:italic;transform:translateY(3px) skewX(-3deg) scaleX(.97);} 
+.digit-3{font-size:0.95em;font-weight:900;font-family:'Georgia','Times New Roman',serif;font-style:italic;transform:translateY(3px) scaleX(.97);} 
+.digit-4{font-size:0.95em;font-weight:900;font-family:'Georgia','Times New Roman',serif;font-style:italic;transform:translateY(3px) scaleX(.96);} 
+.digit-5{font-size:0.95em;font-weight:900;font-family:'Georgia','Times New Roman',serif;font-style:italic;transform:translateY(3px) scaleX(.97);} 
+.digit-7{font-size:0.95em;font-weight:900;font-family:'Georgia','Times New Roman',serif;font-style:italic;transform:translateY(3px) scaleX(.97);} 
+
 .disclaimer{text-align:center;color:#ccc;font-size:12px;line-height:1.6;max-width:900px;margin:20px auto 40px;padding:0 12px;}
 .nav-btn{margin-top:8px;background:#0033cc;color:#fff;padding:8px 22px;border-radius:24px;font-weight:900;border:none;cursor:pointer;}
 .info{color:#fff;text-align:center;font-size:14px;padding:20px;}
+
 @media(max-width:768px){
-  .panel-box{width:100%;max-width:none;padding:4px;overflow-x:auto;}
+  .panel-box{width:100%;max-width:100%;padding:4px;overflow-x:auto;}
   .day-col{gap:2px;}
-  .day-jodi{font-size:22px;min-width:28px;}
+  .day-jodi{font-size:26px;}
+  .day-top,.day-bottom{font-size:10px;}
+  header{font-size:17px;}
+  .yellow-strip .title{font-size:20px;}
+}
+  .day-col{gap:2px;}
+  .day-jodi{font-size:26px;}
   .day-top,.day-bottom{font-size:10px;}
   header{font-size:17px;}
   .yellow-strip .title{font-size:20px;}
@@ -35,11 +59,6 @@ header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10p
 @media(max-width:420px){
   .day-jodi{font-size:20px;}
   .day-top,.day-bottom{font-size:9px;}
-}
-  .day-jodi{font-size:26px;}
-  .day-top,.day-bottom{font-size:11px;}
-  header{font-size:18px;}
-  .yellow-strip .title{font-size:22px;}
 }
 </style>
 </head>
@@ -58,7 +77,7 @@ header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10p
 <div style="text-align:center;margin:10px 0;"><button class="nav-btn" onclick="goTop()">GO TO TOP</button></div>
 
 <div class="blue-line"></div>
-<div class="yellow-strip"><div class="title">DAMODAR</div><div class="dailyDisplay">---</div></div>
+<div class="yellow-strip"><div class="title">DAMODAR</div><div class="dailyDisplay">---</div><button class="nav-btn" onclick="location.reload()">REFRESH</button></div>
 
 <div style="text-align:center;margin:12px 0;">
   <button class="nav-btn" onclick="window.location.href='/'">HOME</button>
@@ -68,77 +87,149 @@ header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10p
 <div class="disclaimer"><strong>Disclaimer:</strong><br>Information only.</div>
 
 <script>
-function goTop(){window.scrollTo({top:0,behavior:'smooth'});}function goBottom(){window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});} 
+function goTop(){window.scrollTo({top:0,behavior:'smooth'});} 
+function goBottom(){window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});} 
 
 document.addEventListener('DOMContentLoaded',()=>{
+
+// track renders
+let DAILY_RENDERED = false;
+let WEEKS_RENDERED = false;
 
 const specialJodi=["00","11","22","33","44","55","66","77","88","99","05","50","16","61","27","72","38","83","49","94"];
 
 function renderDayCell(day){
-  if(!day || !day.jodi) return '';
-  const jodi=day.jodi;
-  const L=day.L||'';
-  const R=day.R||'';
-  const cls=specialJodi.includes(jodi)?'day-jodi red':'day-jodi';
-  return `<div class="day-col">
-    <div class="left-panel">
-      <div class="day-top">${L[0]||''}</div>
-      <div class="day-top">${L[1]||''}</div>
-      <div class="day-top">${L[2]||''}</div>
-    </div>
-    <div class="${cls}">${jodi}</div>
-    <div class="right-panel">
-      <div class="day-bottom">${R[0]||''}</div>
-      <div class="day-bottom">${R[1]||''}</div>
-      <div class="day-bottom">${R[2]||''}</div>
-    </div>
-  </div>`;
+  if(!day || !day.jodi){ return ''; }
+  const jodi = day.jodi;
+  const L = day.L || '';
+  const R = day.R || '';
+  const cls = specialJodi.includes(jodi) ? 'day-jodi red' : 'day-jodi';
+
+  const d = function(ch){
+    return ((ch || ch === 0) && String(ch) !== '')
+      ? `<span class="digit digit-${String(ch)}">${String(ch)}</span>`
+      : `<span class="digit dash">&mdash;</span>`;
+  };
+
+  const d1 = (jodi && jodi[0]) ? d(jodi[0]) : '';
+  const d2 = (jodi && jodi[1]) ? d(jodi[1]) : '';
+
+  return (
+`<div class="day-col">
+  <div class="left-panel">
+    <div class="day-top">${d(L[0])}</div>
+    <div class="day-top">${d(L[1])}</div>
+    <div class="day-top">${d(L[2])}</div>
+  </div>
+  <div class="${cls}">${d1}${d2}</div>
+  <div class="right-panel">
+    <div class="day-bottom">${d(R[0])}</div>
+    <div class="day-bottom">${d(R[1])}</div>
+    <div class="day-bottom">${d(R[2])}</div>
+  </div>
+</div>`);
+}
+
+function formatDigits(str){
+  if(!str){ return ''; }
+  return String(str).replace(/(\\d)/g,function(m){
+    return '<span class="digit digit-' + m + '">' + m + '</span>';
+  });
 }
 
 function renderWeeks(data){
-  const box=document.getElementById('weeks');
-  box.innerHTML='';
+  const box = document.getElementById('weeks');
+  box.innerHTML = '';
+
   if(!data.weeks || !data.weeks.length){
-    box.innerHTML='<div class="info">No panel history available yet.</div>';return;
+    box.innerHTML = '<div class="info">No panel history available yet.</div>';
+    return;
   }
 
-  data.weeks.forEach((w,i)=>{
+  data.weeks.forEach(function(w,i){
     if(i===0){
-      box.insertAdjacentHTML('beforeend',`<div style="display:grid;grid-template-columns:86px repeat(6,1fr);background:#ffcccc;color:#000;font-weight:900;text-align:center"><div>DATE</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div></div>`);
-    }else{
-      box.insertAdjacentHTML('beforeend','<div style="height:1px;background:#0033cc"></div>');
+      box.insertAdjacentHTML('beforeend',
+`<div style="display:grid;grid-template-columns:105px repeat(6,1fr);background:#f7f7f7;color:#000;font-weight:900;text-align:center;border-bottom:1px solid #ddd">
+  <div style='padding:6px 0'>DATE</div>
+  <div style='padding:6px 0'>MON</div>
+  <div style='padding:6px 0'>TUE</div>
+  <div style='padding:6px 0'>WED</div>
+  <div style='padding:6px 0'>THU</div>
+  <div style='padding:6px 0'>FRI</div>
+  <div style='padding:6px 0'>SAT</div>
+</div>`);
     }
 
-    box.insertAdjacentHTML('beforeend',`
-    <div style="display:grid;grid-template-columns:86px repeat(6,1fr);gap:2px;background:#ffcccc;text-align:center">
-      <div>
-        <div style="font-size:12px;color:#000">${w.from}</div>
-        <div style="font-size:11px;color:#000">to</div>
-        <div style="font-size:12px;color:#000">${w.to}</div>
-      </div>
-      <div>${renderDayCell(w.days.mon)}</div>
-      <div>${renderDayCell(w.days.tue)}</div>
-      <div>${renderDayCell(w.days.wed)}</div>
-      <div>${renderDayCell(w.days.thu)}</div>
-      <div>${renderDayCell(w.days.fri)}</div>
-      <div>${renderDayCell(w.days.sat)}</div>
-    </div>`);
+    box.insertAdjacentHTML('beforeend',
+`<div style="display:grid;grid-template-columns:105px repeat(6,1fr);gap:0;background:#ffffff;text-align:center;border-bottom:2px solid #5a2d82">
+  <div style='padding:4px 0'>
+    <div style="font-size:14px;font-family:'Times New Roman',serif;font-style:italic;font-weight:900;color:#000;text-shadow:1px 1px 1px rgba(0,0,0,.2)">${formatDigits(w.from)}</div>
+    <div style="font-size:11px;color:#000">To</div>
+    <div style="font-size:14px;font-family:'Times New Roman',serif;font-style:italic;font-weight:900;color:#000;text-shadow:1px 1px 1px rgba(0,0,0,.2)">${formatDigits(w.to)}</div>
+  </div>
+  <div>${renderDayCell(w.days.mon)}</div>
+  <div>${renderDayCell(w.days.tue)}</div>
+  <div>${renderDayCell(w.days.wed)}</div>
+  <div>${renderDayCell(w.days.thu)}</div>
+  <div>${renderDayCell(w.days.fri)}</div>
+  <div>${renderDayCell(w.days.sat)}</div>
+</div>`);
   });
 }
 
-// daily number from root
+const SAMPLE={
+  daily:"57",
+  weeks:[
+    {from:"01-01-2026",to:"06-01-2026",days:{
+      mon:{jodi:"24",L:"357",R:"048"},
+      tue:{jodi:"79",L:"269",R:"158"},
+      wed:{jodi:"03",L:"145",R:"239"},
+      thu:{jodi:"55",L:"359",R:"166"},
+      fri:{jodi:"18",L:"249",R:"136"},
+      sat:{jodi:"62",L:"589",R:"047"}
+    }},
+    {from:"08-01-2026",to:"13-01-2026",days:{
+      mon:{jodi:"44",L:"478",R:"024"},
+      tue:{jodi:"21",L:"369",R:"125"},
+      wed:{jodi:"90",L:"168",R:"279"},
+      thu:{jodi:"05",L:"589",R:"224"},
+      fri:{jodi:"72",L:"237",R:"369"},
+      sat:{jodi:"33",L:"118",R:"570"}
+    }}
+  ]
+};
+
+// ---- INITIAL PREVIEW (show something immediately) ----
+renderWeeks(SAMPLE);
+document.querySelectorAll('.dailyDisplay').forEach(el=>{
+  el.textContent = SAMPLE.daily;
+});
+
+// DAILY
 fetch('/data.json')
   .then(r=>r.json())
-  .then(d=>document.querySelectorAll('.dailyDisplay').forEach(el=>el.textContent=d.daily||'---'))
-  .catch(()=>{});
-
-// panel history
-fetch('./data.json?_='+Date.now())
-  .then(r=>{if(!r.ok) throw new Error('missing'); return r.json();})
-  .then(renderWeeks)
-  .catch(()=>{
-    document.getElementById('weeks').innerHTML='<div class="info">panel/data.json not found or invalid.</div>';
+  .then(d=>{
+    document.querySelectorAll('.dailyDisplay').forEach(el=>{
+      el.textContent = d.daily || '---';
+      el.classList.remove('red');
+      if(specialJodi.includes(d.daily)) el.classList.add('red');
+    });
+    DAILY_RENDERED = true;
+  })
+  .catch(err=>{
+    console.warn('data.json (daily) failed — NOT changing UI', err);
   });
+
+// WEEKS
+// Per your rule: history stays from local SAMPLE only
+// (public site will NOT depend on data.json for weeks)
+
+// TESTS
+try{
+  console.assert(renderDayCell({jodi:'55',L:'123',R:'456'}).includes('55'),'renderDayCell should include jodi');
+  console.assert(typeof renderWeeks==='function','renderWeeks should be defined');
+  console.assert(renderDayCell({jodi:'10',L:'123',R:'456'}).includes('digit-1'),'side panel digits should use digit classes');
+}catch(e){console.warn('Self tests failed',e);}
 
 });
 </script>
