@@ -15,10 +15,14 @@ header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10p
 .yellow-strip .title{color:#0033cc;font-weight:900;font-size:28px;font-family:"Times New Roman",Georgia,serif;}
 .dailyDisplay{font-size:32px;font-weight:900;margin-top:6px;font-family:'Times New Roman',serif;font-style:italic;color:#000;letter-spacing:2px;line-height:1;text-shadow:1px 1px 1px rgba(0,0,0,.35);} 
 .dailyDisplay.red{color:#b30000;text-shadow:1px 1px 1px rgba(0,0,0,.7);} 
-.panel-box{max-width:none;width:65%;margin:10px auto;border:5px solid #5a2d82;border-radius:0;padding:0;background:#ffffff;color:#000;min-height:120px;box-shadow:0 0 6px rgba(0,0,0,.3);}  
+
+.panel-box{max-width:560px;width:42%;margin:10px auto;border:5px solid #5a2d82;border-radius:0;padding:0;background:#ffffff;color:#000;min-height:120px;box-shadow:0 0 6px rgba(0,0,0,.3);}  
 .day-col{display:flex;align-items:center;justify-content:center;gap:4px;padding:1px 0;}
 .left-panel,.right-panel{display:flex;flex-direction:column;gap:0;}
-.day-top,.day-bottom{font-size:14px;font-weight:700;line-height:1.05;color:#5b5b5b;font-family:'Times New Roman',serif;letter-spacing:2px;}
+.day-top,.day-bottom{font-size:12px;font-weight:700;line-height:1.05;color:#5b5b5b;font-family:'Times New Roman',serif;letter-spacing:2px;}
+
+/* DATE digits (match jodi style) */
+.date-num{display:block;font-size:14px;font-weight:900;font-family:'Times New Roman',serif;font-style:italic;color:#000;text-shadow:1px 1px 1px rgba(0,0,0,.35);line-height:.9;letter-spacing:1px;margin:1px 0;}
 
 /* JODI digits spacing */
 .day-jodi{font-size:clamp(22px,2.6vw,26px);letter-spacing:0.5px;font-weight:900;font-family:'Times New Roman',serif;font-style:italic;line-height:1.02;color:#000;text-shadow:1px 1px 1px rgba(0,0,0,.35);} 
@@ -39,41 +43,24 @@ header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10p
 
 .disclaimer{text-align:center;color:#ccc;font-size:12px;line-height:1.6;max-width:900px;margin:20px auto 40px;padding:0 12px;}
 .nav-btn{margin-top:8px;background:#0033cc;color:#fff;padding:8px 22px;border-radius:24px;font-weight:900;border:none;cursor:pointer;}
-.info{color:#fff;text-align:center;font-size:14px;padding:20px;}
+.info{color:#fff;text-align:center;font-size:12px;padding:20px;}
+
+@media(max-width:1024px){
+  .panel-box{width:52%;max-width:600px;}
+}
 
 @media(max-width:768px){
-  /* mobile: full width fit */
-  .panel-box{width:100%;max-width:100%;padding:2px;}
-  /* tighter vertical rhythm between week rows */
+  .panel-box{width:100%;max-width:100%;padding:2px;overflow-x:auto;}
   #weeks > div{border-bottom-width:1px !important;}
   .day-col{padding:0;gap:0.5px;}
-  .day-top,.day-bottom{line-height:1.02;}
-  .panel-box{width:100%;max-width:100%;padding:2px;overflow-x:auto;}
+  .day-top,.day-bottom{line-height:1.02;font-size:9.5px;}
   .panel-box > div{grid-template-columns:88px repeat(6,1fr)!important;}
-  .day-col{gap:1px;}
   .day-jodi{font-size:clamp(20px,3vw,23px);} 
-  .day-top,.day-bottom{font-size:9.5px;line-height:1.05;}
-  header{font-size:17px;}
-  .yellow-strip .title{font-size:20px;}
-}
-  .panel-box > div{grid-template-columns:80px repeat(6,1fr)!important;}
-  .day-col{gap:1px;}
-  .day-jodi{font-size:22px;}
-  .day-top,.day-bottom{font-size:9px;}
-  header{font-size:17px;}
-  .yellow-strip .title{font-size:20px;}
 }
 
 @media(max-width:420px){
   .panel-box > div{grid-template-columns:78px repeat(6,1fr)!important;}
   .day-jodi{font-size:clamp(19px,3.6vw,21px);} 
-  .day-top,.day-bottom{font-size:9px;}
-}
-  .day-jodi{font-size:20px;}
-  .day-top,.day-bottom{font-size:8px;}
-}
-(max-width:420px){
-  .day-jodi{font-size:20px;}
   .day-top,.day-bottom{font-size:9px;}
 }
 </style>
@@ -108,7 +95,6 @@ function goBottom(){window.scrollTo({top:document.body.scrollHeight,behavior:'sm
 
 document.addEventListener('DOMContentLoaded',()=>{
 
-// track renders
 let DAILY_RENDERED = false;
 let WEEKS_RENDERED = false;
 
@@ -148,7 +134,7 @@ function renderDayCell(day){
 
 function formatDigits(str){
   if(!str){ return ''; }
-  return String(str).replace(/(\\d)/g,function(m){
+  return String(str).replace(/([0-9])/g,function(m){
     return '<span class="digit digit-' + m + '">' + m + '</span>';
   });
 }
@@ -178,10 +164,10 @@ function renderWeeks(data){
 
     box.insertAdjacentHTML('beforeend',
 `<div style="display:grid;grid-template-columns:88px repeat(6,1fr);gap:0;background:#ffffff;text-align:center;border-bottom:2px solid #5a2d82">
-  <div style='padding:4px 0'>
-    <div style="font-size:14px;font-family:'Times New Roman',serif;font-style:italic;font-weight:900;color:#000;text-shadow:1px 1px 1px rgba(0,0,0,.2)">${formatDigits(w.from)}</div>
-    <div style="font-size:11px;color:#000">To</div>
-    <div style="font-size:14px;font-family:'Times New Roman',serif;font-style:italic;font-weight:900;color:#000;text-shadow:1px 1px 1px rgba(0,0,0,.2)">${formatDigits(w.to)}</div>
+  <div style='padding:2px 0'>
+    <div class="date-num">${formatDigits(w.from)}</div>
+    <div style="font-size:10px;color:#000;line-height:.75;margin:1px 0">To</div>
+    <div class="date-num">${formatDigits(w.to)}</div>
   </div>
   <div>${renderDayCell(w.days.mon)}</div>
   <div>${renderDayCell(w.days.tue)}</div>
@@ -196,7 +182,7 @@ function renderWeeks(data){
 const SAMPLE={
   daily:"57",
   weeks:[
-    {from:"01-01-2026",to:"06-01-2026",days:{
+    {from:"01/01/2026",to:"06/01/2026",days:{
       mon:{jodi:"24",L:"357",R:"048"},
       tue:{jodi:"79",L:"269",R:"158"},
       wed:{jodi:"03",L:"145",R:"239"},
@@ -204,7 +190,7 @@ const SAMPLE={
       fri:{jodi:"18",L:"249",R:"136"},
       sat:{jodi:"62",L:"589",R:"047"}
     }},
-    {from:"08-01-2026",to:"13-01-2026",days:{
+    {from:"08/01/2026",to:"13/01/2026",days:{
       mon:{jodi:"44",L:"478",R:"024"},
       tue:{jodi:"21",L:"369",R:"125"},
       wed:{jodi:"90",L:"168",R:"279"},
@@ -215,14 +201,11 @@ const SAMPLE={
   ]
 };
 
-// ---- INITIAL PREVIEW (show something immediately) ----
+// INITIAL PREVIEW
 renderWeeks(SAMPLE);
-document.querySelectorAll('.dailyDisplay').forEach(el=>{
-  el.textContent = SAMPLE.daily;
-});
+document.querySelectorAll('.dailyDisplay').forEach(el=>{ el.textContent = SAMPLE.daily; });
 
 // DAILY (ROOT data.json)
-// -- only daily comes from site root --
 fetch('/data.json?_=' + Date.now())
   .then(r=>{ if(!r.ok) throw new Error('missing/404'); return r.json(); })
   .then(d=>{
@@ -240,20 +223,20 @@ fetch('/data.json?_=' + Date.now())
     });
   });
 
-// WEEKS (PANEL/data.json)
-// -- history loads from panel/data.json (same folder as this HTML) --
+// WEEKS (panel/data.json)
 fetch('./data.json?_=' + Date.now())
   .then(r=>{ if(!r.ok) throw new Error('missing/404'); return r.json(); })
   .then(d=>{ if(d && d.weeks){ renderWeeks(d); WEEKS_RENDERED = true; } })
-  .catch(err=>{
-    console.warn('panel/data.json (weeks) FAILED — keeping current history', err);
-  });
+  .catch(err=>{ console.warn('panel/data.json (weeks) FAILED — keeping current history', err); });
 
 // TESTS
 try{
   console.assert(renderDayCell({jodi:'55',L:'123',R:'456'}).includes('55'),'renderDayCell should include jodi');
   console.assert(typeof renderWeeks==='function','renderWeeks should be defined');
   console.assert(renderDayCell({jodi:'10',L:'123',R:'456'}).includes('digit-1'),'side panel digits should use digit classes');
+  // NEW TESTS
+  console.assert(formatDigits('01/01/2026').includes('digit-0'),'formatDigits should wrap date digits correctly');
+  console.assert(/digit-[0-9]/.test(formatDigits('99')),'formatDigits should wrap all digits');
 }catch(e){console.warn('Self tests failed',e);}
 
 });
