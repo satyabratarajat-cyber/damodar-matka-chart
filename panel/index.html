@@ -205,9 +205,10 @@ document.querySelectorAll('.dailyDisplay').forEach(el=>{
   el.textContent = SAMPLE.daily;
 });
 
-// DAILY
-fetch('/data.json')
-  .then(r=>r.json())
+// DAILY (ROOT data.json)
+// -- only daily comes from site root --
+fetch('/data.json?_=' + Date.now())
+  .then(r=>{ if(!r.ok) throw new Error('missing/404'); return r.json(); })
   .then(d=>{
     document.querySelectorAll('.dailyDisplay').forEach(el=>{
       el.textContent = d.daily || '---';
@@ -217,12 +218,20 @@ fetch('/data.json')
     DAILY_RENDERED = true;
   })
   .catch(err=>{
-    console.warn('data.json (daily) failed — NOT changing UI', err);
+    console.warn('data.json (daily) FAILED — leaving previous value', err);
+    document.querySelectorAll('.dailyDisplay').forEach(el=>{
+      el.setAttribute('title','daily not updated: ' + err);
+    });
   });
 
-// WEEKS
-// Per your rule: history stays from local SAMPLE only
-// (public site will NOT depend on data.json for weeks)
+// WEEKS (PANEL/data.json)
+// -- history loads from panel/data.json (same folder as this HTML) --
+fetch('./data.json?_=' + Date.now())
+  .then(r=>{ if(!r.ok) throw new Error('missing/404'); return r.json(); })
+  .then(d=>{ if(d && d.weeks){ renderWeeks(d); WEEKS_RENDERED = true; } })
+  .catch(err=>{
+    console.warn('panel/data.json (weeks) FAILED — keeping current history', err);
+  });
 
 // TESTS
 try{
