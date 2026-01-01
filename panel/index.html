@@ -15,13 +15,13 @@ header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10p
 .yellow-strip .title{color:#0033cc;font-weight:900;font-size:28px;font-family:"Times New Roman",Georgia,serif;}
 .dailyDisplay{font-size:32px;font-weight:900;margin-top:6px;font-family:'Times New Roman',serif;font-style:italic;color:#000;letter-spacing:2px;line-height:1;text-shadow:1px 1px 1px rgba(0,0,0,.35);} 
 .dailyDisplay.red{color:#b30000;text-shadow:1px 1px 1px rgba(0,0,0,.7);} 
-.panel-box{max-width:900px;width:90%;margin:10px auto;border:5px solid #5a2d82;border-radius:0;padding:0;background:#ffffff;color:#000;min-height:120px;box-shadow:0 0 6px rgba(0,0,0,.3);}  
-.day-col{display:flex;align-items:center;justify-content:center;gap:6px;padding:2px 0;}
+.panel-box{max-width:none;width:65%;margin:10px auto;border:5px solid #5a2d82;border-radius:0;padding:0;background:#ffffff;color:#000;min-height:120px;box-shadow:0 0 6px rgba(0,0,0,.3);}  
+.day-col{display:flex;align-items:center;justify-content:center;gap:4px;padding:1px 0;}
 .left-panel,.right-panel{display:flex;flex-direction:column;gap:0;}
 .day-top,.day-bottom{font-size:14px;font-weight:700;line-height:1.05;color:#5b5b5b;font-family:'Times New Roman',serif;letter-spacing:2px;}
 
 /* JODI digits spacing */
-.day-jodi{font-size:26px;letter-spacing:1px;font-weight:900;font-family:'Times New Roman',serif;font-style:italic;line-height:1;color:#000;text-shadow:1px 1px 1px rgba(0,0,0,.35);} 
+.day-jodi{font-size:clamp(22px,2.6vw,26px);letter-spacing:0.5px;font-weight:900;font-family:'Times New Roman',serif;font-style:italic;line-height:1.02;color:#000;text-shadow:1px 1px 1px rgba(0,0,0,.35);} 
 .day-jodi .digit{display:inline-block;}
 .day-jodi.red{color:#d33;text-shadow:1px 1px 1px rgba(0,0,0,.35);} 
 
@@ -42,7 +42,20 @@ header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10p
 .info{color:#fff;text-align:center;font-size:14px;padding:20px;}
 
 @media(max-width:768px){
-  .panel-box{width:100%;max-width:100%;padding:4px;overflow-x:auto;}
+  /* mobile: full width fit */
+  .panel-box{width:100%;max-width:100%;padding:2px;}
+  /* tighter vertical rhythm between week rows */
+  #weeks > div{border-bottom-width:1px !important;}
+  .day-col{padding:0;gap:0.5px;}
+  .day-top,.day-bottom{line-height:1.02;}
+  .panel-box{width:100%;max-width:100%;padding:2px;overflow-x:auto;}
+  .panel-box > div{grid-template-columns:88px repeat(6,1fr)!important;}
+  .day-col{gap:1px;}
+  .day-jodi{font-size:clamp(20px,3vw,23px);} 
+  .day-top,.day-bottom{font-size:9.5px;line-height:1.05;}
+  header{font-size:17px;}
+  .yellow-strip .title{font-size:20px;}
+}
   .panel-box > div{grid-template-columns:80px repeat(6,1fr)!important;}
   .day-col{gap:1px;}
   .day-jodi{font-size:22px;}
@@ -52,7 +65,10 @@ header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10p
 }
 
 @media(max-width:420px){
-  .panel-box > div{grid-template-columns:70px repeat(6,1fr)!important;}
+  .panel-box > div{grid-template-columns:78px repeat(6,1fr)!important;}
+  .day-jodi{font-size:clamp(19px,3.6vw,21px);} 
+  .day-top,.day-bottom{font-size:9px;}
+}
   .day-jodi{font-size:20px;}
   .day-top,.day-bottom{font-size:8px;}
 }
@@ -149,7 +165,7 @@ function renderWeeks(data){
   data.weeks.forEach(function(w,i){
     if(i===0){
       box.insertAdjacentHTML('beforeend',
-`<div style="display:grid;grid-template-columns:95px repeat(6,1fr);background:#f7f7f7;color:#000;font-weight:900;text-align:center;border-bottom:1px solid #ddd">
+`<div style="display:grid;grid-template-columns:88px repeat(6,1fr);background:#f7f7f7;color:#000;font-weight:900;text-align:center;border-bottom:1px solid #ddd">
   <div style='padding:6px 0'>DATE</div>
   <div style='padding:6px 0'>MON</div>
   <div style='padding:6px 0'>TUE</div>
@@ -161,7 +177,7 @@ function renderWeeks(data){
     }
 
     box.insertAdjacentHTML('beforeend',
-`<div style="display:grid;grid-template-columns:95px repeat(6,1fr);gap:0;background:#ffffff;text-align:center;border-bottom:2px solid #5a2d82">
+`<div style="display:grid;grid-template-columns:88px repeat(6,1fr);gap:0;background:#ffffff;text-align:center;border-bottom:2px solid #5a2d82">
   <div style='padding:4px 0'>
     <div style="font-size:14px;font-family:'Times New Roman',serif;font-style:italic;font-weight:900;color:#000;text-shadow:1px 1px 1px rgba(0,0,0,.2)">${formatDigits(w.from)}</div>
     <div style="font-size:11px;color:#000">To</div>
