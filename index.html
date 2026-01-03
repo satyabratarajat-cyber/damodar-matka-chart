@@ -31,12 +31,15 @@ header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10p
 @media(max-width:768px){
   .panel-box{width:92vw;max-width:none;}
   .week-row{grid-template-columns:repeat(6,1fr);row-gap:2px;column-gap:2px;}
-  .daycell{aspect-ratio:auto;padding:8px 0;} /* a bit more breathing room */
+  .daycell{aspect-ratio:auto;padding:10px 0;} /* a touch more height */
   .jodi{
-    font-size:clamp(22px,7.2vw,30px); /* BIGGER on mobile */
-    font-weight:1000;                 /* BOLDER on mobile */
-    line-height:1.06;                 /* keeps digits centered */
+    font-size:clamp(24px,8vw,32px);  /* a little bigger */
+    font-weight:1000;                /* extra bold */
+    letter-spacing:.6px;             /* slight punch */
+    line-height:1.06;                /* keeps digits centered */
+    text-shadow:1.3px 1.3px 1px rgba(0,0,0,.4); /* slightly stronger */
   }
+}
 }
 .disclaimer{text-align:center;color:#ccc;font-size:12px;line-height:1.6;max-width:900px;margin:20px auto 40px;padding:0 12px;}
 /* DIGIT RULE */
