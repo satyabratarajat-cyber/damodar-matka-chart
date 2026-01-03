@@ -178,10 +178,11 @@ header{
   margin:20px auto 40px;
   padding:0 12px;
 }
-/* ===== DIGIT RULE — REVERT (simple, even digits) ===== */
-.digit-rule{font-family:'Times New Roman',serif;font-style:italic;font-weight:900;letter-spacing:1px;color:#000;text-shadow:1px 1px 1px rgba(0,0,0,.35);}
-.digit-rule span{position:relative;display:inline-block;}
-/* all digits same baseline & size */
+/* ===== DIGIT RULE — CUSTOM NUMERIC DESIGN (no panel change) ===== */
+.digit-rule{font-family:'Times New Roman',serif;font-style:italic;font-weight:900;letter-spacing:1px;color:#000;text-shadow:1px 1px 1px rgba(0,0,0,.35);} 
+.digit-rule span{position:relative;display:inline-block;line-height:1;}
+
+/* Base: normal (reference) */
 .digit-rule .d0,
 .digit-rule .d1,
 .digit-rule .d2,
@@ -191,7 +192,23 @@ header{
 .digit-rule .d6,
 .digit-rule .d7,
 .digit-rule .d8,
-.digit-rule .d9{top:0;font-size:1em;transform:none;letter-spacing:inherit;}
+.digit-rule .d9{transform:none;top:0;}
+
+/* 0,1,2 → thoda BIG & middle */
+.digit-rule .d0{font-size:1.06em;transform:skewX(-3deg) scaleX(.98);} 
+.digit-rule .d1{font-size:1.04em;transform:scaleX(.92);} 
+.digit-rule .d2{font-size:1.05em;transform:scaleX(.96);} 
+
+/* 6 & 8 → halka niche */
+.digit-rule .d6{font-size:1em;transform:translateY(1px) skewX(-3deg) scaleX(.98);} 
+.digit-rule .d8{font-size:1em;transform:translateY(2px) skewX(-3deg) scaleX(.98);} 
+
+/* 3,4,5,7,9 → halka upar */
+.digit-rule .d3{font-size:.98em;transform:translateY(-1px) scaleX(.97);} 
+.digit-rule .d4{font-size:.98em;transform:translateY(-1px) scaleX(.96);} 
+.digit-rule .d5{font-size:.98em;transform:translateY(-1px) scaleX(.97);} 
+.digit-rule .d7{font-size:.98em;transform:translateY(-1px) scaleX(.97);} 
+.digit-rule .d9{font-size:.99em;transform:translateY(-1.5px) scaleX(.97);}
 </style>
 </head>
 
