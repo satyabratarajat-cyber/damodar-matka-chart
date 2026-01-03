@@ -6,6 +6,7 @@
 <title>Damodar Matka Chart</title>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,600;6..96,700;6..96,900&display=swap');
 body{
   margin:0;
   background:#0b0b0b;
@@ -92,7 +93,7 @@ header{
   max-width:480px;
   min-width:240px;
   margin:20px auto;
-  border:3px solid purple;
+  border:4px solid purple; /* thicker data area border */
   border-radius:10px;
   padding:10px;
   background:#fff;
@@ -112,30 +113,37 @@ header{
 .week-row{
   display:grid;
   grid-template-columns:repeat(6,1fr);
-  margin-top:6px;
+  margin-top:2px;     /* uniform outer spacing */
+  row-gap:2px;        /* equal, smaller vertical gap */
+  column-gap:2px;     /* equal, smaller horizontal gap */   /* tighter horizontal gap */
 }
 .daycell{
   text-align:center;
-  border-right:1px solid purple;
+  border:1px solid purple;   /* each number has its own full box */
+  background:#fff;           /* gap shows panel background cleanly */
+  padding:6px 0;
+  margin:0;                  /* gaps handled by grid column/row gap */
+  border-radius:0;          /* square corners (no rounding) */
 }
-.daycell:last-child{border-right:none;}
+.daycell:last-child{border-right:1px solid purple;}
 
-/* ===== OPTION-1 FONT (FINAL) ===== */
+/* ===== OPTION-1 FONT (MATCH SAMPLE IMAGE) ===== */
 .jodi{
   font-family:"Times New Roman", Georgia, serif;
-  font-size:45px;
-  font-weight:950;
-  letter-spacing:1.5px;
+  font-size:26px;
+  font-weight:900;
+  font-style:normal;
+  letter-spacing:1px;
   color:#000;
+  text-shadow:-1px 2px 0 #ffd84d; /* yellow soft shadow like sample */
 }
-.jodi.red{color:red;}
+.jodi.red{
+  color:red;
+  text-shadow:none; /* red numbers stay flat */
+}
 .jodi.empty{color:#999;}
 
-.sep{
-  height:2px;
-  background:purple;
-  margin:8px 0;
-}
+.sep{display:none;} /* separate lines not needed when each cell has box */
 
 /* ===== NAV BUTTON ===== */
 .nav-btn{
@@ -150,7 +158,7 @@ header{
 
 @media(max-width:768px){
   .panel-box{width:92vw;}
-  .jodi{font-size:32px;}
+  .jodi{font-size:20px;}
 }
 
 /* ===== DISCLAIMER ===== */
@@ -163,6 +171,20 @@ header{
   margin:20px auto 40px;
   padding:0 12px;
 }
+/* ===== DIGIT RULE — REVERT (simple, even digits) ===== */
+.digit-rule{font-family:'Times New Roman',serif;font-style:italic;font-weight:900;letter-spacing:1px;color:#000;text-shadow:1px 1px 1px rgba(0,0,0,.35);}
+.digit-rule span{position:relative;display:inline-block;}
+/* all digits same baseline & size */
+.digit-rule .d0,
+.digit-rule .d1,
+.digit-rule .d2,
+.digit-rule .d3,
+.digit-rule .d4,
+.digit-rule .d5,
+.digit-rule .d6,
+.digit-rule .d7,
+.digit-rule .d8,
+.digit-rule .d9{top:0;font-size:1em;transform:none;letter-spacing:inherit;}
 </style>
 </head>
 
@@ -255,6 +277,22 @@ All information is provided “as is” and users are solely responsible for the
 <div class="blue-line"></div>
 
 <script>
+// ===== DIGIT RULE (wrap each digit with class) =====
+function applyDigitRule(el){
+  var t = el.innerText;
+  var html = "";
+  for(var i=0;i<t.length;i++){
+    var ch = t[i];
+    if(/\d/.test(ch)){
+      html += '<span class="d'+ch+'">'+ch+'</span>';
+    } else {
+      html += '<span>'+ch+'</span>';
+    }
+  }
+  el.classList.add('digit-rule');
+  el.innerHTML = html;
+}
+
 const redJodis=[
 "00","11","22","33","44","55","66","77","88","99",
 "05","50","16","61","27","72","38","83","49","94"
@@ -285,6 +323,7 @@ fetch("data.json?_="+Date.now())
 
   document.querySelectorAll(".dailyDisplay").forEach(el=>{
     el.innerText=data.daily||"---";
+    applyDigitRule(el);
   });
 
   const box=document.getElementById("weeks-container");
@@ -313,8 +352,10 @@ fetch("data.json?_="+Date.now())
         j.classList.add("empty");
       }else if(v==="*" || v==="**"){
         j.innerText=v;
+        applyDigitRule(j);
       }else{
         j.innerText=v;
+        applyDigitRule(j);          // APPLY DIGIT RULE TO ALL NUMBERS
         if(redJodis.includes(v)) j.classList.add("red");
       }
 
@@ -368,7 +409,58 @@ fetch("data.json?_="+Date.now())
   }
 })
 .catch(()=>{
-  alert("data.json error or invalid JSON");
+  // ===== SAMPLE DEMO DATA (for canvas preview) =====
+  const demo={
+    daily:"46",
+    history:[
+      ["12","34","56","78","90","22"],
+      ["07","81","63","49","25","50"],
+      ["99","14","27","88","05","61"]
+    ],
+    current:["--","--","--","--","--","--"],
+    weekly:{
+      panel:{MON:"123",TUE:"458",WED:"670",THU:"249",FRI:"508",SAT:"990"},
+      jodi:["12","45","67","24","50","99"],
+      openClose:{MON:"1→6",TUE:"4→8",WED:"6→0",THU:"2→9",FRI:"5→0",SAT:"9→9"}
+    }
+  };
+
+  document.querySelectorAll('.dailyDisplay').forEach(el=>{
+    el.innerText=demo.daily||'---';
+    applyDigitRule(el);
+  });
+
+  const box=document.getElementById('weeks-container');
+  box.innerHTML='';
+
+  function drawWeek(arr,idx,type){
+    const row=document.createElement('div');
+    row.className='week-row';
+    arr.forEach(v=>{
+      const c=document.createElement('div');
+      c.className='daycell';
+      const j=document.createElement('div');
+      j.className='jodi';
+      j.innerText=v;
+      applyDigitRule(j);
+      if(redJodis.includes(v)) j.classList.add('red');
+      c.appendChild(j);
+      row.appendChild(c);
+    });
+    box.appendChild(row);
+    const s=document.createElement('div');
+    s.className='sep';
+    box.appendChild(s);
+  }
+
+  demo.history.forEach((w,i)=>drawWeek(w,i,'History'));
+  drawWeek(demo.current,0,'Current');
+
+  document.getElementById('weekly-panel').innerHTML=
+    Object.keys(demo.weekly.panel).map(k=>`${k} =&gt; ${demo.weekly.panel[k]}`).join('<br>');
+  document.getElementById('weekly-jodi').innerHTML=demo.weekly.jodi.join('<br>');
+  document.getElementById('weekly-openclose').innerHTML=
+    Object.keys(demo.weekly.openClose).map(k=>`${k} =&gt; ${demo.weekly.openClose[k]}`).join('<br>');
 });
 </script>
 
