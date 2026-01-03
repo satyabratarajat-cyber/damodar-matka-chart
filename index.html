@@ -89,11 +89,11 @@ header{
 
 /* ===== PANEL ===== */
 .panel-box{
-  width:32vw;
-  max-width:480px;
-  min-width:240px;
+  width:28vw;             /* smaller data area on desktop */
+  max-width:420px;        /* tighter box */
+  min-width:220px;
   margin:20px auto;
-  border:4px solid purple; /* thicker data area border */
+  border:4px solid purple;
   border-radius:10px;
   padding:10px;
   background:#fff;
@@ -113,17 +113,21 @@ header{
 .week-row{
   display:grid;
   grid-template-columns:repeat(6,1fr);
-  margin-top:2px;     /* uniform outer spacing */
-  row-gap:2px;        /* equal, smaller vertical gap */
-  column-gap:2px;     /* equal, smaller horizontal gap */   /* tighter horizontal gap */
+  margin-top:2px;
+  row-gap:2px;      /* equal gap */
+  column-gap:2px;   /* equal gap */
 }
 .daycell{
+  display:flex;                 /* keep numbers centered */
+  justify-content:center;
+  align-items:center;
   text-align:center;
-  border:1px solid purple;   /* each number has its own full box */
-  background:#fff;           /* gap shows panel background cleanly */
-  padding:6px 0;
-  margin:0;                  /* gaps handled by grid column/row gap */
-  border-radius:0;          /* square corners (no rounding) */
+  border:1px solid purple;      /* individual box */
+  background:#fff;
+  aspect-ratio:1 / 1;           /* <-- makes every box a PERFECT SQUARE */
+  padding:0;                    /* no padding — square stays square */
+  margin:0;
+  border-radius:0;              /* sharp corners */
 }
 .daycell:last-child{border-right:1px solid purple;}
 
@@ -157,7 +161,10 @@ header{
 }
 
 @media(max-width:768px){
-  .panel-box{width:92vw;}
+  .panel-box{width:96vw; max-width:none;}   /* mobile: full width */
+  .jodi{font-size:18px;}                    /* readable but compact */
+  .week-row{row-gap:2px; column-gap:2px;}   /* same clean grid */
+}
   .jodi{font-size:20px;}
 }
 
