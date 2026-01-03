@@ -132,9 +132,7 @@ header{
 .daycell:last-child{border-right:1px solid purple;}
 
 /* ===== OPTION-1 FONT (MATCH SAMPLE IMAGE) ===== */
-.jodi{
-  font-family:"Times New Roman", Georgia, serif;
-  font-size:45px;
+$130px; /* bigger numbers in data boxes */
   font-weight:900;
   font-style:normal;
   letter-spacing:1px;
@@ -162,7 +160,9 @@ header{
 
 @media(max-width:768px){
   .panel-box{width:96vw; max-width:none;}   /* mobile: full width */
-  .jodi{font-size:32px;}                    /* readable but compact */
+  .jodi{font-size:22px;}                    /* bigger on mobile too */
+  .week-row{row-gap:2px; column-gap:2px;}   /* same clean grid */
+}                    /* readable but compact */
   .week-row{row-gap:2px; column-gap:2px;}   /* same clean grid */
 }
   .jodi{font-size:20px;}
@@ -490,5 +490,3 @@ fetch("data.json?_="+Date.now())
 
 </body>
 </html>
-
-
