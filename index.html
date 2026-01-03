@@ -27,7 +27,7 @@ header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10p
 .jodi.red{color:#d33;text-shadow:1px 1px 1px rgba(0,0,0,.35);}
 .jodi.empty{color:#999;}
 .sep{display:none;}
-.nav-btn{background:#0033cc;color:#fff;padding:10px 26px;border-radius:24px;font-weight:900;border:none;cursor:pointer;}
+.nav-btn{background:#0033cc;color:#fff;padding:10px 26px;border-radius:0;font-weight:900;border:2px solid #001b66;cursor:pointer;box-shadow:0 0 0 1px rgba(0,0,0,.25);}
 @media(max-width:768px){
   .panel-box{width:92vw;max-width:none;}
   .week-row{grid-template-columns:repeat(6,1fr);row-gap:2px;column-gap:2px;}
@@ -100,10 +100,19 @@ header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10p
   <div id="weekly-openclose" style="font-size:22px; font-weight:800; text-align:center; color:#000; background:#ffcccc; padding:8px; border-radius:6px;"></div>
 </div>
 
+<div style="text-align:center; margin:16px 0;">
+  <a href="/" class="nav-btn" style="text-decoration:none; display:inline-block; margin-right:10px;">HOME</a>
+  <a href="./panel/index.html" class="nav-btn" style="text-decoration:none; display:inline-block;">PANEL CHART</a>
+</div>
+
+<div class="blue-line"></div>
 <div class="disclaimer"><strong>Disclaimer:</strong><br>
-This website is intended strictly for informational, educational and record‑keeping purposes only.
-We do not support or promote gambling or betting in any form.
-Users are solely responsible for how they use the information provided here.</div>
+This website is only for informational, educational and record‑keeping purposes.
+Results shown here are taken from publicly available sources and are updated automatically.
+We do not support, promote, or encourage gambling, betting, or any illegal activity.
+Users are fully responsible for how they use the information displayed on this site.
+</div>
+<div class="blue-line"></div>
 
 <script>
 function applyDigitRule(el){
