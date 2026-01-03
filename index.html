@@ -82,7 +82,28 @@ header{color:red;text-align:center;font-weight:900;font-size:22px;margin-top:10p
 <div class="blue-line"></div>
 <div class="yellow-strip"><div class="title">DAMODAR</div><div class="dailyDisplay">---</div><button class="refresh-btn" onclick="location.reload()">REFRESH RESULT</button></div>
 <div class="blue-line"></div>
-<div class="disclaimer"><strong>Disclaimer:</strong> Informational only — gambling not promoted.</div>
+
+
+<!-- WEEKLY EXTRA CHARTS -->
+<div class="panel-box" style="max-width:900px; width:92vw; background:#b30000; color:#fff;">
+  <h3 style="text-align:center; color:#ffeb3b; margin:8px 0;">WEEKLY PANEL / PATTI CHART</h3>
+  <div id="weekly-panel" style="font-size:18px; line-height:2; text-align:center; font-weight:700; color:#000; background:#ffcccc; padding:8px; border-radius:6px;"></div>
+</div>
+
+<div class="panel-box" style="max-width:900px; width:92vw; background:#b30000; color:#fff;">
+  <h3 style="text-align:center; color:#ffeb3b; margin:8px 0;">WEEKLY JODI CHART</h3>
+  <div id="weekly-jodi" style="font-size:30px; font-weight:900; text-align:center; letter-spacing:3px; color:#000; background:#ffcccc; padding:8px; border-radius:6px;"></div>
+</div>
+
+<div class="panel-box" style="max-width:900px; width:92vw; background:#b30000; color:#fff;">
+  <h3 style="text-align:center; color:#ffeb3b; margin:8px 0;">WEEKLY OPEN TO CLOSE</h3>
+  <div id="weekly-openclose" style="font-size:22px; font-weight:800; text-align:center; color:#000; background:#ffcccc; padding:8px; border-radius:6px;"></div>
+</div>
+
+<div class="disclaimer"><strong>Disclaimer:</strong><br>
+This website is intended strictly for informational, educational and record‑keeping purposes only.
+We do not support or promote gambling or betting in any form.
+Users are solely responsible for how they use the information provided here.</div>
 
 <script>
 function applyDigitRule(el){
@@ -131,6 +152,28 @@ fetch('data.json?_=' + Date.now())
 
     if(Array.isArray(data.history)) data.history.forEach(drawWeek);
     if(Array.isArray(data.current)) drawWeek(data.current);
+
+    // ===== WEEKLY DATA SECTION (RESTORED) =====
+    if(data.weekly){
+      const p=document.getElementById('weekly-panel');
+      if(p && data.weekly.panel){
+        p.innerHTML = Object.keys(data.weekly.panel)
+          .map(k=>`${k} =&gt; ${data.weekly.panel[k]}`)
+          .join('<br>');
+      }
+
+      const j=document.getElementById('weekly-jodi');
+      if(j && Array.isArray(data.weekly.jodi)){
+        j.innerHTML = data.weekly.jodi.join('<br>');
+      }
+
+      const o=document.getElementById('weekly-openclose');
+      if(o && data.weekly.openClose){
+        o.innerHTML = Object.keys(data.weekly.openClose)
+          .map(k=>`${k} =&gt; ${data.weekly.openClose[k]}`)
+          .join('<br>');
+      }
+    }
   })
   .catch(err => {
     console.warn('data.json missing or invalid', err);
