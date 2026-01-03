@@ -132,16 +132,18 @@ header{
 .daycell:last-child{border-right:1px solid purple;}
 
 /* ===== OPTION-1 FONT (MATCH SAMPLE IMAGE) ===== */
-$130px; /* bigger numbers in data boxes */
+.jodi{
+  font-family:"Times New Roman", Georgia, serif;
+  font-size:55px;              /* DESKTOP — jodi size */
   font-weight:900;
   font-style:normal;
   letter-spacing:1px;
   color:#000;
-  text-shadow:-1px 2px 0 #ffd84d; /* yellow soft shadow like sample */
+  text-shadow:-1px 2px 0 #ffd84d; /* yellow soft shadow */
 }
-.jodi.red{
-  color:red;
-  text-shadow:none; /* red numbers stay flat */
+.jodi.red{                     /* SPECIAL (RED) NUMBER FIX */
+  color:#d40000;
+  text-shadow:none;
 }
 .jodi.empty{color:#999;}
 
@@ -159,7 +161,10 @@ $130px; /* bigger numbers in data boxes */
 }
 
 @media(max-width:768px){
-  .panel-box{width:96vw; max-width:none;}   /* mobile: full width */
+  .panel-box{width:96vw; max-width:none;}
+  .jodi{font-size:40px;}        /* MOBILE — jodi size */
+  .week-row{row-gap:2px; column-gap:2px;}
+}   /* mobile: full width */
   .jodi{font-size:22px;}                    /* bigger on mobile too */
   .week-row{row-gap:2px; column-gap:2px;}   /* same clean grid */
 }                    /* readable but compact */
