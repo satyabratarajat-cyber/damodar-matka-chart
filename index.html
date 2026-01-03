@@ -78,23 +78,43 @@ const redJodis=["00","11","22","33","44","55","66","77","88","99","05","50","16"
 function goTop(){window.scrollTo({top:0,behavior:'smooth'});} 
 function goBottom(){window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});} 
 
-// DEMO preview data (canvas)
-const demo={
-  daily:"46",
-  history:[["12","34","56","78","90","22"],["07","81","63","49","25","50"],["99","14","27","88","05","61"]],
-  current:["--","--","--","--","--","--"]
-};
+// ===== LOAD DATA FROM data.json =====
+fetch('data.json?_=' + Date.now())
+  .then(r => r.json())
+  .then(data => {
+    // DAILY RESULT
+    document.querySelectorAll('.dailyDisplay').forEach(el => {
+      el.innerText = data.daily || '---';
+      applyDigitRule(el);
+    });
 
-document.querySelectorAll('.dailyDisplay').forEach(el=>{el.innerText=demo.daily;applyDigitRule(el);});
-const box=document.getElementById('weeks-container');
-function drawWeek(arr){
-  const row=document.createElement('div');row.className='week-row';
-  arr.forEach(v=>{const c=document.createElement('div');c.className='daycell';const j=document.createElement('div');j.className='jodi';j.innerText=v;applyDigitRule(j);if(redJodis.includes(v)) j.classList.add('red');c.appendChild(j);row.appendChild(c);});
-  box.appendChild(row);
-  box.appendChild(Object.assign(document.createElement('div'),{className:'sep'}));
-}
+    const box = document.getElementById('weeks-container');
+    box.innerHTML = '';
 
-demo.history.forEach(drawWeek); drawWeek(demo.current);
+    function drawWeek(arr){
+      const row = document.createElement('div');
+      row.className = 'week-row';
+      arr.forEach(v => {
+        const c = document.createElement('div');
+        c.className = 'daycell';
+        const j = document.createElement('div');
+        j.className = 'jodi';
+        j.innerText = v || '--';
+        applyDigitRule(j);
+        if(redJodis.includes(v)) j.classList.add('red');
+        c.appendChild(j);
+        row.appendChild(c);
+      });
+      box.appendChild(row);
+      box.appendChild(Object.assign(document.createElement('div'),{className:'sep'}));
+    }
+
+    if(Array.isArray(data.history)) data.history.forEach(drawWeek);
+    if(Array.isArray(data.current)) drawWeek(data.current);
+  })
+  .catch(err => {
+    console.warn('data.json missing or invalid', err);
+  });
 </script>
 </body>
 </html>
